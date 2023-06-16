@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "lib": ["es5","es6", "dom"],
+      "sourceMap": true,
+      "outDir": "./lib",
+      "rootDir": "./",
+      "declaration": true,
+      "strict": true,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "noImplicitThis": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noFallthroughCasesInSwitch": true,
+      "baseUrl": "./",
+      "paths": {
+        "*": [
+          "node_modules/@types/*"
+        ]
+      }
+    },
+    "include": [
+      "src/**/*.ts",
+      "test/**/*.ts",
+      "jest.config.ts"
+    ],
+    "exclude": [
+      "node_modules"      
+    ]
+  }
+  
