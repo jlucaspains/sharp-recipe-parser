@@ -122,25 +122,6 @@ export function parseInstruction(
   return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
 }
 
-// function getTagger(language: ValidLanguages): BrillPOSTagger {
-//   if (!taggers.has(language)) {
-//     const defaultCategory = "N";
-//     const defaultCategoryCapitalized = "NNP";
-//     const lexicon = new Lexicon(
-//       language.toUpperCase(),
-//       defaultCategory,
-//       defaultCategoryCapitalized
-//     );
-//     const ruleSet = new RuleSet(language.toUpperCase());
-//     const tagger = new BrillPOSTagger(lexicon, ruleSet);
-//     taggers.set(language, tagger);
-//   }
-
-//   // the passed language will always be available here, so it is safe to disable this rule
-//   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-//   return taggers.get(language)!;
-// }
-
 function getQuantity(tokens: POSTaggedWord[]): [number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
@@ -158,10 +139,9 @@ function getQuantity(tokens: POSTaggedWord[]): [number, string, number] {
       item == "/" ||
       (hasUnicodeFraction = isUnicodeFraction(item))
     ) {
-      quantityText += `${addSpace ? " " : ""}${item}`;
-      quantityConvertible += `${addSpace ? " " : ""}${
-        hasUnicodeFraction ? unicodeFractions[item] : item
-      }`;
+      const space = addSpace ? " " : "";
+      quantityText += `${space}${item}`;
+      quantityConvertible += `${space}${hasUnicodeFraction ? unicodeFractions[item] : item}`;
     } else {
       break;
     }
@@ -173,9 +153,7 @@ function getQuantity(tokens: POSTaggedWord[]): [number, string, number] {
   if (quantityConvertible.includes("/")) {
     const frac = new Fraction(quantityConvertible);
     quantityValue = frac.valueOf();
-  } else if (quantityConvertible.length == 0) {
-    quantityValue = 0;
-  } else {
+  } else if (quantityConvertible.length > 0) {
     quantityValue = parseFloat(quantityConvertible);
   }
 
@@ -192,7 +170,6 @@ function getUnit(
   }
 
   const possibleUOM = tokens[startIndex].token;
-  // const possibleUOMSingular = possibleUOM.toLowerCase();
   const possibleUOMSingular = nounInflector
     .singularize(possibleUOM)
     .toLowerCase();
@@ -249,9 +226,3 @@ function isUnicodeFraction(maybeFraction: string): boolean {
   // eslint-disable-next-line no-prototype-builtins
   return unicodeFractions.hasOwnProperty(maybeFraction);
 }
-
-// console.log(parseIngredient("1 cup of sugar", "en"));
-// console.log(parseInstruction("Bake at 400F for 20sec  ", "en"));
-// console.log(parseInstruction("Bake at 400F for 10 min", "en"));
-// console.log(parseInstruction("Bake at 400F for 2 hour", "en"));
-// console.log(parseInstruction("Bake at 180C for 1 day", "en"));
