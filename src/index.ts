@@ -1,10 +1,4 @@
 import { WordPunctTokenizer } from "natural/lib/natural/tokenizers";
-// import {
-//   BrillPOSTagger,
-//   BrillPOSTaggedWord,
-//   Lexicon,
-//   RuleSet,
-// } from "natural/lib/natural/brill_pos_tagger";
 import { NounInflector } from "natural/lib/natural/inflectors";
 import Fraction from "fraction.js";
 import { getUnits } from "./units";
@@ -21,7 +15,6 @@ interface POSTaggedWord {
 
 const tokenizer = new WordPunctTokenizer();
 const nounInflector = new NounInflector();
-// const taggers = new Map<string, BrillPOSTagger>();
 
 /* eslint-disable @typescript-eslint/naming-convention */
 const unicodeFractions: Record<string, string> = {
@@ -61,7 +54,7 @@ export function parseIngredient(
   });
 
   const [quantity, quantityText, quantityEndIndex] = getQuantity(tags);
-  const [unit, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
+  const [unit, unitText, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
   const [ingredient, ingredientEndIndex] = getIngredient(
     tags,
     unitEndIndex,
@@ -69,33 +62,7 @@ export function parseIngredient(
   );
   const extra = getExtra(tags, ingredientEndIndex);
 
-  return { quantity, quantityText, unit, ingredient, extra };
-}
-
-export function parseIngredientSimple(
-  text: string,
-  language: ValidLanguages
-): IngredientParseResult | null {
-  const tokens = tokenizer.tokenize(text);
-
-  if (tokens == null || tokens.length == 0) {
-    return null;
-  }
-
-  const tags = tokens.map((item) => {
-    return { token: item, tag: "N" };
-  });
-
-  const [quantity, quantityText, quantityEndIndex] = getQuantity(tags);
-  const [unit, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
-  const [ingredient, ingredientEndIndex] = getIngredient(
-    tags,
-    unitEndIndex,
-    language
-  );
-  const extra = getExtra(tags, ingredientEndIndex);
-
-  return { quantity, quantityText, unit, ingredient, extra };
+  return { quantity, quantityText, unit, unitText, ingredient, extra };
 }
 
 export function parseInstruction(
@@ -108,21 +75,25 @@ export function parseInstruction(
     return null;
   }
 
-  // const tagger = getTagger(language);
-  // const tags = tagger.tagWithLexicon(tokens).taggedWords;
   const tags = tokens.map((item) => {
     return { token: item, tag: "N" };
   });
   const units = getUnits(language);
 
   let number = 0;
+  let numberText = "";
   let timeInSeconds = 0;
+  let timeUnitText = "";
   let temperature = 0;
+  let temperatureText = "";
   let temperatureUnit = "";
+  let temperatureUnitText = "";
+  let timeText = "";
   for (const tag of tags) {
     const maybeNumber = Number(tag.token);
     if (!isNaN(maybeNumber)) {
       number = maybeNumber;
+      numberText = tag.token;
     } else if (number > 0) {
       const maybeUnitSingular = nounInflector
         .singularize(tag.token)
@@ -134,17 +105,21 @@ export function parseInstruction(
         const timeUnit = units.timeUnits.get(maybeUnitSingular)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         timeInSeconds += number * units.timeUnitMultipliers.get(timeUnit)!;
+        timeText = numberText;
+        timeUnitText = tag.token;
       } else if (units.temperatureUnits.has(maybeUnitSingular)) {
         temperature = number;
+        temperatureText = numberText;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         temperatureUnit = units.temperatureUnits.get(maybeUnitSingular)!;
+        temperatureUnitText = tag.token;
       }
 
       number = 0; // reset if no match
     }
   }
 
-  return { timeInSeconds, temperature, temperatureUnit };
+  return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
 }
 
 // function getTagger(language: ValidLanguages): BrillPOSTagger {
@@ -211,9 +186,9 @@ function getUnit(
   tokens: POSTaggedWord[],
   startIndex: number,
   language: ValidLanguages
-): [string, number] {
+): [string, string, number] {
   if (startIndex >= tokens.length) {
-    return ["", startIndex];
+    return ["", "", startIndex];
   }
 
   const possibleUOM = tokens[startIndex].token;
@@ -224,11 +199,11 @@ function getUnit(
 
   const units = getUnits(language);
   if (!units.ingredientUnits.has(possibleUOMSingular)) {
-    return ["", startIndex];
+    return ["", "", startIndex];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return [units.ingredientUnits.get(possibleUOMSingular)!, startIndex + 1];
+  return [units.ingredientUnits.get(possibleUOMSingular)!, possibleUOM, startIndex + 1];
 }
 
 function getIngredient(
