@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Publish Package
 
 on:
   workflow_dispatch:
@@ -17,12 +17,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          registry-url: https://npm.pkg.github.com/
+          always-auth: true
+          registry-url: 'https://registry.npmjs.org'
 
       - run: yarn install
 
       - run: yarn build
 
-      - run: yarn publish
+      - run: yarn publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN }}
