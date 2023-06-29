@@ -25,4 +25,5 @@ export interface Units {
   timeUnitMultipliers: Map<string, number>;
   temperatureUnits: Map<string, string>;
   ingredientPrepositions: string[];
+  ingredientSizes: string[];
 }
