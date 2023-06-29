@@ -1,6 +1,6 @@
 {
   "name": "@jlucaspains/sharp-recipe-parser",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0-alpha2",
   "description": "Recipe parsing tools",
   "main": "lib/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/jest": "^29.5.1",
     "@typescript-eslint/eslint-plugin": "^5.59.8",
+    "csv-parse": "^5.4.0",
     "@typescript-eslint/parser": "^5.60.1",
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^8.8.0",
@@ -39,10 +40,10 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "jest": "^29.5.0",
+    "prettier": "^2.8.8",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4",
-    "prettier": "^2.8.8"
+    "typescript": "^5.0.4"
   },
   "files": [
     "lib/**/*"

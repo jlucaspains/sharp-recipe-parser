@@ -142,17 +142,21 @@ function getQuantity(tokens: POSTaggedWord[]): [number, string, number] {
       const space = addSpace ? " " : "";
       quantityText += `${space}${item}`;
       quantityConvertible += `${space}${hasUnicodeFraction ? unicodeFractions[item] : item}`;
-    } else {
+    } else if (quantityText.length > 0) {
       break;
     }
 
     addSpace = item != "/";
   }
 
+  if (quantityText.length == 0) {
+    index = 0;
+  }
+
   let quantityValue = 0;
   if (quantityConvertible.includes("/")) {
     const frac = new Fraction(quantityConvertible);
-    quantityValue = frac.valueOf();
+    quantityValue = frac.round(2).valueOf();
   } else if (quantityConvertible.length > 0) {
     quantityValue = parseFloat(quantityConvertible);
   }
@@ -169,18 +173,32 @@ function getUnit(
     return ["", "", startIndex];
   }
 
-  const possibleUOM = tokens[startIndex].token;
+  const units = getUnits(language);
+  let newStartIndex = startIndex;
+
+  // remove ingredient size if present
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const item = tokens[newStartIndex];
+
+    if (!units.ingredientSizes.includes(item.token)) {
+      break;
+    }
+
+    newStartIndex++;
+  }
+
+  const possibleUOM = tokens[newStartIndex].token;
   const possibleUOMSingular = nounInflector
     .singularize(possibleUOM)
     .toLowerCase();
 
-  const units = getUnits(language);
   if (!units.ingredientUnits.has(possibleUOMSingular)) {
-    return ["", "", startIndex];
+    return ["", "", newStartIndex];
   }
 
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return [units.ingredientUnits.get(possibleUOMSingular)!, possibleUOM, startIndex + 1];
+  return [units.ingredientUnits.get(possibleUOMSingular)!, possibleUOM, newStartIndex + 1];
 }
 
 function getIngredient(
@@ -192,8 +210,8 @@ function getIngredient(
     return ["", startIndex];
   }
 
-  const commaIndex = tokens.findIndex((item) => item.token == ",");
-  const endIndex = commaIndex > 0 ? commaIndex : tokens.length;
+  const seaparatorIndex = tokens.findIndex((item) => item.token == "," || item.token == "(");
+  const endIndex = seaparatorIndex > 0 ? seaparatorIndex : tokens.length;
 
   let newStartIndex = startIndex;
 
@@ -203,7 +221,8 @@ function getIngredient(
   while (true) {
     const item = tokens[newStartIndex];
 
-    if (!units.ingredientPrepositions.includes(item.token)) {
+    if (!units.ingredientPrepositions.includes(item.token)
+      && !units.ingredientSizes.includes(item.token)) {
       break;
     }
 

@@ -3,7 +3,11 @@ ingredientUnits.set("bag", "bag");
 ingredientUnits.set("box", "box");
 ingredientUnits.set("c", "cup");
 ingredientUnits.set("can", "can");
+// the nounInflector incorrectly singularizes "cloves" to "clof"
+ingredientUnits.set("clof", "clove"); 
+ingredientUnits.set("clove", "clove");
 ingredientUnits.set("cup", "cup");
+ingredientUnits.set("dash", "dash");
 ingredientUnits.set("g", "gram");
 ingredientUnits.set("gal", "gallon");
 ingredientUnits.set("gallon", "gallon");
@@ -39,6 +43,7 @@ ingredientUnits.set("qt", "quart");
 ingredientUnits.set("qts", "quart");
 ingredientUnits.set("quart", "quart");
 ingredientUnits.set("slice", "slice");
+ingredientUnits.set("stalk", "stalk");
 ingredientUnits.set("stick", "stick");
 ingredientUnits.set("t", "teaspoon");
 ingredientUnits.set("tablespoon", "tablespoon");
@@ -48,6 +53,8 @@ ingredientUnits.set("tbspn", "tablespoon");
 ingredientUnits.set("teaspoon", "teaspoon");
 ingredientUnits.set("tsp", "teaspoon");
 ingredientUnits.set("tspn", "teaspoon");
+
+const ingredientSizes = ["large", "medium", "small"];
 
 const timeUnits = new Map<string, string>();
 timeUnits.set("min", "minute");
@@ -77,6 +84,7 @@ const ingredientPrepositions = ["of"];
 
 export default {
   ingredientUnits,
+  ingredientSizes,
   timeUnits,
   timeUnitMultipliers,
   temperatureUnits,
