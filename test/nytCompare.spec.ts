@@ -18,9 +18,7 @@ describe("Parse ingredient EN", () => {
     it.each(result as any[])(
         "parse %s",
         (item) => {
-            console.log(item);
             const result = parseIngredient(item.input as string, "en");
-            console.log(result);
             expect(result?.quantity ?? -1).toBe(item.qty);
             expect(result?.unit ?? -1).toBe(item.unit);
             expect(result?.ingredient ?? -1).toBe(item.name);

@@ -11,6 +11,8 @@ ingredientUnits.set("dash", "dash");
 ingredientUnits.set("g", "gram");
 ingredientUnits.set("gal", "gallon");
 ingredientUnits.set("gallon", "gallon");
+ingredientUnits.set("gr", "grain");
+ingredientUnits.set("grain", "grain");
 ingredientUnits.set("gram", "gram");
 ingredientUnits.set("inch", "inch");
 ingredientUnits.set("kg", "kilogram");
