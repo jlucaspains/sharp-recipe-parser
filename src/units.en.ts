@@ -82,6 +82,8 @@ temperatureUnits.set("f", "fahrenheit");
 temperatureUnits.set("c", "celsius");
 temperatureUnits.set("celsius", "celsius");
 
+const temperatureMarkers = ["°", "degree"];
+
 const ingredientPrepositions = ["of"];
 
 export default {
@@ -91,4 +93,5 @@ export default {
   timeUnitMultipliers,
   temperatureUnits,
   ingredientPrepositions,
+  temperatureMarkers
 };

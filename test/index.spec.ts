@@ -53,6 +53,8 @@ describe("Parse instruction EN", () => {
     ["Bake for 10min", 600, 0, ""],
     ["Wait 1 hour, knead some more and wait another 15 min", 4500, 0, ""],
     ["Preheat the oven at 450 fahrenheit", 0, 450, "fahrenheit"],
+    ["Preheat the oven at 450° fahrenheit", 0, 450, "fahrenheit"],
+    ["Preheat the oven at 450°F", 0, 450, "fahrenheit"],
     [
       "Preheat the oven at 450 fahrenheit then adjust to 500F",
       0,

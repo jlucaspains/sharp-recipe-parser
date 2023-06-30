@@ -99,6 +99,10 @@ export function parseInstruction(
         .singularize(tag.token)
         .toLowerCase();
 
+      if (units.temperatureMarkers.includes(maybeUnitSingular)) {
+        continue;
+      }
+
       // uom is only relevant after number
       if (units.timeUnits.has(maybeUnitSingular)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
