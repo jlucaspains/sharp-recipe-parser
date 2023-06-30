@@ -33,6 +33,8 @@ describe("Parse ingredient EN", () => {
     ["Ingredient", 0, "", "", "Ingredient", ""],
     ["10 gr wheat flour", 10, "10", "grain", "wheat flour", ""],
     ["1 drop of water", 1, "1", "drop", "water", ""],
+    ["1 batch of another recipe", 1, "1", "batch", "another recipe", ""],
+    ["2 batches meringue", 2, "2", "batch", "meringue", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(

@@ -1,5 +1,6 @@
 const ingredientUnits = new Map<string, string>();
 ingredientUnits.set("bag", "bag");
+ingredientUnits.set("batch", "batch");
 ingredientUnits.set("box", "box");
 ingredientUnits.set("c", "cup");
 ingredientUnits.set("can", "can");
