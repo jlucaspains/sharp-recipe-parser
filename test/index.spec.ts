@@ -25,7 +25,7 @@ describe("Parse ingredient EN", () => {
     ["1 gram salt", 1, "1", "gram", "salt", ""],
     ["2oz of scallions", 2, "2", "ounce", "scallions", ""],
     ["2 ounces of scallions", 2, "2", "ounce", "scallions", ""],
-    ["2 bunches of scallions", 2, "2", "", "bunches of scallions", ""],
+    ["2 bunches of scallions", 2, "2", "bunch", "scallions", ""],
     ["5 cans of dried corn", 5, "5", "can", "dried corn", ""],
     ["½ cans of dried corn", 0.5, "½", "can", "dried corn", ""],
     ["10 ml milk", 10, "10", "milliliter", "milk", ""],
@@ -35,6 +35,9 @@ describe("Parse ingredient EN", () => {
     ["1 drop of water", 1, "1", "drop", "water", ""],
     ["1 batch of another recipe", 1, "1", "batch", "another recipe", ""],
     ["2 batches meringue", 2, "2", "batch", "meringue", ""],
+    ["1 cup (120g) flour, sifted", 1, "1", "cup", "flour", "sifted"],
+    ["1 cup flour (whole), sifted", 1, "1", "cup", "flour", "sifted"],
+    ["1 cup (120g) flour (whole), sifted", 1, "1", "cup", "flour", "sifted"],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
