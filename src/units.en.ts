@@ -1,5 +1,6 @@
 const ingredientUnits = new Map<string, string>();
 ingredientUnits.set("bag", "bag");
+ingredientUnits.set("batch", "batch");
 ingredientUnits.set("box", "box");
 ingredientUnits.set("c", "cup");
 ingredientUnits.set("can", "can");
@@ -8,9 +9,12 @@ ingredientUnits.set("clof", "clove");
 ingredientUnits.set("clove", "clove");
 ingredientUnits.set("cup", "cup");
 ingredientUnits.set("dash", "dash");
+ingredientUnits.set("drop", "drop");
 ingredientUnits.set("g", "gram");
 ingredientUnits.set("gal", "gallon");
 ingredientUnits.set("gallon", "gallon");
+ingredientUnits.set("gr", "grain");
+ingredientUnits.set("grain", "grain");
 ingredientUnits.set("gram", "gram");
 ingredientUnits.set("inch", "inch");
 ingredientUnits.set("kg", "kilogram");
@@ -80,6 +84,8 @@ temperatureUnits.set("f", "fahrenheit");
 temperatureUnits.set("c", "celsius");
 temperatureUnits.set("celsius", "celsius");
 
+const temperatureMarkers = ["°", "degree"];
+
 const ingredientPrepositions = ["of"];
 
 export default {
@@ -89,4 +95,5 @@ export default {
   timeUnitMultipliers,
   temperatureUnits,
   ingredientPrepositions,
+  temperatureMarkers
 };

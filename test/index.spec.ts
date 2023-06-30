@@ -31,6 +31,10 @@ describe("Parse ingredient EN", () => {
     ["10 ml milk", 10, "10", "milliliter", "milk", ""],
     ["Salt to taste", 0, "", "", "Salt to taste", ""],
     ["Ingredient", 0, "", "", "Ingredient", ""],
+    ["10 gr wheat flour", 10, "10", "grain", "wheat flour", ""],
+    ["1 drop of water", 1, "1", "drop", "water", ""],
+    ["1 batch of another recipe", 1, "1", "batch", "another recipe", ""],
+    ["2 batches meringue", 2, "2", "batch", "meringue", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
@@ -52,6 +56,8 @@ describe("Parse instruction EN", () => {
     ["Bake for 10min", 600, 0, ""],
     ["Wait 1 hour, knead some more and wait another 15 min", 4500, 0, ""],
     ["Preheat the oven at 450 fahrenheit", 0, 450, "fahrenheit"],
+    ["Preheat the oven at 450° fahrenheit", 0, 450, "fahrenheit"],
+    ["Preheat the oven at 450°F", 0, 450, "fahrenheit"],
     [
       "Preheat the oven at 450 fahrenheit then adjust to 500F",
       0,
