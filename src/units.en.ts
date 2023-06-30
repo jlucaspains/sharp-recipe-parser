@@ -8,6 +8,7 @@ ingredientUnits.set("clof", "clove");
 ingredientUnits.set("clove", "clove");
 ingredientUnits.set("cup", "cup");
 ingredientUnits.set("dash", "dash");
+ingredientUnits.set("drop", "drop");
 ingredientUnits.set("g", "gram");
 ingredientUnits.set("gal", "gallon");
 ingredientUnits.set("gallon", "gallon");
