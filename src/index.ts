@@ -147,7 +147,7 @@ function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number
       if (isSpecialFraction) {
         value = unicodeFractions[item];
       } else if (isTextNumber) {
-        value = units.ingredientQuantities.get(item.toLowerCase())?.toString() || "";
+        value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
       }
 
       quantityText += `${space}${item}`;
