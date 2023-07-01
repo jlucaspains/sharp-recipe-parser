@@ -214,28 +214,29 @@ function getIngredient(
     return ["", startIndex];
   }
 
-  const seaparatorIndex = tokens.findIndex((item) => item.token == "," || item.token == "(");
-  const endIndex = seaparatorIndex > 0 ? seaparatorIndex : tokens.length;
 
-  let newStartIndex = startIndex;
-
+  const separatorIndex = tokens.findIndex((item) => item.token == ",");
+  const endIndex = separatorIndex > 0 ? separatorIndex : tokens.length;
   const units = getUnits(language);
-  // remove prepositions up until the first non-preposition
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const item = tokens[newStartIndex];
+  const cleanTokens = [];
+  let withinParenthesis = false;
 
-    if (!units.ingredientPrepositions.includes(item.token)
-      && !units.ingredientSizes.includes(item.token)) {
-      break;
+  for (const item of tokens.slice(startIndex, endIndex)) {
+    // remove anything within parenthesis
+    withinParenthesis = withinParenthesis || item.token == "("
+    // remove prepositions and ingredient sizes
+    const isSpecial = units.ingredientPrepositions.includes(item.token)
+      || units.ingredientSizes.includes(item.token);
+
+    if (!isSpecial && !withinParenthesis) {
+      cleanTokens.push(item);
     }
 
-    newStartIndex++;
+    withinParenthesis = withinParenthesis && item.token != ")";
   }
 
-  const ingredients = tokens.slice(newStartIndex, endIndex);
-
-  return [ingredients.map((item) => item.token).join(" "), endIndex];
+  
+  return [cleanTokens.map((item) => item.token).join(" "), endIndex];
 }
 
 function getExtra(tokens: POSTaggedWord[], startIndex: number): string {
