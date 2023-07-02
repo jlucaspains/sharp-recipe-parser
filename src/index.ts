@@ -141,7 +141,8 @@ function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number
     const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
     if (isNumber || isFraction || isSpecialFraction || isTextNumber) {
-      const space = quantityText.length > 0 && !ignoreNextSpace && !isFraction ? " " : "";
+      const addSpace = quantityText.length > 0 && !ignoreNextSpace && !isFraction;
+      const space = addSpace ? " " : "";
       let value = item;
 
       if (isSpecialFraction) {
