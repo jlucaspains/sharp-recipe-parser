@@ -53,7 +53,7 @@ export function parseIngredient(
     return { token: item, tag: "N" };
   });
 
-  const [quantity, quantityText, quantityEndIndex] = getQuantity(tags);
+  const [quantity, quantityText, quantityEndIndex] = getQuantity(tags, language);
   const [unit, unitText, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
   const [ingredient, ingredientEndIndex] = getIngredient(
     tags,
@@ -126,34 +126,40 @@ export function parseInstruction(
   return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
 }
 
-function getQuantity(tokens: POSTaggedWord[]): [number, string, number] {
+function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
-
-  let addSpace = false;
   let index = 0;
+  let ignoreNextSpace = false;
+  const units = getUnits(language);
+
   for (; index < tokens.length; index++) {
     const item = tokens[index].token;
+    const isNumber = !isNaN(Number(item));
+    const isFraction = item === "/";
+    const isSpecialFraction = isUnicodeFraction(item);
+    const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
-    addSpace = addSpace && item != "/";
-
-    let hasUnicodeFraction = false;
-    if (
-      !isNaN(Number(item)) ||
-      item == "/" ||
-      (hasUnicodeFraction = isUnicodeFraction(item))
-    ) {
+    if (isNumber || isFraction || isSpecialFraction || isTextNumber) {
+      const addSpace = quantityText.length > 0 && !ignoreNextSpace && !isFraction;
       const space = addSpace ? " " : "";
+      let value = item;
+
+      if (isSpecialFraction) {
+        value = unicodeFractions[item];
+      } else if (isTextNumber) {
+        value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
+      }
+
       quantityText += `${space}${item}`;
-      quantityConvertible += `${space}${hasUnicodeFraction ? unicodeFractions[item] : item}`;
+      quantityConvertible += `${space}${value}`;
+      ignoreNextSpace = isFraction;
     } else if (quantityText.length > 0) {
       break;
     }
-
-    addSpace = item != "/";
   }
 
-  if (quantityText.length == 0) {
+  if (quantityText.length === 0) {
     index = 0;
   }
 
@@ -214,7 +220,6 @@ function getIngredient(
     return ["", startIndex];
   }
 
-
   const separatorIndex = tokens.findIndex((item) => item.token == ",");
   const endIndex = separatorIndex > 0 ? separatorIndex : tokens.length;
   const units = getUnits(language);
@@ -235,7 +240,7 @@ function getIngredient(
     withinParenthesis = withinParenthesis && item.token != ")";
   }
 
-  
+
   return [cleanTokens.map((item) => item.token).join(" "), endIndex];
 }
 

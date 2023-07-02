@@ -38,6 +38,16 @@ describe("Parse ingredient EN", () => {
     ["1 cup (120g) flour, sifted", 1, "1", "cup", "flour", "sifted"],
     ["1 cup flour (whole), sifted", 1, "1", "cup", "flour", "sifted"],
     ["1 cup (120g) flour (whole), sifted", 1, "1", "cup", "flour", "sifted"],
+    ["one pound of carrots", 1, "one", "pound", "carrots", ""],
+    ["two pound of carrots", 2, "two", "pound", "carrots", ""],
+    ["three pound of carrots", 3, "three", "pound", "carrots", ""],
+    ["four pound of carrots", 4, "four", "pound", "carrots", ""],
+    ["five pound of carrots", 5, "five", "pound", "carrots", ""],
+    ["six pound of carrots", 6, "six", "pound", "carrots", ""],
+    ["seven pound of carrots", 7, "seven", "pound", "carrots", ""],
+    ["eight pound of carrots", 8, "eight", "pound", "carrots", ""],
+    ["nine pound of carrots", 9, "nine", "pound", "carrots", ""],
+    ["ten pound of carrots", 10, "ten", "pound", "carrots", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
