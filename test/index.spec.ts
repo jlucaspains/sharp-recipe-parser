@@ -63,6 +63,36 @@ describe("Parse ingredient EN", () => {
   );
 });
 
+
+describe("Parse ingredient ranges EN", () => {
+  const table = [
+    ["one to two pounds of carrots", 2, 1, 2, "one to two", "pound", "carrots", ""],
+    ["2-3 cups of carrots", 3, 2, 3, "2 - 3", "cup", "carrots", ""],
+    ["3 - 4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
+    ["3- 4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
+    ["3 -4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
+    ["3 to 4 cups of carrots", 4, 3, 4, "3 to 4", "cup", "carrots", ""],
+    ["1/4 to 1/2 cups of carrots", .5, .25, .5, "1/4 to 1/2", "cup", "carrots", ""],
+    ["1/4 - 1/2 cups of carrots", .5, .25, .5, "1/4 - 1/2", "cup", "carrots", ""],
+    ["1/4-1/2 cups of carrots", .5, .25, .5, "1/4 - 1/2", "cup", "carrots", ""],
+    ["1 1/4 - 1 1/2 cups of carrots", 1.5, 1.25, 1.5, "1 1/4 - 1 1/2", "cup", "carrots", ""],
+    ["2 cups of carrots", 2, 2, 2, "2", "cup", "carrots", ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, quantity, minQuantity, maxQuantity, quantityText, unit, ingredient, extra) => {
+      const result = parseIngredient(text as string, "en");
+      expect(result?.quantity ?? -1).toBe(quantity);
+      expect(result?.minQuantity ?? -1).toBe(minQuantity);
+      expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
+      expect(result?.quantityText ?? -1).toBe(quantityText);
+      expect(result?.unit ?? -1).toBe(unit);
+      expect(result?.ingredient ?? -1).toBe(ingredient);
+      expect(result?.extra ?? -1).toBe(extra);
+    }
+  );
+});
+
 describe("Parse instruction EN", () => {
   const table = [
     ["", -1, -1, -1],

@@ -3,6 +3,8 @@ export type ValidLanguages = "en" | "pt";
 export interface IngredientParseResult {
   quantity: number;
   quantityText: string;
+  minQuantity: number;
+  maxQuantity: number;
   unit: string;
   unitText: string;
   ingredient: string;
@@ -28,4 +30,5 @@ export interface Units {
   ingredientSizes: string[];
   temperatureMarkers: string[];
   ingredientQuantities: Map<string, number>;
+  ingredientRangeMarker: string[];
 }

@@ -53,7 +53,7 @@ export function parseIngredient(
     return { token: item, tag: "N" };
   });
 
-  const [quantity, quantityText, quantityEndIndex] = getQuantity(tags, language);
+  const [firstQuantity, quantity, quantityText, quantityEndIndex] = getQuantity(tags, language);
   const [unit, unitText, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
   const [ingredient, ingredientEndIndex] = getIngredient(
     tags,
@@ -62,7 +62,7 @@ export function parseIngredient(
   );
   const extra = getExtra(tags, ingredientEndIndex);
 
-  return { quantity, quantityText, unit, unitText, ingredient, extra };
+  return { quantity, quantityText, minQuantity: firstQuantity || quantity, maxQuantity: quantity, unit, unitText, ingredient, extra };
 }
 
 export function parseInstruction(
@@ -126,11 +126,12 @@ export function parseInstruction(
   return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
 }
 
-function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number, string, number] {
+function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number, number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
-  let index = 0;
   let ignoreNextSpace = false;
+  let firstQuantityConvertible = "";
+  let index = 0;
   const units = getUnits(language);
 
   for (; index < tokens.length; index++) {
@@ -154,6 +155,10 @@ function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number
       quantityText += `${space}${item}`;
       quantityConvertible += `${space}${value}`;
       ignoreNextSpace = isFraction;
+    } else if(quantityText.length > 0 && units.ingredientRangeMarker.includes(item)) {
+      firstQuantityConvertible = quantityConvertible;
+      quantityText += ` ${item}`;
+      quantityConvertible = "";
     } else if (quantityText.length > 0) {
       break;
     }
@@ -163,15 +168,22 @@ function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number
     index = 0;
   }
 
+  const firstQuantityValue = getQuantityValue(firstQuantityConvertible);
+  const quantityValue = getQuantityValue(quantityConvertible);
+
+  return [firstQuantityValue, quantityValue, quantityText, index];
+}
+
+function getQuantityValue(quantityConvertible: string): number {
   let quantityValue = 0;
   if (quantityConvertible.includes("/")) {
-    const frac = new Fraction(quantityConvertible);
+    const frac = new Fraction(quantityConvertible.trim());
     quantityValue = frac.round(2).valueOf();
   } else if (quantityConvertible.length > 0) {
-    quantityValue = parseFloat(quantityConvertible);
+    quantityValue = parseFloat(quantityConvertible.trim());
   }
 
-  return [quantityValue, quantityText, index];
+  return quantityValue;
 }
 
 function getUnit(
