@@ -90,16 +90,18 @@ const temperatureMarkers = ["°", "degree"];
 const ingredientPrepositions = ["of"];
 
 const ingredientQuantities = new Map<string, number>();
-ingredientQuantities.set("one", 1)
-ingredientQuantities.set("two", 2)
-ingredientQuantities.set("three", 3)
-ingredientQuantities.set("four", 4)
-ingredientQuantities.set("five", 5)
-ingredientQuantities.set("six", 6)
-ingredientQuantities.set("seven", 7)
-ingredientQuantities.set("eight", 8)
-ingredientQuantities.set("nine", 9)
-ingredientQuantities.set("ten", 10)
+ingredientQuantities.set("one", 1);
+ingredientQuantities.set("two", 2);
+ingredientQuantities.set("three", 3);
+ingredientQuantities.set("four", 4);
+ingredientQuantities.set("five", 5);
+ingredientQuantities.set("six", 6);
+ingredientQuantities.set("seven", 7);
+ingredientQuantities.set("eight", 8);
+ingredientQuantities.set("nine", 9);
+ingredientQuantities.set("ten", 10);
+
+const ingredientRangeMarker = ["to", "-", "or"];
 
 export default {
   ingredientUnits,
@@ -109,5 +111,6 @@ export default {
   temperatureUnits,
   ingredientPrepositions,
   temperatureMarkers,
-  ingredientQuantities
+  ingredientQuantities,
+  ingredientRangeMarker
 };
