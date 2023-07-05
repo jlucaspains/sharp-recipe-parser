@@ -1,4 +1,5 @@
 import { parseIngredient, parseInstruction } from "../src/index";
+import { InstructionTime } from "../src/types";
 
 describe("Parse ingredient EN", () => {
   const table = [
@@ -114,9 +115,36 @@ describe("Parse instruction EN", () => {
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
       const result = parseInstruction(text as string, "en");
-      expect(result?.timeInSeconds ?? -1).toBe(timeInSeconds);
+      expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
+    }
+  );
+});
+
+
+describe("Parse instruction time range EN", () => {
+  const table = [
+    ["Bake for 10min then 20 min then 30 minutes", 3600, [{ timeInSeconds: 600, timeUnitText: "min", timeText: "10" }, { timeInSeconds: 1200, timeUnitText: "min", timeText: "20" }, { timeInSeconds: 1800, timeUnitText: "minutes", timeText: "30" }]],
+    ["Bake for 10min then wait it to cool down over 15 minutes", 1500, [{ timeInSeconds: 600, timeUnitText: "min", timeText: "10" }, { timeInSeconds: 900, timeUnitText: "minutes", timeText: "15" }]],
+    ["Bake for 10min", 600, [{ timeInSeconds: 600, timeUnitText: "min", timeText: "10" }]],
+    ["Boil until done", 0, []],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, totalTimeInSeconds, time) => {
+      const timeItems = time as InstructionTime[];
+      const result = parseInstruction(text as string, "en");
+      expect(result?.totalTimeInSeconds ?? -1).toBe(totalTimeInSeconds);
+      expect(result?.timeItems?.length).toBe(timeItems.length);
+
+      for (let index = 0; index < (result?.timeItems?.length ?? 0); index++) {
+        const element = result?.timeItems[index];
+
+        expect(element?.timeInSeconds).toBe(timeItems[index].timeInSeconds);
+        expect(element?.timeText).toBe(timeItems[index].timeText);
+        expect(element?.timeUnitText).toBe(timeItems[index].timeUnitText);
+      }
     }
   );
 });

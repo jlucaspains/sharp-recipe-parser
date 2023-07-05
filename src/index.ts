@@ -5,6 +5,7 @@ import { getUnits } from "./units";
 import {
   IngredientParseResult,
   InstructionParseResult,
+  InstructionTime,
   ValidLanguages,
 } from "./types";
 
@@ -82,13 +83,12 @@ export function parseInstruction(
 
   let number = 0;
   let numberText = "";
-  let timeInSeconds = 0;
-  let timeUnitText = "";
+  let timeItems: InstructionTime[] = [];
+  let totalTimeInSeconds = 0;
   let temperature = 0;
   let temperatureText = "";
   let temperatureUnit = "";
   let temperatureUnitText = "";
-  let timeText = "";
   for (const tag of tags) {
     const maybeNumber = Number(tag.token);
     if (!isNaN(maybeNumber)) {
@@ -108,9 +108,9 @@ export function parseInstruction(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const timeUnit = units.timeUnits.get(maybeUnitSingular)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        timeInSeconds += number * units.timeUnitMultipliers.get(timeUnit)!;
-        timeText = numberText;
-        timeUnitText = tag.token;
+        const timeInSeconds = number * units.timeUnitMultipliers.get(timeUnit)!;
+        totalTimeInSeconds += timeInSeconds;
+        timeItems.push({timeInSeconds, timeUnitText: tag.token, timeText: numberText});
       } else if (units.temperatureUnits.has(maybeUnitSingular)) {
         temperature = number;
         temperatureText = numberText;
@@ -123,7 +123,7 @@ export function parseInstruction(
     }
   }
 
-  return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
+  return { totalTimeInSeconds, timeItems, temperature, temperatureText, temperatureUnit, temperatureUnitText };
 }
 
 function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number, number, string, number] {
