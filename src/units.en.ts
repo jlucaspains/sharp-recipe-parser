@@ -6,7 +6,7 @@ ingredientUnits.set("bunch", "bunch");
 ingredientUnits.set("c", "cup");
 ingredientUnits.set("can", "can");
 // the nounInflector incorrectly singularizes "cloves" to "clof"
-ingredientUnits.set("clof", "clove"); 
+ingredientUnits.set("clof", "clove");
 ingredientUnits.set("clove", "clove");
 ingredientUnits.set("cup", "cup");
 ingredientUnits.set("dash", "dash");
@@ -112,5 +112,5 @@ export default {
   ingredientPrepositions,
   temperatureMarkers,
   ingredientQuantities,
-  ingredientRangeMarker
+  ingredientRangeMarker,
 };

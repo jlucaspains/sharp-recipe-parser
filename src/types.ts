@@ -12,13 +12,18 @@ export interface IngredientParseResult {
 }
 
 export interface InstructionParseResult {
-  timeInSeconds: number;
-  timeText: string;
-  timeUnitText: string;
+  totalTimeInSeconds: number;
+  timeItems: InstructionTime[];
   temperature: number;
   temperatureUnit: string;
   temperatureText: string;
   temperatureUnitText: string;
+}
+
+export interface InstructionTime {
+  timeInSeconds: number;
+  timeUnitText: string;
+  timeText: string;
 }
 
 export interface Units {

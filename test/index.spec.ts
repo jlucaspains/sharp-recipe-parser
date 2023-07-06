@@ -1,4 +1,5 @@
 import { parseIngredient, parseInstruction } from "../src/index";
+import { InstructionTime } from "../src/types";
 
 describe("Parse ingredient EN", () => {
   const table = [
@@ -63,24 +64,77 @@ describe("Parse ingredient EN", () => {
   );
 });
 
-
 describe("Parse ingredient ranges EN", () => {
   const table = [
-    ["one to two pounds of carrots", 2, 1, 2, "one to two", "pound", "carrots", ""],
+    [
+      "one to two pounds of carrots",
+      2,
+      1,
+      2,
+      "one to two",
+      "pound",
+      "carrots",
+      "",
+    ],
     ["2-3 cups of carrots", 3, 2, 3, "2 - 3", "cup", "carrots", ""],
     ["3 - 4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
     ["3- 4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
     ["3 -4 cups of carrots", 4, 3, 4, "3 - 4", "cup", "carrots", ""],
     ["3 to 4 cups of carrots", 4, 3, 4, "3 to 4", "cup", "carrots", ""],
-    ["1/4 to 1/2 cups of carrots", .5, .25, .5, "1/4 to 1/2", "cup", "carrots", ""],
-    ["1/4 - 1/2 cups of carrots", .5, .25, .5, "1/4 - 1/2", "cup", "carrots", ""],
-    ["1/4-1/2 cups of carrots", .5, .25, .5, "1/4 - 1/2", "cup", "carrots", ""],
-    ["1 1/4 - 1 1/2 cups of carrots", 1.5, 1.25, 1.5, "1 1/4 - 1 1/2", "cup", "carrots", ""],
+    [
+      "1/4 to 1/2 cups of carrots",
+      0.5,
+      0.25,
+      0.5,
+      "1/4 to 1/2",
+      "cup",
+      "carrots",
+      "",
+    ],
+    [
+      "1/4 - 1/2 cups of carrots",
+      0.5,
+      0.25,
+      0.5,
+      "1/4 - 1/2",
+      "cup",
+      "carrots",
+      "",
+    ],
+    [
+      "1/4-1/2 cups of carrots",
+      0.5,
+      0.25,
+      0.5,
+      "1/4 - 1/2",
+      "cup",
+      "carrots",
+      "",
+    ],
+    [
+      "1 1/4 - 1 1/2 cups of carrots",
+      1.5,
+      1.25,
+      1.5,
+      "1 1/4 - 1 1/2",
+      "cup",
+      "carrots",
+      "",
+    ],
     ["2 cups of carrots", 2, 2, 2, "2", "cup", "carrots", ""],
   ];
   it.each(table)(
     "parse %s",
-    (text, quantity, minQuantity, maxQuantity, quantityText, unit, ingredient, extra) => {
+    (
+      text,
+      quantity,
+      minQuantity,
+      maxQuantity,
+      quantityText,
+      unit,
+      ingredient,
+      extra
+    ) => {
       const result = parseIngredient(text as string, "en");
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
@@ -114,9 +168,51 @@ describe("Parse instruction EN", () => {
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
       const result = parseInstruction(text as string, "en");
-      expect(result?.timeInSeconds ?? -1).toBe(timeInSeconds);
+      expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
     }
   );
+});
+
+describe("Parse instruction time range EN", () => {
+  const table = [
+    [
+      "Bake for 10min then 20 min then 30 minutes",
+      3600,
+      [
+        { timeInSeconds: 600, timeUnitText: "min", timeText: "10" },
+        { timeInSeconds: 1200, timeUnitText: "min", timeText: "20" },
+        { timeInSeconds: 1800, timeUnitText: "minutes", timeText: "30" },
+      ],
+    ],
+    [
+      "Bake for 10min then wait it to cool down over 15 minutes",
+      1500,
+      [
+        { timeInSeconds: 600, timeUnitText: "min", timeText: "10" },
+        { timeInSeconds: 900, timeUnitText: "minutes", timeText: "15" },
+      ],
+    ],
+    [
+      "Bake for 10min",
+      600,
+      [{ timeInSeconds: 600, timeUnitText: "min", timeText: "10" }],
+    ],
+    ["Boil until done", 0, []],
+  ];
+  it.each(table)("parse %s", (text, totalTimeInSeconds, time) => {
+    const timeItems = time as InstructionTime[];
+    const result = parseInstruction(text as string, "en");
+    expect(result?.totalTimeInSeconds ?? -1).toBe(totalTimeInSeconds);
+    expect(result?.timeItems.length).toBe(timeItems.length);
+
+    for (let index = 0; index < (result?.timeItems.length ?? 0); index++) {
+      const element = result?.timeItems[index];
+
+      expect(element?.timeInSeconds).toBe(timeItems[index].timeInSeconds);
+      expect(element?.timeText).toBe(timeItems[index].timeText);
+      expect(element?.timeUnitText).toBe(timeItems[index].timeUnitText);
+    }
+  });
 });

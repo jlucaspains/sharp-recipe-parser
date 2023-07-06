@@ -5,6 +5,7 @@ import { getUnits } from "./units";
 import {
   IngredientParseResult,
   InstructionParseResult,
+  InstructionTime,
   ValidLanguages,
 } from "./types";
 
@@ -53,8 +54,15 @@ export function parseIngredient(
     return { token: item, tag: "N" };
   });
 
-  const [firstQuantity, quantity, quantityText, quantityEndIndex] = getQuantity(tags, language);
-  const [unit, unitText, unitEndIndex] = getUnit(tags, quantityEndIndex, language);
+  const [firstQuantity, quantity, quantityText, quantityEndIndex] = getQuantity(
+    tags,
+    language
+  );
+  const [unit, unitText, unitEndIndex] = getUnit(
+    tags,
+    quantityEndIndex,
+    language
+  );
   const [ingredient, ingredientEndIndex] = getIngredient(
     tags,
     unitEndIndex,
@@ -62,7 +70,16 @@ export function parseIngredient(
   );
   const extra = getExtra(tags, ingredientEndIndex);
 
-  return { quantity, quantityText, minQuantity: firstQuantity || quantity, maxQuantity: quantity, unit, unitText, ingredient, extra };
+  return {
+    quantity,
+    quantityText,
+    minQuantity: firstQuantity || quantity,
+    maxQuantity: quantity,
+    unit,
+    unitText,
+    ingredient,
+    extra,
+  };
 }
 
 export function parseInstruction(
@@ -82,13 +99,12 @@ export function parseInstruction(
 
   let number = 0;
   let numberText = "";
-  let timeInSeconds = 0;
-  let timeUnitText = "";
+  const timeItems: InstructionTime[] = [];
+  let totalTimeInSeconds = 0;
   let temperature = 0;
   let temperatureText = "";
   let temperatureUnit = "";
   let temperatureUnitText = "";
-  let timeText = "";
   for (const tag of tags) {
     const maybeNumber = Number(tag.token);
     if (!isNaN(maybeNumber)) {
@@ -108,9 +124,13 @@ export function parseInstruction(
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const timeUnit = units.timeUnits.get(maybeUnitSingular)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        timeInSeconds += number * units.timeUnitMultipliers.get(timeUnit)!;
-        timeText = numberText;
-        timeUnitText = tag.token;
+        const timeInSeconds = number * units.timeUnitMultipliers.get(timeUnit)!;
+        totalTimeInSeconds += timeInSeconds;
+        timeItems.push({
+          timeInSeconds,
+          timeUnitText: tag.token,
+          timeText: numberText,
+        });
       } else if (units.temperatureUnits.has(maybeUnitSingular)) {
         temperature = number;
         temperatureText = numberText;
@@ -123,10 +143,20 @@ export function parseInstruction(
     }
   }
 
-  return { timeInSeconds, timeText, timeUnitText, temperature, temperatureText, temperatureUnit, temperatureUnitText };
+  return {
+    totalTimeInSeconds,
+    timeItems,
+    temperature,
+    temperatureText,
+    temperatureUnit,
+    temperatureUnitText,
+  };
 }
 
-function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number, number, string, number] {
+function getQuantity(
+  tokens: POSTaggedWord[],
+  language: ValidLanguages
+): [number, number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
   let ignoreNextSpace = false;
@@ -142,20 +172,25 @@ function getQuantity(tokens: POSTaggedWord[], language: ValidLanguages): [number
     const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
     if (isNumber || isFraction || isSpecialFraction || isTextNumber) {
-      const addSpace = quantityText.length > 0 && !ignoreNextSpace && !isFraction;
+      const addSpace =
+        quantityText.length > 0 && !ignoreNextSpace && !isFraction;
       const space = addSpace ? " " : "";
       let value = item;
 
       if (isSpecialFraction) {
         value = unicodeFractions[item];
       } else if (isTextNumber) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
       }
 
       quantityText += `${space}${item}`;
       quantityConvertible += `${space}${value}`;
       ignoreNextSpace = isFraction;
-    } else if(quantityText.length > 0 && units.ingredientRangeMarker.includes(item)) {
+    } else if (
+      quantityText.length > 0 &&
+      units.ingredientRangeMarker.includes(item)
+    ) {
       firstQuantityConvertible = quantityConvertible;
       quantityText += ` ${item}`;
       quantityConvertible = "";
@@ -219,8 +254,12 @@ function getUnit(
     return ["", "", newStartIndex];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return [units.ingredientUnits.get(possibleUOMSingular)!, possibleUOM, newStartIndex + 1];
+  return [
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    units.ingredientUnits.get(possibleUOMSingular)!,
+    possibleUOM,
+    newStartIndex + 1,
+  ];
 }
 
 function getIngredient(
@@ -240,10 +279,11 @@ function getIngredient(
 
   for (const item of tokens.slice(startIndex, endIndex)) {
     // remove anything within parenthesis
-    withinParenthesis = withinParenthesis || item.token == "("
+    withinParenthesis = withinParenthesis || item.token == "(";
     // remove prepositions and ingredient sizes
-    const isSpecial = units.ingredientPrepositions.includes(item.token)
-      || units.ingredientSizes.includes(item.token);
+    const isSpecial =
+      units.ingredientPrepositions.includes(item.token) ||
+      units.ingredientSizes.includes(item.token);
 
     if (!isSpecial && !withinParenthesis) {
       cleanTokens.push(item);
@@ -251,7 +291,6 @@ function getIngredient(
 
     withinParenthesis = withinParenthesis && item.token != ")";
   }
-
 
   return [cleanTokens.map((item) => item.token).join(" "), endIndex];
 }
