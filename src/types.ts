@@ -23,7 +23,7 @@ export interface InstructionParseResult {
 export interface InstructionTime {
   timeInSeconds: number;
   timeUnitText: string;
-  timeText: string
+  timeText: string;
 }
 
 export interface Units {
