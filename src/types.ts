@@ -27,7 +27,7 @@ export interface InstructionTime {
 }
 
 export interface Units {
-  ingredientUnits: Map<string, string>;
+  ingredientUnits: Map<string, string | UnitCustomIdentifier>;
   timeUnits: Map<string, string>;
   timeUnitMultipliers: Map<string, number>;
   temperatureUnits: Map<string, string>;
@@ -36,4 +36,8 @@ export interface Units {
   temperatureMarkers: string[];
   ingredientQuantities: Map<string, number>;
   ingredientRangeMarker: string[];
+}
+
+export interface UnitCustomIdentifier {
+  (tokens: Array<string>, startIndex: number): { uom: string, newIndex: number };
 }
