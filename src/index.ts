@@ -1,4 +1,4 @@
-import { tokenize } from './tokenizer';
+import { tokenize } from "./tokenizer";
 import Fraction from "fraction.js";
 import { getUnits } from "./units";
 import {
@@ -272,7 +272,8 @@ function getIngredient(
   const cleanTokens = [];
   let withinParenthesis = false;
   const firstToken = tokens[startIndex];
-  const skipFirstToken = units.ingredientPrepositions.includes(firstToken) ||
+  const skipFirstToken =
+    units.ingredientPrepositions.includes(firstToken) ||
     units.ingredientSizes.includes(firstToken);
   const newStartIndex = skipFirstToken ? startIndex + 1 : startIndex;
 
@@ -291,9 +292,7 @@ function getIngredient(
 }
 
 function getExtra(tokens: string[], startIndex: number): string {
-  return tokens
-    .slice(startIndex + 1)
-    .join(" ");
+  return tokens.slice(startIndex + 1).join(" ");
 }
 
 function isUnicodeFraction(maybeFraction: string): boolean {
