@@ -1,3 +1,7 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jlucaspains_sharp-recipe-parser&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jlucaspains_sharp-recipe-parser)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jlucaspains_sharp-recipe-parser&metric=coverage)](https://sonarcloud.io/summary/new_code?id=jlucaspains_sharp-recipe-parser)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jlucaspains_sharp-recipe-parser&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=jlucaspains_sharp-recipe-parser)
+
 A simple recipe ingredient and instruction parser that avoids regexes as much as possible.
 
 ## Getting started
