@@ -38,6 +38,4 @@ export interface Units {
   ingredientRangeMarker: string[];
 }
 
-export interface UnitCustomIdentifier {
-  (tokens: Array<string>, startIndex: number): { uom: string, newIndex: number };
-}
+export type UnitCustomIdentifier = (tokens: Array<string>, startIndex: number) => { uom: string, newIndex: number };
