@@ -1,4 +1,4 @@
-A simple recipe ingredient and instruction parser.
+A simple recipe ingredient and instruction parser that avoids regexes as much as possible.
 
 ## Getting started
 Install package from [npmjs.com](https://www.npmjs.com/package/@jlucaspains/sharp-recipe-parser):
@@ -38,7 +38,7 @@ parseInstruction('Bake at 400F for 30 minutes.');
 ```
 
 ## How it works
-sharp-recipe-parser uses [natural](https://www.npmjs.com/package/natural) in order to tokenize the words from ingredient and instruction phrases. After tokenization, rules developed specifically for recipe parsing are executed like so:
+sharp-recipe-parser uses a simple technique that preserves words and punctuation in order to tokenize the ingredient and instruction phrases. After tokenization, rules developed specifically for recipe parsing are executed like so:
 
 1. Look through the tokens for numbers (e.g. 1, 10, 1.5, 1/2, 1 1/4, one, etc)
    1. Fractions are parsed using [fraction.js](https://www.npmjs.com/package/fraction.js)
@@ -82,5 +82,5 @@ I've tried a few models such as the [New York Times Ingredient Phrase Tagger](ht
 2. Where is this used?
 The library was developed side-by-side with [Sharp Cooking](https://github.com/jlucaspains/sharp-cooking-web). As soon as version 1 of the library is released, I expected Sharp Cooking will leverage it in PROD as well.
 
-4. Why natural language parsing over regex?
+4. Why not regex?
 Regex quickly becomes clunky and hard to understand at a glance. There are reasonably simple rules that can be followed to parse and understand a recipe using a tokenizer and dictionaries to lookup specific data. 

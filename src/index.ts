@@ -1,5 +1,4 @@
-import { WordPunctTokenizer } from "natural/lib/natural/tokenizers";
-import { NounInflector } from "natural/lib/natural/inflectors";
+import { tokenize } from "./tokenizer";
 import Fraction from "fraction.js";
 import { getUnits } from "./units";
 import {
@@ -8,14 +7,6 @@ import {
   InstructionTime,
   ValidLanguages,
 } from "./types";
-
-interface POSTaggedWord {
-  token: string;
-  tag: string;
-}
-
-const tokenizer = new WordPunctTokenizer();
-const nounInflector = new NounInflector();
 
 /* eslint-disable @typescript-eslint/naming-convention */
 const unicodeFractions: Record<string, string> = {
@@ -44,31 +35,27 @@ export function parseIngredient(
   text: string,
   language: ValidLanguages
 ): IngredientParseResult | null {
-  const tokens = tokenizer.tokenize(text);
+  const tokens = tokenize(text);
 
   if (tokens == null || tokens.length == 0) {
     return null;
   }
 
-  const tags = tokens.map((item) => {
-    return { token: item, tag: "N" };
-  });
-
   const [firstQuantity, quantity, quantityText, quantityEndIndex] = getQuantity(
-    tags,
+    tokens,
     language
   );
   const [unit, unitText, unitEndIndex] = getUnit(
-    tags,
+    tokens,
     quantityEndIndex,
     language
   );
   const [ingredient, ingredientEndIndex] = getIngredient(
-    tags,
+    tokens,
     unitEndIndex,
     language
   );
-  const extra = getExtra(tags, ingredientEndIndex);
+  const extra = getExtra(tokens, ingredientEndIndex);
 
   return {
     quantity,
@@ -86,7 +73,7 @@ export function parseInstruction(
   text: string,
   language: ValidLanguages
 ): InstructionParseResult | null {
-  const tokens = tokenizer.tokenize(text);
+  const tokens = tokenize(text);
 
   if (tokens == null || tokens.length == 0) {
     return null;
@@ -111,18 +98,16 @@ export function parseInstruction(
       number = maybeNumber;
       numberText = tag.token;
     } else if (number > 0) {
-      const maybeUnitSingular = nounInflector
-        .singularize(tag.token)
-        .toLowerCase();
+      const maybeUnit = tag.token.toLowerCase();
 
-      if (units.temperatureMarkers.includes(maybeUnitSingular)) {
+      if (units.temperatureMarkers.includes(maybeUnit)) {
         continue;
       }
 
       // uom is only relevant after number
-      if (units.timeUnits.has(maybeUnitSingular)) {
+      if (units.timeUnits.has(maybeUnit)) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const timeUnit = units.timeUnits.get(maybeUnitSingular)!;
+        const timeUnit = units.timeUnits.get(maybeUnit)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const timeInSeconds = number * units.timeUnitMultipliers.get(timeUnit)!;
         totalTimeInSeconds += timeInSeconds;
@@ -131,11 +116,11 @@ export function parseInstruction(
           timeUnitText: tag.token,
           timeText: numberText,
         });
-      } else if (units.temperatureUnits.has(maybeUnitSingular)) {
+      } else if (units.temperatureUnits.has(maybeUnit)) {
         temperature = number;
         temperatureText = numberText;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        temperatureUnit = units.temperatureUnits.get(maybeUnitSingular)!;
+        temperatureUnit = units.temperatureUnits.get(maybeUnit)!;
         temperatureUnitText = tag.token;
       }
 
@@ -154,7 +139,7 @@ export function parseInstruction(
 }
 
 function getQuantity(
-  tokens: POSTaggedWord[],
+  tokens: string[],
   language: ValidLanguages
 ): [number, number, string, number] {
   let quantityText = "";
@@ -165,7 +150,7 @@ function getQuantity(
   const units = getUnits(language);
 
   for (; index < tokens.length; index++) {
-    const item = tokens[index].token;
+    const item = tokens[index];
     const isNumber = !isNaN(Number(item));
     const isFraction = item === "/";
     const isSpecialFraction = isUnicodeFraction(item);
@@ -222,7 +207,7 @@ function getQuantityValue(quantityConvertible: string): number {
 }
 
 function getUnit(
-  tokens: POSTaggedWord[],
+  tokens: string[],
   startIndex: number,
   language: ValidLanguages
 ): [string, string, number] {
@@ -238,32 +223,42 @@ function getUnit(
   while (true) {
     const item = tokens[newStartIndex];
 
-    if (!units.ingredientSizes.includes(item.token)) {
+    if (!units.ingredientSizes.includes(item)) {
       break;
     }
 
     newStartIndex++;
   }
 
-  const possibleUOM = tokens[newStartIndex].token;
-  const possibleUOMSingular = nounInflector
-    .singularize(possibleUOM)
-    .toLowerCase();
+  const possibleUOM = tokens[newStartIndex].toLowerCase();
 
-  if (!units.ingredientUnits.has(possibleUOMSingular)) {
+  if (!units.ingredientUnits.has(possibleUOM)) {
     return ["", "", newStartIndex];
+  }
+
+  newStartIndex++;
+
+  const unit = units.ingredientUnits.get(possibleUOM)!;
+  let resultUnit: string;
+
+  if (typeof unit === "string") {
+    resultUnit = unit;
+  } else {
+    const customUnit = unit(tokens, newStartIndex);
+    resultUnit = customUnit.uom;
+    newStartIndex = customUnit.newIndex;
   }
 
   return [
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    units.ingredientUnits.get(possibleUOMSingular)!,
+    resultUnit,
     possibleUOM,
-    newStartIndex + 1,
+    newStartIndex,
   ];
 }
 
 function getIngredient(
-  tokens: POSTaggedWord[],
+  tokens: string[],
   startIndex: number,
   language: ValidLanguages
 ): [string, number] {
@@ -271,35 +266,33 @@ function getIngredient(
     return ["", startIndex];
   }
 
-  const separatorIndex = tokens.findIndex((item) => item.token == ",");
+  const separatorIndex = tokens.findIndex((item) => item == ",");
   const endIndex = separatorIndex > 0 ? separatorIndex : tokens.length;
   const units = getUnits(language);
   const cleanTokens = [];
   let withinParenthesis = false;
+  const firstToken = tokens[startIndex];
+  const skipFirstToken =
+    units.ingredientPrepositions.includes(firstToken) ||
+    units.ingredientSizes.includes(firstToken);
+  const newStartIndex = skipFirstToken ? startIndex + 1 : startIndex;
 
-  for (const item of tokens.slice(startIndex, endIndex)) {
+  for (const item of tokens.slice(newStartIndex, endIndex)) {
     // remove anything within parenthesis
-    withinParenthesis = withinParenthesis || item.token == "(";
-    // remove prepositions and ingredient sizes
-    const isSpecial =
-      units.ingredientPrepositions.includes(item.token) ||
-      units.ingredientSizes.includes(item.token);
+    withinParenthesis = withinParenthesis || item == "(";
 
-    if (!isSpecial && !withinParenthesis) {
+    if (!withinParenthesis) {
       cleanTokens.push(item);
     }
 
-    withinParenthesis = withinParenthesis && item.token != ")";
+    withinParenthesis = withinParenthesis && item != ")";
   }
 
-  return [cleanTokens.map((item) => item.token).join(" "), endIndex];
+  return [cleanTokens.map((item) => item).join(" "), endIndex];
 }
 
-function getExtra(tokens: POSTaggedWord[], startIndex: number): string {
-  return tokens
-    .slice(startIndex + 1)
-    .map((item) => item.token)
-    .join(" ");
+function getExtra(tokens: string[], startIndex: number): string {
+  return tokens.slice(startIndex + 1).join(" ");
 }
 
 function isUnicodeFraction(maybeFraction: string): boolean {
