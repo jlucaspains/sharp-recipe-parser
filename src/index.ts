@@ -35,7 +35,7 @@ export function parseIngredient(
   text: string,
   language: ValidLanguages
 ): IngredientParseResult | null {
-  const tokens = tokenize(text);
+  const tokens = tokenize(text, false);
 
   if (tokens == null || tokens.length == 0) {
     return null;
@@ -79,9 +79,6 @@ export function parseInstruction(
     return null;
   }
 
-  const tags = tokens.map((item) => {
-    return { token: item, tag: "N" };
-  });
   const units = getUnits(language);
 
   let number = 0;
@@ -92,13 +89,14 @@ export function parseInstruction(
   let temperatureText = "";
   let temperatureUnit = "";
   let temperatureUnitText = "";
-  for (const tag of tags) {
-    const maybeNumber = Number(tag.token);
+  for (const token of tokens) {
+    const maybeNumber = Number(token);
+
     if (!isNaN(maybeNumber)) {
       number = maybeNumber;
-      numberText = tag.token;
+      numberText = token;
     } else if (number > 0) {
-      const maybeUnit = tag.token.toLowerCase();
+      const maybeUnit = token.toLowerCase();
 
       if (units.temperatureMarkers.includes(maybeUnit)) {
         continue;
@@ -113,7 +111,7 @@ export function parseInstruction(
         totalTimeInSeconds += timeInSeconds;
         timeItems.push({
           timeInSeconds,
-          timeUnitText: tag.token,
+          timeUnitText: token,
           timeText: numberText,
         });
       } else if (units.temperatureUnits.has(maybeUnit)) {
@@ -121,7 +119,7 @@ export function parseInstruction(
         temperatureText = numberText;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         temperatureUnit = units.temperatureUnits.get(maybeUnit)!;
-        temperatureUnitText = tag.token;
+        temperatureUnitText = token;
       }
 
       number = 0; // reset if no match
@@ -144,44 +142,45 @@ function getQuantity(
 ): [number, number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
-  let ignoreNextSpace = false;
   let firstQuantityConvertible = "";
   let index = 0;
   const units = getUnits(language);
+  let space = "";
 
   for (; index < tokens.length; index++) {
     const item = tokens[index];
-    const isNumber = !isNaN(Number(item));
+    const isSpace = item === " ";
+    const isNumber = !isSpace && !isNaN(Number(item));
     const isFraction = item === "/";
     const isSpecialFraction = isUnicodeFraction(item);
     const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
     if (isNumber || isFraction || isSpecialFraction || isTextNumber) {
-      const addSpace =
-        quantityText.length > 0 && !ignoreNextSpace && !isFraction;
-      const space = addSpace ? " " : "";
       let value = item;
 
+      let specialSpace = space;
       if (isSpecialFraction) {
         value = unicodeFractions[item];
+        specialSpace = quantityConvertible.length > 0 ? " " : space; // force space for unicode fractions
       } else if (isTextNumber) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
       }
 
       quantityText += `${space}${item}`;
-      quantityConvertible += `${space}${value}`;
-      ignoreNextSpace = isFraction;
+      quantityConvertible += `${specialSpace}${value}`;
     } else if (
       quantityText.length > 0 &&
       units.ingredientRangeMarker.includes(item)
     ) {
       firstQuantityConvertible = quantityConvertible;
-      quantityText += ` ${item}`;
+      quantityText += `${space}${item}`;
       quantityConvertible = "";
-    } else if (quantityText.length > 0) {
+    } else if (!isSpace && quantityText.length > 0) {
       break;
     }
+
+    space = isSpace ? " " : "";
   }
 
   if (quantityText.length === 0) {
@@ -223,7 +222,7 @@ function getUnit(
   while (true) {
     const item = tokens[newStartIndex];
 
-    if (!units.ingredientSizes.includes(item)) {
+    if (!units.ingredientSizes.includes(item) && item != " ") {
       break;
     }
 
@@ -250,7 +249,6 @@ function getUnit(
   }
 
   return [
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     resultUnit,
     possibleUOM,
     newStartIndex,
@@ -271,11 +269,17 @@ function getIngredient(
   const units = getUnits(language);
   const cleanTokens = [];
   let withinParenthesis = false;
+
+  if (tokens[startIndex] == " ") {
+    startIndex++;
+  }
+
   const firstToken = tokens[startIndex];
+
   const skipFirstToken =
     units.ingredientPrepositions.includes(firstToken) ||
     units.ingredientSizes.includes(firstToken);
-  const newStartIndex = skipFirstToken ? startIndex + 1 : startIndex;
+  const newStartIndex = skipFirstToken ? startIndex + 2 : startIndex;
 
   for (const item of tokens.slice(newStartIndex, endIndex)) {
     // remove anything within parenthesis
@@ -288,11 +292,20 @@ function getIngredient(
     withinParenthesis = withinParenthesis && item != ")";
   }
 
-  return [cleanTokens.map((item) => item).join(" "), endIndex];
+  return [
+    cleanTokens
+      .map((item) => item)
+      .join("")
+      .trim(),
+    endIndex,
+  ];
 }
 
 function getExtra(tokens: string[], startIndex: number): string {
-  return tokens.slice(startIndex + 1).join(" ");
+  return tokens
+    .slice(startIndex + 1)
+    .join("")
+    .trim();
 }
 
 function isUnicodeFraction(maybeFraction: string): boolean {
