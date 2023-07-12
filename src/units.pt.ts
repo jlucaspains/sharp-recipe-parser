@@ -50,17 +50,14 @@ ingredientUnits.set("bastão", "bastão");
 ingredientUnits.set("bastões", "bastão");
 
 const xicaraFunc = (input: string[], startIndex: number) => {
-  const token = input[startIndex];
-  const isParenthesis = token === "(";
-  const isDe = token == "de";
-  const newIndex = isParenthesis ? 3 : 2;
-  if (isParenthesis || isDe) {
-    if (input[startIndex + 1] === "chá") {
-      return { uom: "xícara de chá", newIndex: startIndex + newIndex };
-    }
-    if (input[startIndex + 1] === "café") {
-      return { uom: "xícara de café", newIndex: startIndex + newIndex };
-    }
+  const text = input.slice(startIndex + 1).join("");
+
+  if (text.startsWith("de chá") || text.startsWith("(chá)")) {
+    return { uom: "xícara de chá", newIndex: startIndex + 4 };
+  }
+
+  if (text.startsWith("de café") || text.startsWith("(café)")) {
+    return { uom: "xícara de café", newIndex: startIndex + 4 };
   }
 
   return { uom: "xícara", newIndex: startIndex };
@@ -70,17 +67,14 @@ ingredientUnits.set("xícara", xicaraFunc);
 ingredientUnits.set("xícaras", xicaraFunc);
 
 const colherFunc = (input: string[], startIndex: number) => {
-  const token = input[startIndex];
-  const isParenthesis = token === "(";
-  const isDe = token == "de";
-  const newIndex = isParenthesis ? 3 : 2;
-  if (isParenthesis || isDe) {
-    if (input[startIndex + 1] === "chá") {
-      return { uom: "colher de chá", newIndex: startIndex + newIndex };
-    }
-    if (input[startIndex + 1] === "sopa") {
-      return { uom: "colher de sopa", newIndex: startIndex + newIndex };
-    }
+  const text = input.slice(startIndex + 1).join("");
+
+  if (text.startsWith("de chá") || text.startsWith("(chá)")) {
+    return { uom: "colher de chá", newIndex: startIndex + 4 };
+  }
+
+  if (text.startsWith("de sopa") || text.startsWith("(sopa)")) {
+    return { uom: "colher de sopa", newIndex: startIndex + 4 };
   }
 
   return { uom: "colher", newIndex: startIndex };
