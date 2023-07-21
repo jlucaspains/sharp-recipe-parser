@@ -282,7 +282,8 @@ function getIngredient(
 
   const skipFirstToken =
     units.ingredientPrepositions.includes(firstToken) ||
-    units.ingredientSizes.includes(firstToken);
+    units.ingredientSizes.includes(firstToken) ||
+    firstToken == ".";
   const newStartIndex = skipFirstToken ? startIndex + 2 : startIndex;
 
   for (const item of tokens.slice(newStartIndex, endIndex)) {
