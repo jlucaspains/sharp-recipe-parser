@@ -229,28 +229,32 @@ function getUnit(
     newStartIndex++;
   }
 
-  const possibleUOM = tokens[newStartIndex].toLowerCase();
+  const possibleUOM = tokens[newStartIndex];
+  const possibleUOMLower = possibleUOM.toLowerCase();
 
-  if (!units.ingredientUnits.has(possibleUOM)) {
+  if (!units.ingredientUnits.has(possibleUOMLower)) {
     return ["", "", newStartIndex];
   }
 
   newStartIndex++;
 
-  const unit = units.ingredientUnits.get(possibleUOM)!;
+  const unit = units.ingredientUnits.get(possibleUOMLower)!;
   let resultUnit: string;
+  let resultUnitText: string;
 
   if (typeof unit === "string") {
     resultUnit = unit;
+    resultUnitText = possibleUOM;
   } else {
     const customUnit = unit(tokens, newStartIndex);
     resultUnit = customUnit.uom;
+    resultUnitText = customUnit.uomText
     newStartIndex = customUnit.newIndex;
   }
 
   return [
     resultUnit,
-    possibleUOM,
+    resultUnitText,
     newStartIndex,
   ];
 }

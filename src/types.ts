@@ -41,4 +41,4 @@ export interface Units {
 export type UnitCustomIdentifier = (
   tokens: string[],
   startIndex: number
-) => { uom: string; newIndex: number };
+) => { uom: string, uomText: string; newIndex: number };
