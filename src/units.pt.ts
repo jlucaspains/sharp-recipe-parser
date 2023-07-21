@@ -53,14 +53,22 @@ const xicaraFunc = (input: string[], startIndex: number) => {
   const text = input.slice(startIndex + 1).join("");
 
   if (text.startsWith("de chá") || text.startsWith("(chá)")) {
-    return { uom: "xícara de chá", newIndex: startIndex + 4 };
+    return {
+      uom: "xícara de chá",
+      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
+      newIndex: startIndex + 4
+    };
   }
 
   if (text.startsWith("de café") || text.startsWith("(café)")) {
-    return { uom: "xícara de café", newIndex: startIndex + 4 };
+    return {
+      uom: "xícara de café",
+      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
+      newIndex: startIndex + 4
+    };
   }
 
-  return { uom: "xícara", newIndex: startIndex };
+  return { uom: "xícara", uomText: "xícara", newIndex: startIndex };
 };
 
 ingredientUnits.set("xícara", xicaraFunc);
@@ -70,14 +78,22 @@ const colherFunc = (input: string[], startIndex: number) => {
   const text = input.slice(startIndex + 1).join("");
 
   if (text.startsWith("de chá") || text.startsWith("(chá)")) {
-    return { uom: "colher de chá", newIndex: startIndex + 4 };
+    return {
+      uom: "colher de chá",
+      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
+      newIndex: startIndex + 4
+    };
   }
 
   if (text.startsWith("de sopa") || text.startsWith("(sopa)")) {
-    return { uom: "colher de sopa", newIndex: startIndex + 4 };
+    return {
+      uom: "colher de sopa",
+      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
+      newIndex: startIndex + 4
+    };
   }
 
-  return { uom: "colher", newIndex: startIndex };
+  return { uom: "colher", uomText: "colher", newIndex: startIndex };
 };
 ingredientUnits.set("colher", colherFunc);
 ingredientUnits.set("colheres", colherFunc);

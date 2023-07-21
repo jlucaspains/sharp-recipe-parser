@@ -104,6 +104,31 @@ describe("Parse ingredient PT", () => {
   );
 });
 
+describe("Parse ingredient with compound UOM PT", () => {
+  const table = [
+    ["1 xícara de chá farinha", 1, "1", "xícara de chá", "xícara de chá", "farinha", ""],
+    ["2 xícaras (chá) farinha", 2, "2", "xícara de chá", "xícaras (chá)", "farinha", ""],
+    ["2 xícaras de café farinha", 2, "2", "xícara de café", "xícaras de café", "farinha", ""],
+    ["1 xícara (café) farinha", 1, "1", "xícara de café", "xícara (café)", "farinha", ""],
+    ["1 colher farinha", 1, "1", "colher", "colher", "farinha", ""],
+    ["1 colher de sopa farinha", 1, "1", "colher de sopa", "colher de sopa", "farinha", ""],
+    ["3 colheres (sopa) farinha", 3, "3", "colher de sopa", "colheres (sopa)", "farinha", ""],
+    ["2 colheres de chá farinha", 2, "2", "colher de chá", "colheres de chá", "farinha", ""],
+    ["1 colher (chá) farinha", 1, "1", "colher de chá", "colher (chá)", "farinha", ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, quantity, quantityText, unit, unitText, ingredient, extra) => {
+      const result = parseIngredient(text as string, "pt");
+      expect(result?.quantity ?? -1).toBe(quantity);
+      expect(result?.quantityText ?? -1).toBe(quantityText);
+      expect(result?.unit ?? -1).toBe(unit);
+      expect(result?.unitText ?? -1).toBe(unitText);
+      expect(result?.ingredient ?? -1).toBe(ingredient);
+      expect(result?.extra ?? -1).toBe(extra);
+    }
+  );
+});
 describe("Parse ingredient ranges PT", () => {
   const table = [
     [
