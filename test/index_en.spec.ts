@@ -49,6 +49,8 @@ describe("Parse ingredient EN", () => {
     ["eight pound of carrots", 8, "eight", "pound", "carrots", ""],
     ["nine pound of carrots", 9, "nine", "pound", "carrots", ""],
     ["ten pound of carrots", 10, "ten", "pound", "carrots", ""],
+    ["1 tbsp. flour", 1, "1", "tablespoon", "flour", ""],
+    ["1 tbsp . flour", 1, "1", "tablespoon", "flour", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
