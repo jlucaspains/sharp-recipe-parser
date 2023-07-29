@@ -66,6 +66,7 @@ parseIngredient('300g flour, very fine', 'en', { includeAlternativeUnits: true, 
 //   ]
 // }
 
+// with default options
 parseInstruction('Bake at 400F for 30 minutes.');
 // results in
 // {
@@ -75,6 +76,25 @@ parseInstruction('Bake at 400F for 30 minutes.');
 //   temperatureText: '400',
 //   temperatureUnit: 'fahrenheit',
 //   temperatureUnitText: 'F'
+// }
+
+// with explicit options
+parseInstruction('Bake at 400F for 30 minutes.', { includeAlternativeTemperatureUnit: true });
+// {
+//   totalTimeInSeconds: 1800,
+//   timeItems: [ { timeInSeconds: 1800, timeUnitText: 'minutes', timeText: '30' } ],
+//   temperature: 400,
+//   temperatureText: '400',
+//   temperatureUnit: 'fahrenheit',
+//   temperatureUnitText: 'F',
+//   alternativeTemperatures: [
+//     {
+//       quantity: 204.4444,
+//       unit: 'C',
+//       minQuantity: 204.4444,
+//       maxQuantity: 204.4444
+//     }
+//   ]
 // }
 ```
 

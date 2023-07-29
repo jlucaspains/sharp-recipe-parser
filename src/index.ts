@@ -406,6 +406,3 @@ function round(
   })
   return Number(formattedValue)
 }
-
-console.log(parseInstruction("Bake for 10min at 350F", "en", { includeAlternativeTemperatureUnit: true }));
-console.log(parseInstruction("Bake for 10min at 180C", "en", { includeAlternativeTemperatureUnit: true }));
