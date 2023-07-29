@@ -351,7 +351,7 @@ function getExtra(tokens: string[], startIndex: number): string {
 function getIngredientConversions(defaultQuantity: AlternativeQuantity, language: ValidLanguages): Array<AlternativeQuantity> {
   const unit = getUnits(language).ingredientUnits.get(defaultQuantity.unit);
 
-  if (!unit || !unit.canConvert) {
+  if (!unit?.canConvert) {
     return [];
   }
 
@@ -372,7 +372,7 @@ function getIngredientConversions(defaultQuantity: AlternativeQuantity, language
 function getTemperatureConversions(temperature: number, uom: string, language: ValidLanguages): AlternativeQuantity[] {
   const unit = getUnits(language).temperatureUnits.get(uom);
 
-  if (!unit || !unit.canConvert) {
+  if (!unit?.canConvert) {
     return [];
   }
 
