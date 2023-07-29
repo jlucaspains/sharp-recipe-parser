@@ -16,6 +16,7 @@ Then:
 ```typescript
 import { parseIngredient, parseInstruction } from '@jlucaspains/sharp-recipe-parser';
 
+// with default options
 parseIngredient('300g flour', 'en');
 // results in
 // {
@@ -26,7 +27,43 @@ parseIngredient('300g flour', 'en');
 //   unit: 'gram',
 //   unitText: 'g',
 //   ingredient: 'flour',
-//   extra: ''
+//   extra: '',
+//   alternativeQuantities: []
+// }
+
+// with explicit options
+parseIngredient('300g flour, very fine', 'en', { includeAlternativeUnits: true, includeExtra: true});
+// results in
+// {
+//   quantity: 300,
+//   quantityText: '300',
+//   minQuantity: 300,
+//   maxQuantity: 300,
+//   unit: 'gram',
+//   unitText: 'g',
+//   ingredient: 'flour',
+//   extra: 'very fine',
+//   alternativeQuantities: [
+//     {
+//       quantity: 0.6614,
+//       unit: 'lb',
+//       minQuantity: 0.6614,
+//       maxQuantity: 0.6614
+//     },
+//     { quantity: 0.3, unit: 'kg', minQuantity: 0.3, maxQuantity: 0.3 },
+//     {
+//       quantity: 10.5822,
+//       unit: 'oz',
+//       minQuantity: 10.5822,
+//       maxQuantity: 10.5822
+//     },
+//     {
+//       quantity: 300000,
+//       unit: 'mg',
+//       minQuantity: 300000,
+//       maxQuantity: 300000
+//     }
+//   ]
 // }
 
 parseInstruction('Bake at 400F for 30 minutes.');
@@ -56,11 +93,12 @@ sharp-recipe-parser uses a simple technique that preserves words and punctuation
 ## Features
 ### parseIngredient
 1. Identify the quantity from whole numbers (2), decimals (1.5), fractions (1/2), Unicode fractions (½), composite fractions (1 1/2), and ranges (1-2)
-2. Identify 58 notations of english langugate UOMs plus appropriate plural words (e.g. cup, cups, g, gram, grams, etc). See all UOMs in `units.en.ts` in source code.
-3. Identify the ingredient
+2. Identify 58 notations of english language UOMs plus appropriate plural words (e.g. cup, cups, g, gram, grams, etc). See all UOMs in `units.en.ts` in source code.
+3. Calculate alternative quantity UOMs
+4. Identify the ingredient
    1. Note that parenthesis are ignored so 1 cup (150g) flour will only identify flour as the ingredient
-4. Automatically removes prepositions from ingredients (e.g. 10g of flour; only flour is identified as ingredient)
-5. Identify extra instructions (e.g. 1 cup of carrots, cut small; cut small becomes extra)
+5. Automatically removes prepositions from ingredients (e.g. 10g of flour; only flour is identified as ingredient)
+6. Identify extra instructions (e.g. 1 cup of carrots, cut small; cut small becomes extra)
 
 ### parseInstruction
 1. Identify instances of time units in minutes, hours, and days

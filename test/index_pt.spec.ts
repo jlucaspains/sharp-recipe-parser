@@ -212,6 +212,40 @@ describe("Parse ingredient ranges PT", () => {
   );
 });
 
+describe("Parse ingredient with options PT", () => {
+  const table = [
+    ["1kg de farinha", 1, 1, 1, "quilograma", "farinha", 1000, "g"],
+    ["1kg de farinha", 1, 1, 1, "quilograma", "farinha", 1000000, "mg"],
+    ["1kg de farinha", 1, 1, 1, "quilograma", "farinha", 2.2046, "lb"],
+    ["1 copo de leite", 1, 1, 1, "copo", "leite", 16, "Tbs"],
+    ["1 copo de leite", 1, 1, 1, "copo", "leite", .25, "qt"],
+    ["1 copo de leite", 1, 1, 1, "copo", "leite", 48, "tsp"],
+    ["1 copo de leite", 1, 1, 1, "copo", "leite", 48, "tsp"],
+    ["1 pitada de sal", 1, 1, 1, "pitada", "sal", 0, ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateUOM) => {
+      const result = parseIngredient(text as string, "pt", { includeAlternativeUnits: true, includeExtra: true });
+      expect(result?.quantity ?? -1).toBe(quantity);
+      expect(result?.minQuantity ?? -1).toBe(minQuantity);
+      expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
+      expect(result?.unit ?? -1).toBe(unit);
+      expect(result?.ingredient ?? -1).toBe(ingredient);
+
+      if (alternateQuantity === 0) {
+        expect(result?.alternativeQuantities).toEqual([]);
+      } else {
+        expect(result?.alternativeQuantities).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ quantity: alternateQuantity, unit: alternateUOM, minQuantity: alternateQuantity, maxQuantity: alternateQuantity })
+          ])
+        )
+      }
+    }
+  );
+});
+
 describe("Parse instruction PT", () => {
   const table = [
     ["", -1, -1, -1],

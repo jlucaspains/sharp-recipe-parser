@@ -21,6 +21,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "convert-units": "^2.3.4",
     "fraction.js": "^4.2.0"
   },
   "publishConfig": {
