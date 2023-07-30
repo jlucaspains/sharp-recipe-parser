@@ -149,6 +149,44 @@ describe("Parse ingredient ranges EN", () => {
   );
 });
 
+describe("Parse ingredient with options EN", () => {
+  const table = [
+    ["500g of flour", 500, 500, 500, "gram", "flour", .5, "kg"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000, "g"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000000, "mg"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 2.2046, "lb"],
+    ["1-2kg of flour", 2, 1, 2, "kilogram", "flour", 4.4092, "lb"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", 16, "Tbs"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", .25, "qt"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", 48, "tsp"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", 48, "tsp"],
+    ["1 dash of cream", 1, 1, 1, "dash", "cream", 0, ""],
+    ["1/2in ginger", 0.5, 0.5, 0.5, "inch", "ginger", 1.27, "cm"],
+    ["2cm ginger", 2, 2, 2, "centimeter", "ginger", 0.7874, "in"],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateUOM) => {
+      const result = parseIngredient(text as string, "en", { includeAlternativeUnits: true, includeExtra: true });
+      expect(result?.quantity ?? -1).toBe(quantity);
+      expect(result?.minQuantity ?? -1).toBe(minQuantity);
+      expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
+      expect(result?.unit ?? -1).toBe(unit);
+      expect(result?.ingredient ?? -1).toBe(ingredient);
+
+      if (alternateQuantity === 0) {
+        expect(result?.alternativeQuantities).toEqual([]);
+      } else {
+        expect(result?.alternativeQuantities).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ quantity: alternateQuantity, unit: alternateUOM, minQuantity: alternateQuantity, maxQuantity: alternateQuantity })
+          ])
+        )
+      }
+    }
+  );
+});
+
 describe("Parse instruction EN", () => {
   const table = [
     ["", -1, -1, -1],
@@ -173,6 +211,38 @@ describe("Parse instruction EN", () => {
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
+    }
+  );
+});
+
+describe("Parse instruction with options EN", () => {
+  const table = [
+    ["Preheat the oven at 450 fahrenheit", 450, "fahrenheit", 232.2222, "C"],
+    ["Preheat the oven at 450 celsius", 450, "celsius", 842, "F"],
+    [
+      "Preheat the oven at 450 fahrenheit then adjust to 500F",
+      500, // keep the last temperature
+      "fahrenheit",
+      260, "C"
+    ],
+    ["Bake", 0, "", 0, ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, temperature, temperatureUnit, altTemp, altTempUOM) => {
+      const result = parseInstruction(text as string, "en", { includeAlternativeTemperatureUnit: true });
+      expect(result?.temperature ?? -1).toBe(temperature);
+      expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
+
+      if (altTemp === 0) {
+        expect(result?.alternativeTemperatures).toEqual([]);
+      } else {
+        expect(result?.alternativeTemperatures).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ quantity: altTemp, unit: altTempUOM, minQuantity: altTemp, maxQuantity: altTemp })
+          ])
+        )
+      }
     }
   );
 });

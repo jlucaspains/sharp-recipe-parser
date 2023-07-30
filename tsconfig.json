@@ -15,14 +15,16 @@
       "noUnusedParameters": true,
       "noFallthroughCasesInSwitch": true,
       "baseUrl": "./",
+      "esModuleInterop": true,
       "paths": {
         "*": [
           "node_modules/@types/*"
         ]
-      }
+      },
     },
     "include": [
-      "src/**/*.ts"
+      "src/**/*.ts",
+      "typings/**/*.ts",
     ],
     "exclude": [
       "node_modules"

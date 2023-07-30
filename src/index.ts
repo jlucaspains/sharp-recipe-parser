@@ -1,11 +1,15 @@
 import { tokenize } from "./tokenizer";
 import Fraction from "fraction.js";
 import { getUnits } from "./units";
+import convert from 'convert-units';
 import {
   IngredientParseResult,
   InstructionParseResult,
   InstructionTime,
   ValidLanguages,
+  ParseIngredientOptions,
+  AlternativeQuantity,
+  ParseInstructionOptions
 } from "./types";
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -31,9 +35,20 @@ const unicodeFractions: Record<string, string> = {
 };
 /* eslint-enable @typescript-eslint/naming-convention */
 
+const defaultParseIngredientOptions: ParseIngredientOptions = {
+  includeAlternativeUnits: false,
+  includeExtra: true,
+}
+
+
+const defaultParseInstructionOptions: ParseInstructionOptions = {
+  includeAlternativeTemperatureUnit: false
+}
+
 export function parseIngredient(
   text: string,
-  language: ValidLanguages
+  language: ValidLanguages,
+  options: ParseIngredientOptions = defaultParseIngredientOptions
 ): IngredientParseResult | null {
   const tokens = tokenize(text, false);
 
@@ -55,24 +70,38 @@ export function parseIngredient(
     unitEndIndex,
     language
   );
-  const extra = getExtra(tokens, ingredientEndIndex);
+
+  let extra = "";
+  if (options.includeExtra ?? true) {
+    extra = getExtra(tokens, ingredientEndIndex);
+  }
+
+  const minQuantity = firstQuantity || quantity;
+  const maxQuantity = quantity;
+
+  let alternativeQuantities: Array<AlternativeQuantity> = [];
+  if (options.includeAlternativeUnits ?? false) {
+    alternativeQuantities = getIngredientConversions({ quantity, minQuantity, maxQuantity, unit }, language);
+  }
 
   return {
     quantity,
     quantityText,
-    minQuantity: firstQuantity || quantity,
-    maxQuantity: quantity,
+    minQuantity,
+    maxQuantity,
     unit,
     unitText,
     ingredient,
     extra,
+    alternativeQuantities
   };
 }
 
 export function parseInstruction(
   text: string,
-  language: ValidLanguages
-): InstructionParseResult | null {
+  language: ValidLanguages,
+  options: ParseInstructionOptions = defaultParseInstructionOptions
+  ): InstructionParseResult | null {
   const tokens = tokenize(text);
 
   if (tokens == null || tokens.length == 0) {
@@ -89,6 +118,7 @@ export function parseInstruction(
   let temperatureText = "";
   let temperatureUnit = "";
   let temperatureUnitText = "";
+  let alternativeTemperatures: Array<AlternativeQuantity> = [];
   for (const token of tokens) {
     const maybeNumber = Number(token);
 
@@ -118,12 +148,16 @@ export function parseInstruction(
         temperature = number;
         temperatureText = numberText;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        temperatureUnit = units.temperatureUnits.get(maybeUnit)!;
+        temperatureUnit = units.temperatureUnits.get(maybeUnit)!.text;
         temperatureUnitText = token;
       }
 
       number = 0; // reset if no match
     }
+  }
+
+  if (options.includeAlternativeTemperatureUnit && temperature > 0) {
+    alternativeTemperatures = getTemperatureConversions(temperature, temperatureUnit, language);
   }
 
   return {
@@ -133,6 +167,7 @@ export function parseInstruction(
     temperatureText,
     temperatureUnit,
     temperatureUnitText,
+    alternativeTemperatures
   };
 }
 
@@ -242,14 +277,14 @@ function getUnit(
   let resultUnit: string;
   let resultUnitText: string;
 
-  if (typeof unit === "string") {
-    resultUnit = unit;
-    resultUnitText = possibleUOM;
-  } else {
-    const customUnit = unit(tokens, newStartIndex);
+  if (unit.customFunction) {
+    const customUnit = unit.customFunction(tokens, newStartIndex);
     resultUnit = customUnit.uom;
     resultUnitText = customUnit.uomText
     newStartIndex = customUnit.newIndex;
+  } else {
+    resultUnit = unit.text;
+    resultUnitText = possibleUOM;
   }
 
   return [
@@ -313,7 +348,61 @@ function getExtra(tokens: string[], startIndex: number): string {
     .trim();
 }
 
+function getIngredientConversions(defaultQuantity: AlternativeQuantity, language: ValidLanguages): Array<AlternativeQuantity> {
+  const unit = getUnits(language).ingredientUnits.get(defaultQuantity.unit);
+
+  if (!unit?.canConvert) {
+    return [];
+  }
+
+  return unit.conversions.map((possibility: string) => {
+    const quantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
+    const minQuantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
+    const maxQuantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
+
+    return {
+      quantity: round(quantity, 0, 4),
+      unit: possibility,
+      minQuantity: round(minQuantity, 0, 4),
+      maxQuantity: round(maxQuantity, 0, 4),
+    };
+  });
+}
+
+function getTemperatureConversions(temperature: number, uom: string, language: ValidLanguages): AlternativeQuantity[] {
+  const unit = getUnits(language).temperatureUnits.get(uom);
+
+  if (!unit?.canConvert) {
+    return [];
+  }
+
+  return unit.conversions.map((possibility: string) => {
+    const quantity = convert(temperature).from(unit.symbol).to(possibility);
+
+    const rounded = round(quantity, 0, 4);
+    return {
+      quantity: rounded,
+      unit: possibility,
+      minQuantity: rounded,
+      maxQuantity: rounded,
+    };
+  });
+}
+
 function isUnicodeFraction(maybeFraction: string): boolean {
   // eslint-disable-next-line no-prototype-builtins
   return unicodeFractions.hasOwnProperty(maybeFraction);
+}
+
+function round(
+  value: number,
+  minimumFractionDigits: number,
+  maximumFractionDigits: number
+) {
+  const formattedValue = value.toLocaleString('en', {
+    useGrouping: false,
+    minimumFractionDigits,
+    maximumFractionDigits
+  })
+  return Number(formattedValue)
 }
