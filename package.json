@@ -1,6 +1,6 @@
 {
   "name": "@jlucaspains/sharp-recipe-parser",
-  "version": "1.0.0-beta5",
+  "version": "1.0.0-beta6",
   "description": "Recipe parsing tools",
   "main": "lib/index.js",
   "scripts": {
