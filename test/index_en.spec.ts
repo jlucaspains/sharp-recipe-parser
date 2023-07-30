@@ -225,19 +225,24 @@ describe("Parse instruction with options EN", () => {
       "fahrenheit",
       260, "C"
     ],
+    ["Bake", 0, "", 0, ""],
   ];
   it.each(table)(
     "parse %s",
     (text, temperature, temperatureUnit, altTemp, altTempUOM) => {
-      const result = parseInstruction(text as string, "en", {includeAlternativeTemperatureUnit: true });
+      const result = parseInstruction(text as string, "en", { includeAlternativeTemperatureUnit: true });
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
 
-      expect(result?.alternativeTemperatures).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ quantity: altTemp, unit: altTempUOM, minQuantity: altTemp, maxQuantity: altTemp })
-        ])
-      )
+      if (altTemp === 0) {
+        expect(result?.alternativeTemperatures).toEqual([]);
+      } else {
+        expect(result?.alternativeTemperatures).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({ quantity: altTemp, unit: altTempUOM, minQuantity: altTemp, maxQuantity: altTemp })
+          ])
+        )
+      }
     }
   );
 });
