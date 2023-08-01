@@ -70,6 +70,7 @@ export interface ParseInstructionOptions {
 export interface AlternativeQuantity {
   quantity: number;
   unit: string;
+  unitText: string;
   minQuantity: number;
   maxQuantity: number;
 }

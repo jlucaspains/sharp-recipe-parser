@@ -87,7 +87,7 @@ export function parseIngredient(
   let alternativeQuantities: AlternativeQuantity[] = [];
   if (options.includeAlternativeUnits) {
     alternativeQuantities = getIngredientConversions(
-      { quantity, minQuantity, maxQuantity, unit },
+      { quantity, minQuantity, maxQuantity, unit, unitText },
       units,
     );
   }
@@ -432,12 +432,14 @@ function getTemperatureConversions(
   return defaultConversions
     .filter((item) => item !== unit.symbol)
     .map((possibility: string) => {
+      const possibilityUOM = units.ingredientUnits.get(possibility);
       const quantity = convert(temperature, unit.symbol, possibility, units);
 
       const rounded = round(quantity, 0, 4);
       return {
         quantity: rounded,
         unit: possibility,
+        unitText: possibilityUOM?.text ?? possibility,
         minQuantity: rounded,
         maxQuantity: rounded,
       };
