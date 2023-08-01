@@ -47,19 +47,28 @@ parseIngredient('300g flour, very fine', 'en', { includeAlternativeUnits: true, 
 //     {
 //       quantity: 0.6614,
 //       unit: 'lb',
+//       unitText: 'pound',
 //       minQuantity: 0.6614,
 //       maxQuantity: 0.6614
 //     },
-//     { quantity: 0.3, unit: 'kg', minQuantity: 0.3, maxQuantity: 0.3 },
+//     {
+//       quantity: 0.3,
+//       unit: 'kg',
+//       unitText: 'kilogram',
+//       minQuantity: 0.3,
+//       maxQuantity: 0.3
+//     },
 //     {
 //       quantity: 10.5822,
 //       unit: 'oz',
+//       unitText: 'ounce',
 //       minQuantity: 10.5822,
 //       maxQuantity: 10.5822
 //     },
 //     {
 //       quantity: 300000,
 //       unit: 'mg',
+//       unitText: 'milligram',
 //       minQuantity: 300000,
 //       maxQuantity: 300000
 //     }
