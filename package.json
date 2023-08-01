@@ -1,6 +1,6 @@
 {
   "name": "@jlucaspains/sharp-recipe-parser",
-  "version": "1.0.0-beta6",
+  "version": "1.0.0-beta7",
   "description": "Recipe parsing tools",
   "main": "lib/index.js",
   "scripts": {
@@ -21,7 +21,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "convert-units": "^2.3.4",
     "fraction.js": "^4.2.0"
   },
   "publishConfig": {

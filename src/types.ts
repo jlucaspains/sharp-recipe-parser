@@ -1,4 +1,4 @@
-export type ValidLanguages = "en" | "pt";
+export type ValidLanguages = "en" | "en-US" | "pt" | "pt-BR" | string;
 
 export interface IngredientParseResult {
   quantity: number;
@@ -19,7 +19,7 @@ export interface InstructionParseResult {
   temperatureUnit: string;
   temperatureText: string;
   temperatureUnitText: string;
-  alternativeTemperatures: AlternativeQuantity[]
+  alternativeTemperatures: AlternativeQuantity[];
 }
 
 export interface InstructionTime {
@@ -31,9 +31,13 @@ export interface InstructionTime {
 export interface UnitDetail {
   symbol: string;
   text: string;
-  canConvert: boolean;
   customFunction?: UnitCustomIdentifier;
-  conversions: string[];
+  conversionGroup?: string;
+}
+
+export interface UnitConversion {
+  defaultConversions: Map<string, string[]>;
+  converters: Map<string, (input: number) => number>;
 }
 
 export interface Units {
@@ -46,12 +50,13 @@ export interface Units {
   temperatureMarkers: string[];
   ingredientQuantities: Map<string, number>;
   ingredientRangeMarker: string[];
+  unitConversions: UnitConversion;
 }
 
 export type UnitCustomIdentifier = (
   tokens: string[],
-  startIndex: number
-) => { uom: string, uomText: string; newIndex: number };
+  startIndex: number,
+) => { uom: string; uomText: string; newIndex: number };
 
 export interface ParseIngredientOptions {
   includeExtra: boolean;

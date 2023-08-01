@@ -1,35 +1,92 @@
 import { UnitDetail } from "./types";
+import CultureInvariantConversions from "./conversions";
 
-const bag: UnitDetail = { symbol: "bag", text: "bag", canConvert: false, conversions: [] };
-const batch: UnitDetail = { symbol: "batch", text: "batch", canConvert: false, conversions: [] };
-const box: UnitDetail = { symbol: "box", text: "box", canConvert: false, conversions: [] };
-const bunch: UnitDetail = { symbol: "bunch", text: "bunch", canConvert: false, conversions: [] };
-const cup: UnitDetail = { symbol: "cup", text: "cup", canConvert: true, conversions: ["Tbs", "l", "ml", "qt", "tsp", "gal"] };
-const can: UnitDetail = { symbol: "can", text: "can", canConvert: false, conversions: [] };
-const clove: UnitDetail = { symbol: "clove", text: "clove", canConvert: false, conversions: [] };
-const dash: UnitDetail = { symbol: "dash", text: "dash", canConvert: false, conversions: [] };
-const drop: UnitDetail = { symbol: "drop", text: "drop", canConvert: false, conversions: [] };
-const gram: UnitDetail = { symbol: "g", text: "gram", canConvert: true, conversions: ["lb", "kg", "oz", "mg"] };
-const gallon: UnitDetail = { symbol: "gal", text: "gallon", canConvert: true, conversions: ["cup", "l", "ml", "qt", "tsp", "Tbs", "pnt"] };
-const grain: UnitDetail = { symbol: "grain", text: "grain", canConvert: false, conversions: [] };
-const inch: UnitDetail = { symbol: "in", text: "inch", canConvert: true, conversions: ["cm"] };
-const cm: UnitDetail = { symbol: "cm", text: "centimeter", canConvert: true, conversions: ["in"] };
-const kilogram: UnitDetail = { symbol: "kg", text: "kilogram", canConvert: true, conversions: ["lb", "oz", "g", "mg"] };
-const pound: UnitDetail = { symbol: "lb", text: "pound", canConvert: true, conversions: ["g", "kg", "oz", "mg"] };
-const liter: UnitDetail = { symbol: "l", text: "liter", canConvert: true, conversions: ["cup", "pnt", "ml", "qt", "tsp", "Tbs", "gal"] };
-const milligram: UnitDetail = { symbol: "mg", text: "milligram", canConvert: true, conversions: ["g"] };
-const milliliter: UnitDetail = { symbol: "ml", text: "milliliter", canConvert: true, conversions: ["cup", "l", "pnt", "qt", "tsp", "Tbs", "gal"] };
-const ounce: UnitDetail = { symbol: "oz", text: "ounce", canConvert: true, conversions: ["g", "kg", "lb", "mg"] };
-const pkg: UnitDetail = { symbol: "package", text: "package", canConvert: false, conversions: [] };
-const piece: UnitDetail = { symbol: "piece", text: "piece", canConvert: false, conversions: [] };
-const pinch: UnitDetail = { symbol: "pinch", text: "pinch", canConvert: false, conversions: [] };
-const pint: UnitDetail = { symbol: "pnt", text: "pint", canConvert: true, conversions: ["cup", "l", "ml", "qt", "tsp", "Tbs", "gal"] };
-const quart: UnitDetail = { symbol: "qt", text: "quart", canConvert: true, conversions: ["cup", "l", "ml", "pnt", "tsp", "Tbs", "gal"] };
-const slice: UnitDetail = { symbol: "slice", text: "slice", canConvert: false, conversions: [] };
-const stalk: UnitDetail = { symbol: "stalk", text: "stalk", canConvert: false, conversions: [] };
-const stick: UnitDetail = { symbol: "stick", text: "stick", canConvert: false, conversions: [] };
-const teaspoon: UnitDetail = { symbol: "tsp", text: "teaspoon", canConvert: true, conversions: ["cup", "l", "ml", "qt", "Tbs", "gal", "pnt"] };
-const tablespoon: UnitDetail = { symbol: "Tbs", text: "tablespoon", canConvert: true, conversions: ["cup", "l", "ml", "qt", "tsp", "gal", "pnt"] };
+const bag: UnitDetail = { symbol: "bag", text: "bag" };
+const batch: UnitDetail = { symbol: "batch", text: "batch" };
+const box: UnitDetail = { symbol: "box", text: "box" };
+const bunch: UnitDetail = { symbol: "bunch", text: "bunch" };
+const cup: UnitDetail = {
+  symbol: "cup",
+  text: "cup",
+  conversionGroup: "volume",
+};
+const can: UnitDetail = { symbol: "can", text: "can" };
+const clove: UnitDetail = { symbol: "clove", text: "clove" };
+const dash: UnitDetail = { symbol: "dash", text: "dash" };
+const drop: UnitDetail = { symbol: "drop", text: "drop" };
+const gram: UnitDetail = { symbol: "g", text: "gram", conversionGroup: "mass" };
+const gallon: UnitDetail = {
+  symbol: "gal",
+  text: "gallon",
+  conversionGroup: "volume",
+};
+const grain: UnitDetail = { symbol: "grain", text: "grain" };
+const inch: UnitDetail = {
+  symbol: "in",
+  text: "inch",
+  conversionGroup: "length",
+};
+const cm: UnitDetail = {
+  symbol: "cm",
+  text: "centimeter",
+  conversionGroup: "length",
+};
+const kilogram: UnitDetail = {
+  symbol: "kg",
+  text: "kilogram",
+  conversionGroup: "mass",
+};
+const pound: UnitDetail = {
+  symbol: "lb",
+  text: "pound",
+  conversionGroup: "mass",
+};
+const liter: UnitDetail = {
+  symbol: "l",
+  text: "liter",
+  conversionGroup: "volume",
+};
+const milligram: UnitDetail = {
+  symbol: "mg",
+  text: "milligram",
+  conversionGroup: "mass",
+};
+const milliliter: UnitDetail = {
+  symbol: "ml",
+  text: "milliliter",
+  conversionGroup: "volume",
+};
+const ounce: UnitDetail = {
+  symbol: "oz",
+  text: "ounce",
+  conversionGroup: "mass",
+};
+const pkg: UnitDetail = { symbol: "package", text: "package" };
+const piece: UnitDetail = { symbol: "piece", text: "piece" };
+const pinch: UnitDetail = { symbol: "pinch", text: "pinch" };
+const pint: UnitDetail = {
+  symbol: "pnt",
+  text: "pint",
+  conversionGroup: "volume",
+};
+const quart: UnitDetail = {
+  symbol: "qt",
+  text: "quart",
+  conversionGroup: "volume",
+};
+const slice: UnitDetail = { symbol: "slice", text: "slice" };
+const stalk: UnitDetail = { symbol: "stalk", text: "stalk" };
+const stick: UnitDetail = { symbol: "stick", text: "stick" };
+const teaspoon: UnitDetail = {
+  symbol: "tsp",
+  text: "teaspoon",
+  conversionGroup: "volume",
+};
+const tablespoon: UnitDetail = {
+  symbol: "tbsp",
+  text: "tablespoon",
+  conversionGroup: "volume",
+};
 
 const ingredientUnits = new Map<string, UnitDetail>();
 ingredientUnits.set("bag", bag);
@@ -37,7 +94,7 @@ ingredientUnits.set("bags", bag);
 ingredientUnits.set("batch", batch);
 ingredientUnits.set("batches", batch);
 ingredientUnits.set("box", box);
-ingredientUnits.set("boxex", box);
+ingredientUnits.set("boxes", box);
 ingredientUnits.set("bunch", bunch);
 ingredientUnits.set("bunches", bunch);
 ingredientUnits.set("c", cup);
@@ -148,8 +205,16 @@ timeUnitMultipliers.set("second", 1);
 timeUnitMultipliers.set("hour", 60 * 60);
 timeUnitMultipliers.set("day", 60 * 60 * 24);
 
-const fahrenheit: UnitDetail = { symbol: "F", text: "fahrenheit", canConvert: true, conversions: ["C"] };
-const celsius: UnitDetail = { symbol: "C", text: "celsius", canConvert: true, conversions: ["F"] };
+const fahrenheit: UnitDetail = {
+  symbol: "f",
+  text: "fahrenheit",
+  conversionGroup: "temperature",
+};
+const celsius: UnitDetail = {
+  symbol: "c",
+  text: "celsius",
+  conversionGroup: "temperature",
+};
 const temperatureUnits = new Map<string, UnitDetail>();
 temperatureUnits.set("fahrenheit", fahrenheit);
 temperatureUnits.set("f", fahrenheit);
@@ -174,6 +239,26 @@ ingredientQuantities.set("ten", 10);
 
 const ingredientRangeMarker = ["to", "-", "or"];
 
+const defaultConversions = new Map<string, string[]>();
+defaultConversions.set("volume", [
+  "cup",
+  "tbsp",
+  "l",
+  "ml",
+  "qt",
+  "tsp",
+  "gal",
+  "pt",
+]);
+defaultConversions.set("mass", ["lb", "kg", "oz", "mg", "g"]);
+defaultConversions.set("length", ["in", "cm"]);
+defaultConversions.set("temperature", ["f", "c"]);
+
+const converters = new Map<string, (input: number) => number>(
+  CultureInvariantConversions,
+);
+const unitConversions = { defaultConversions, converters };
+
 export default {
   ingredientUnits,
   ingredientSizes,
@@ -184,4 +269,5 @@ export default {
   temperatureMarkers,
   ingredientQuantities,
   ingredientRangeMarker,
+  unitConversions,
 };
