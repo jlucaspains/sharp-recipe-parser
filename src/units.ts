@@ -10,14 +10,18 @@ units.set("en-us", AmericanEnglishUnits);
 units.set("pt", PortugueseUnits);
 units.set("pt-br", BrazilianPortugueseUnits);
 
-export function getUnits(language: ValidLanguages): Units {
+export function getUnits(language: ValidLanguages): Units | null {
+  if (!language) {
+    return null;
+  }
+
   // only types mapped will be accepted so it is safe to disable this rule
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  return units.get(language.toLowerCase())!;
+  return units.get(language.toLowerCase()) || null;
 }
 
-export function convert(input: number, from: string, to: string, language: ValidLanguages): number {
-  const converter = getUnits(language)?.unitConversions?.converters?.get(`${from}->${to}`);
+export function convert(input: number, from: string, to: string, units: Units): number {
+  const converter = units.unitConversions?.converters?.get(`${from}->${to}`);
   if (!converter) {
     throw new Error(`No conversion found from ${from} to ${to}`);
   }
