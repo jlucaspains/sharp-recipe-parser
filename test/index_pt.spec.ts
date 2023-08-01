@@ -100,21 +100,85 @@ describe("Parse ingredient pt-BR", () => {
       expect(result?.unit ?? -1).toBe(unit);
       expect(result?.ingredient ?? -1).toBe(ingredient);
       expect(result?.extra ?? -1).toBe(extra);
-    }
+    },
   );
 });
 
 describe("Parse ingredient with compound UOM pt-BR", () => {
   const table = [
-    ["1 xícara de chá farinha", 1, "1", "xicaracha", "xícara de chá", "farinha", ""],
-    ["2 xícaras (chá) farinha", 2, "2", "xicaracha", "xícaras (chá)", "farinha", ""],
-    ["2 xícaras de café farinha", 2, "2", "xicaracafe", "xícaras de café", "farinha", ""],
-    ["1 xícara (café) farinha", 1, "1", "xicaracafe", "xícara (café)", "farinha", ""],
+    [
+      "1 xícara de chá farinha",
+      1,
+      "1",
+      "xicaracha",
+      "xícara de chá",
+      "farinha",
+      "",
+    ],
+    [
+      "2 xícaras (chá) farinha",
+      2,
+      "2",
+      "xicaracha",
+      "xícaras (chá)",
+      "farinha",
+      "",
+    ],
+    [
+      "2 xícaras de café farinha",
+      2,
+      "2",
+      "xicaracafe",
+      "xícaras de café",
+      "farinha",
+      "",
+    ],
+    [
+      "1 xícara (café) farinha",
+      1,
+      "1",
+      "xicaracafe",
+      "xícara (café)",
+      "farinha",
+      "",
+    ],
     ["1 colher farinha", 1, "1", "colher", "colher", "farinha", ""],
-    ["1 colher de sopa farinha", 1, "1", "colhersopa", "colher de sopa", "farinha", ""],
-    ["3 colheres (sopa) farinha", 3, "3", "colhersopa", "colheres (sopa)", "farinha", ""],
-    ["2 colheres de chá farinha", 2, "2", "colhercha", "colheres de chá", "farinha", ""],
-    ["1 colher (chá) farinha", 1, "1", "colhercha", "colher (chá)", "farinha", ""],
+    [
+      "1 colher de sopa farinha",
+      1,
+      "1",
+      "colhersopa",
+      "colher de sopa",
+      "farinha",
+      "",
+    ],
+    [
+      "3 colheres (sopa) farinha",
+      3,
+      "3",
+      "colhersopa",
+      "colheres (sopa)",
+      "farinha",
+      "",
+    ],
+    [
+      "2 colheres de chá farinha",
+      2,
+      "2",
+      "colhercha",
+      "colheres de chá",
+      "farinha",
+      "",
+    ],
+    [
+      "1 colher (chá) farinha",
+      1,
+      "1",
+      "colhercha",
+      "colher (chá)",
+      "farinha",
+      "",
+    ],
   ];
   it.each(table)(
     "parse %s",
@@ -126,7 +190,7 @@ describe("Parse ingredient with compound UOM pt-BR", () => {
       expect(result?.unitText ?? -1).toBe(unitText);
       expect(result?.ingredient ?? -1).toBe(ingredient);
       expect(result?.extra ?? -1).toBe(extra);
-    }
+    },
   );
 });
 describe("Parse ingredient ranges pt-BR", () => {
@@ -198,7 +262,7 @@ describe("Parse ingredient ranges pt-BR", () => {
       quantityText,
       unit,
       ingredient,
-      extra
+      extra,
     ) => {
       const result = parseIngredient(text as string, "pt-BR");
       expect(result?.quantity ?? -1).toBe(quantity);
@@ -208,25 +272,61 @@ describe("Parse ingredient ranges pt-BR", () => {
       expect(result?.unit ?? -1).toBe(unit);
       expect(result?.ingredient ?? -1).toBe(ingredient);
       expect(result?.extra ?? -1).toBe(extra);
-    }
+    },
   );
 });
 
 describe("Parse ingredient with options pt-BR", () => {
   const table = [
-    ["500g de farinha", 500, 500, 500, "grama", "farinha", .5, .5, .5, "kg"],
+    ["500g de farinha", 500, 500, 500, "grama", "farinha", 0.5, 0.5, 0.5, "kg"],
     ["1kg de farinha", 1, 1, 1, "quilograma", "farinha", 1000, 1000, 1000, "g"],
-    ["1-2kg de farinha", 2, 1, 2, "quilograma", "farinha", 2000, 1000, 2000, "g"],
-    ["1 copo de leite", 1, 1, 1, "copo", "leite", 16.6667, 16.6667, 16.6667, "colhersopa"],
-    ["1 copo de leite", 1, 1, 1, "copo", "leite", .25, .25, .25, "l"],
+    [
+      "1-2kg de farinha",
+      2,
+      1,
+      2,
+      "quilograma",
+      "farinha",
+      2000,
+      1000,
+      2000,
+      "g",
+    ],
+    [
+      "1 copo de leite",
+      1,
+      1,
+      1,
+      "copo",
+      "leite",
+      16.6667,
+      16.6667,
+      16.6667,
+      "colhersopa",
+    ],
+    ["1 copo de leite", 1, 1, 1, "copo", "leite", 0.25, 0.25, 0.25, "l"],
     ["1 copo de leite", 1, 1, 1, "copo", "leite", 50, 50, 50, "colhercha"],
     ["1 pitada de sal", 1, 1, 1, "pitada", "sal", 0, 0, 0, ""],
     ["1 pacote macarrao", 1, 1, 1, "pacote", "macarrao", 0, 0, 0, ""],
   ];
   it.each(table)(
     "parse %s",
-    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateMin, alternateMax, alternateUOM) => {
-      const result = parseIngredient(text as string, "pt-BR", { includeAlternativeUnits: true, includeExtra: true });
+    (
+      text,
+      quantity,
+      minQuantity,
+      maxQuantity,
+      unit,
+      ingredient,
+      alternateQuantity,
+      alternateMin,
+      alternateMax,
+      alternateUOM,
+    ) => {
+      const result = parseIngredient(text as string, "pt-BR", {
+        includeAlternativeUnits: true,
+        includeExtra: true,
+      });
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
       expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
@@ -239,24 +339,40 @@ describe("Parse ingredient with options pt-BR", () => {
         expect(result?.alternativeQuantities).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              quantity: alternateQuantity, unit: alternateUOM,
-              minQuantity: alternateMin, maxQuantity: alternateMax
-            })
-          ])
-        )
+              quantity: alternateQuantity,
+              unit: alternateUOM,
+              minQuantity: alternateMin,
+              maxQuantity: alternateMax,
+            }),
+          ]),
+        );
       }
-    }
+    },
   );
 });
 
 describe("Parse ingredient with options pt", () => {
   const table = [
-    ["500g de farinha", 500, 500, 500, "grama", "farinha", .5, .5, .5, "kg"],
+    ["500g de farinha", 500, 500, 500, "grama", "farinha", 0.5, 0.5, 0.5, "kg"],
   ];
   it.each(table)(
     "parse %s",
-    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateMin, alternateMax, alternateUOM) => {
-      const result = parseIngredient(text as string, "pt", { includeAlternativeUnits: true, includeExtra: true });
+    (
+      text,
+      quantity,
+      minQuantity,
+      maxQuantity,
+      unit,
+      ingredient,
+      alternateQuantity,
+      alternateMin,
+      alternateMax,
+      alternateUOM,
+    ) => {
+      const result = parseIngredient(text as string, "pt", {
+        includeAlternativeUnits: true,
+        includeExtra: true,
+      });
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
       expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
@@ -269,13 +385,15 @@ describe("Parse ingredient with options pt", () => {
         expect(result?.alternativeQuantities).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              quantity: alternateQuantity, unit: alternateUOM,
-              minQuantity: alternateMin, maxQuantity: alternateMax
-            })
-          ])
-        )
+              quantity: alternateQuantity,
+              unit: alternateUOM,
+              minQuantity: alternateMin,
+              maxQuantity: alternateMax,
+            }),
+          ]),
+        );
       }
-    }
+    },
   );
 });
 
@@ -303,7 +421,7 @@ describe("Parse instruction pt-BR", () => {
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
-    }
+    },
   );
 });
 
@@ -315,14 +433,17 @@ describe("Parse instruction with options pt-BR", () => {
       "Aqueca o frono a 450 fahrenheit depois ajuste para 500F",
       500, // keep the last temperature
       "fahrenheit",
-      260, "c"
+      260,
+      "c",
     ],
     ["Asse", 0, "", 0, ""],
   ];
   it.each(table)(
     "parse %s",
     (text, temperature, temperatureUnit, altTemp, altTempUOM) => {
-      const result = parseInstruction(text as string, "pt-BR", { includeAlternativeTemperatureUnit: true });
+      const result = parseInstruction(text as string, "pt-BR", {
+        includeAlternativeTemperatureUnit: true,
+      });
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
 
@@ -331,11 +452,16 @@ describe("Parse instruction with options pt-BR", () => {
       } else {
         expect(result?.alternativeTemperatures).toEqual(
           expect.arrayContaining([
-            expect.objectContaining({ quantity: altTemp, unit: altTempUOM, minQuantity: altTemp, maxQuantity: altTemp })
-          ])
-        )
+            expect.objectContaining({
+              quantity: altTemp,
+              unit: altTempUOM,
+              minQuantity: altTemp,
+              maxQuantity: altTemp,
+            }),
+          ]),
+        );
       }
-    }
+    },
   );
 });
 describe("Parse instruction time range pt-BR", () => {

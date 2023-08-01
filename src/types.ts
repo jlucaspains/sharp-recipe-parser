@@ -19,7 +19,7 @@ export interface InstructionParseResult {
   temperatureUnit: string;
   temperatureText: string;
   temperatureUnitText: string;
-  alternativeTemperatures: AlternativeQuantity[]
+  alternativeTemperatures: AlternativeQuantity[];
 }
 
 export interface InstructionTime {
@@ -40,7 +40,6 @@ export interface UnitConversion {
   converters: Map<string, (input: number) => number>;
 }
 
-
 export interface Units {
   ingredientUnits: Map<string, UnitDetail>;
   timeUnits: Map<string, string>;
@@ -56,8 +55,8 @@ export interface Units {
 
 export type UnitCustomIdentifier = (
   tokens: string[],
-  startIndex: number
-) => { uom: string, uomText: string; newIndex: number };
+  startIndex: number,
+) => { uom: string; uomText: string; newIndex: number };
 
 export interface ParseIngredientOptions {
   includeExtra: boolean;

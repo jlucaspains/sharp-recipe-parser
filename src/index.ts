@@ -9,7 +9,7 @@ import {
   ParseIngredientOptions,
   AlternativeQuantity,
   ParseInstructionOptions,
-  Units
+  Units,
 } from "./types";
 
 /* eslint-disable @typescript-eslint/naming-convention */
@@ -38,19 +38,17 @@ const unicodeFractions: Record<string, string> = {
 const defaultParseIngredientOptions: ParseIngredientOptions = {
   includeAlternativeUnits: false,
   includeExtra: true,
-}
-
+};
 
 const defaultParseInstructionOptions: ParseInstructionOptions = {
-  includeAlternativeTemperatureUnit: false
-}
+  includeAlternativeTemperatureUnit: false,
+};
 
 export function parseIngredient(
   text: string,
   language: ValidLanguages,
-  options: ParseIngredientOptions = defaultParseIngredientOptions
+  options: ParseIngredientOptions = defaultParseIngredientOptions,
 ): IngredientParseResult | null {
-
   const units = getUnits(language);
 
   if (!units) {
@@ -59,36 +57,39 @@ export function parseIngredient(
 
   const tokens = tokenize(text, false);
 
-  if (tokens == null || tokens.length == 0 || tokens.every(item => item === " ")) {
+  if (tokens.length == 0 || tokens.every((item) => item === " ")) {
     return null;
   }
 
   const [firstQuantity, quantity, quantityText, quantityEndIndex] = getQuantity(
     tokens,
-    units
+    units,
   );
   const [unit, unitText, unitEndIndex] = getUnit(
     tokens,
     quantityEndIndex,
-    units
+    units,
   );
   const [ingredient, ingredientEndIndex] = getIngredient(
     tokens,
     unitEndIndex,
-    units
+    units,
   );
 
   let extra = "";
-  if (options.includeExtra ?? true) {
+  if (options.includeExtra) {
     extra = getExtra(tokens, ingredientEndIndex);
   }
 
   const minQuantity = firstQuantity || quantity;
   const maxQuantity = quantity;
 
-  let alternativeQuantities: Array<AlternativeQuantity> = [];
-  if (options.includeAlternativeUnits ?? false) {
-    alternativeQuantities = getIngredientConversions({ quantity, minQuantity, maxQuantity, unit }, units);
+  let alternativeQuantities: AlternativeQuantity[] = [];
+  if (options.includeAlternativeUnits) {
+    alternativeQuantities = getIngredientConversions(
+      { quantity, minQuantity, maxQuantity, unit },
+      units,
+    );
   }
 
   return {
@@ -100,14 +101,14 @@ export function parseIngredient(
     unitText,
     ingredient,
     extra,
-    alternativeQuantities
+    alternativeQuantities,
   };
 }
 
 export function parseInstruction(
   text: string,
   language: ValidLanguages,
-  options: ParseInstructionOptions = defaultParseInstructionOptions
+  options: ParseInstructionOptions = defaultParseInstructionOptions,
 ): InstructionParseResult | null {
   const units = getUnits(language);
 
@@ -117,7 +118,7 @@ export function parseInstruction(
 
   const tokens = tokenize(text);
 
-  if (tokens == null || tokens.length == 0) {
+  if (tokens.length == 0) {
     return null;
   }
 
@@ -129,7 +130,7 @@ export function parseInstruction(
   let temperatureText = "";
   let temperatureUnit = "";
   let temperatureUnitText = "";
-  let alternativeTemperatures: Array<AlternativeQuantity> = [];
+  let alternativeTemperatures: AlternativeQuantity[] = [];
   for (const token of tokens) {
     const maybeNumber = Number(token);
 
@@ -168,7 +169,11 @@ export function parseInstruction(
   }
 
   if (options.includeAlternativeTemperatureUnit && temperature > 0) {
-    alternativeTemperatures = getTemperatureConversions(temperature, temperatureUnit, units);
+    alternativeTemperatures = getTemperatureConversions(
+      temperature,
+      temperatureUnit,
+      units,
+    );
   }
 
   return {
@@ -178,13 +183,13 @@ export function parseInstruction(
     temperatureText,
     temperatureUnit,
     temperatureUnitText,
-    alternativeTemperatures
+    alternativeTemperatures,
   };
 }
 
 function getQuantity(
   tokens: string[],
-  units: Units
+  units: Units,
 ): [number, number, string, number] {
   let quantityText = "";
   let quantityConvertible = "";
@@ -198,7 +203,7 @@ function getQuantity(
     const isNumber = !isSpace && !isNaN(Number(item));
     const isFraction = item === "/";
     const isSpecialFraction = isUnicodeFraction(item);
-    const isTextNumber = units.ingredientQuantities?.has(item.toLowerCase());
+    const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
     if (isNumber || isFraction || isSpecialFraction || isTextNumber) {
       let value = item;
@@ -209,7 +214,7 @@ function getQuantity(
         specialSpace = quantityConvertible.length > 0 ? " " : space; // force space for unicode fractions
       } else if (isTextNumber) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        value = units.ingredientQuantities?.get(item.toLowerCase())!.toString();
+        value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
       }
 
       quantityText += `${space}${item}`;
@@ -253,7 +258,7 @@ function getQuantityValue(quantityConvertible: string): number {
 function getUnit(
   tokens: string[],
   startIndex: number,
-  units: Units
+  units: Units,
 ): [string, string, number] {
   if (startIndex >= tokens.length) {
     return ["", "", startIndex];
@@ -266,7 +271,7 @@ function getUnit(
   while (true) {
     const item = tokens[newStartIndex];
 
-    if (!units.ingredientSizes?.includes(item) && item != " ") {
+    if (!units.ingredientSizes.includes(item) && item != " ") {
       break;
     }
 
@@ -282,6 +287,7 @@ function getUnit(
 
   newStartIndex++;
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const unit = units.ingredientUnits.get(possibleUOMLower)!;
   let resultUnit: string;
   let resultUnitText: string;
@@ -289,24 +295,20 @@ function getUnit(
   if (unit.customFunction) {
     const customUnit = unit.customFunction(tokens, newStartIndex);
     resultUnit = customUnit.uom;
-    resultUnitText = customUnit.uomText
+    resultUnitText = customUnit.uomText;
     newStartIndex = customUnit.newIndex;
   } else {
     resultUnit = unit.text;
     resultUnitText = possibleUOM;
   }
 
-  return [
-    resultUnit,
-    resultUnitText,
-    newStartIndex,
-  ];
+  return [resultUnit, resultUnitText, newStartIndex];
 }
 
 function getIngredient(
   tokens: string[],
   startIndex: number,
-  units: Units
+  units: Units,
 ): [string, number] {
   if (startIndex >= tokens.length) {
     return ["", startIndex];
@@ -356,27 +358,47 @@ function getExtra(tokens: string[], startIndex: number): string {
     .trim();
 }
 
-function getIngredientConversions(defaultQuantity: AlternativeQuantity, units: Units): Array<AlternativeQuantity> {
-  const unit = units.ingredientUnits?.get(defaultQuantity.unit);
+function getIngredientConversions(
+  defaultQuantity: AlternativeQuantity,
+  units: Units,
+): AlternativeQuantity[] {
+  const unit = units.ingredientUnits.get(defaultQuantity.unit);
   const conversionGroup = unit?.conversionGroup;
 
   if (!conversionGroup) {
     return [];
   }
 
-  const defaultConversions = units.unitConversions?.defaultConversions?.get(conversionGroup);
+  const defaultConversions =
+    units.unitConversions.defaultConversions.get(conversionGroup);
 
   if (!defaultConversions) {
     return [];
   }
 
-  return defaultConversions.filter(item => item !== unit.symbol)
+  return defaultConversions
+    .filter((item) => item !== unit.symbol)
     .map((possibility: string) => {
-      const quantity = convert(defaultQuantity.quantity, unit.symbol, possibility, units);
-      const minQuantity = convert(defaultQuantity.minQuantity, unit.symbol, possibility, units);
-      const maxQuantity = convert(defaultQuantity.maxQuantity, unit.symbol, possibility, units);
+      const quantity = convert(
+        defaultQuantity.quantity,
+        unit.symbol,
+        possibility,
+        units,
+      );
+      const minQuantity = convert(
+        defaultQuantity.minQuantity,
+        unit.symbol,
+        possibility,
+        units,
+      );
+      const maxQuantity = convert(
+        defaultQuantity.maxQuantity,
+        unit.symbol,
+        possibility,
+        units,
+      );
 
-      const possibilityUOM = units.ingredientUnits?.get(possibility);
+      const possibilityUOM = units.ingredientUnits.get(possibility);
 
       return {
         quantity: round(quantity, 0, 4),
@@ -388,21 +410,27 @@ function getIngredientConversions(defaultQuantity: AlternativeQuantity, units: U
     });
 }
 
-function getTemperatureConversions(temperature: number, uom: string, units: Units): AlternativeQuantity[] {
-  const unit = units.temperatureUnits?.get(uom);
+function getTemperatureConversions(
+  temperature: number,
+  uom: string,
+  units: Units,
+): AlternativeQuantity[] {
+  const unit = units.temperatureUnits.get(uom);
   const conversionGroup = unit?.conversionGroup;
 
   if (!conversionGroup) {
     return [];
   }
 
-  const defaultConversions = units.unitConversions?.defaultConversions?.get(conversionGroup);
+  const defaultConversions =
+    units.unitConversions.defaultConversions.get(conversionGroup);
 
   if (!defaultConversions) {
     return [];
   }
 
-  return defaultConversions.filter(item => item !== unit.symbol)
+  return defaultConversions
+    .filter((item) => item !== unit.symbol)
     .map((possibility: string) => {
       const quantity = convert(temperature, unit.symbol, possibility, units);
 
@@ -424,12 +452,12 @@ function isUnicodeFraction(maybeFraction: string): boolean {
 function round(
   value: number,
   minimumFractionDigits: number,
-  maximumFractionDigits: number
+  maximumFractionDigits: number,
 ) {
-  const formattedValue = value.toLocaleString('en', {
+  const formattedValue = value.toLocaleString("en", {
     useGrouping: false,
     minimumFractionDigits,
-    maximumFractionDigits
-  })
-  return Number(formattedValue)
+    maximumFractionDigits,
+  });
+  return Number(formattedValue);
 }

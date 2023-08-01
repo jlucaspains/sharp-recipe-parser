@@ -3,17 +3,49 @@ import CultureInvariantConversions from "./conversions";
 
 const saco: UnitDetail = { symbol: "saco", text: "saco" };
 const caixa: UnitDetail = { symbol: "caixa", text: "caixa" };
-const copo: UnitDetail = { symbol: "cup", text: "copo", conversionGroup: "volume" };
+const copo: UnitDetail = {
+  symbol: "cup",
+  text: "copo",
+  conversionGroup: "volume",
+};
 const lata: UnitDetail = { symbol: "lata", text: "lata" };
 const dente: UnitDetail = { symbol: "dente", text: "dente" };
 const gota: UnitDetail = { symbol: "gota", text: "gota" };
-const grama: UnitDetail = { symbol: "g", text: "grama", conversionGroup: "mass" };
-const galao: UnitDetail = { symbol: "gal", text: "galão", conversionGroup: "volume" };
-const cm: UnitDetail = { symbol: "cm", text: "centimeter", conversionGroup: "length" };
-const quilograma: UnitDetail = { symbol: "kg", text: "quilograma", conversionGroup: "mass" };
-const litro: UnitDetail = { symbol: "l", text: "litro", conversionGroup: "volume" };
-const miligrama: UnitDetail = { symbol: "mg", text: "miligrama", conversionGroup: "mass" };
-const mililitro: UnitDetail = { symbol: "ml", text: "mililitro", conversionGroup: "volume" };
+const grama: UnitDetail = {
+  symbol: "g",
+  text: "grama",
+  conversionGroup: "mass",
+};
+const galao: UnitDetail = {
+  symbol: "gal",
+  text: "galão",
+  conversionGroup: "volume",
+};
+const cm: UnitDetail = {
+  symbol: "cm",
+  text: "centimeter",
+  conversionGroup: "length",
+};
+const quilograma: UnitDetail = {
+  symbol: "kg",
+  text: "quilograma",
+  conversionGroup: "mass",
+};
+const litro: UnitDetail = {
+  symbol: "l",
+  text: "litro",
+  conversionGroup: "volume",
+};
+const miligrama: UnitDetail = {
+  symbol: "mg",
+  text: "miligrama",
+  conversionGroup: "mass",
+};
+const mililitro: UnitDetail = {
+  symbol: "ml",
+  text: "mililitro",
+  conversionGroup: "volume",
+};
 const pacote: UnitDetail = { symbol: "pacote", text: "pacote" };
 const pedaco: UnitDetail = { symbol: "pedaço", text: "pedaço" };
 const pitada: UnitDetail = { symbol: "pitada", text: "pitada" };
@@ -99,8 +131,16 @@ timeUnitMultipliers.set("segundo", 1);
 timeUnitMultipliers.set("hora", 60 * 60);
 timeUnitMultipliers.set("dia", 60 * 60 * 24);
 
-const fahrenheit: UnitDetail = { symbol: "f", text: "fahrenheit", conversionGroup: "temperature" };
-const celsius: UnitDetail = { symbol: "c", text: "celsius", conversionGroup: "temperature" };
+const fahrenheit: UnitDetail = {
+  symbol: "f",
+  text: "fahrenheit",
+  conversionGroup: "temperature",
+};
+const celsius: UnitDetail = {
+  symbol: "c",
+  text: "celsius",
+  conversionGroup: "temperature",
+};
 const temperatureUnits = new Map<string, UnitDetail>();
 temperatureUnits.set("fahrenheit", fahrenheit);
 temperatureUnits.set("f", fahrenheit);
@@ -131,8 +171,10 @@ defaultConversions.set("mass", ["kg", "mg", "g"]);
 defaultConversions.set("length", ["cm"]);
 defaultConversions.set("temperature", ["f", "c"]);
 
-const converters = new Map<string, (input: number) => number>(CultureInvariantConversions);
-const unitConversions = {defaultConversions, converters};
+const converters = new Map<string, (input: number) => number>(
+  CultureInvariantConversions,
+);
+const unitConversions = { defaultConversions, converters };
 
 export default {
   ingredientUnits,
@@ -144,5 +186,5 @@ export default {
   temperatureMarkers,
   ingredientQuantities,
   ingredientRangeMarker,
-  unitConversions
+  unitConversions,
 };
