@@ -1,24 +1,24 @@
 import { UnitDetail } from "./types";
+import CultureInvariantConversions from "./conversions";
 
-const saco: UnitDetail = { symbol: "saco", text: "saco", canConvert: false, conversions: [] };
-const caixa: UnitDetail = { symbol: "caixa", text: "caixa", canConvert: false, conversions: [] };
-const copo: UnitDetail = { symbol: "cup", text: "copo", canConvert: true, conversions: ["Tbs", "l", "ml", "qt", "tsp", "gal"] };
-const lata: UnitDetail = { symbol: "lata", text: "lata", canConvert: false, conversions: [] };
-const dente: UnitDetail = { symbol: "dente", text: "dente", canConvert: false, conversions: [] };
-const gota: UnitDetail = { symbol: "gota", text: "gota", canConvert: false, conversions: [] };
-const grama: UnitDetail = { symbol: "g", text: "grama", canConvert: true, conversions: ["lb", "kg", "oz", "mg"] };
-const galao: UnitDetail = { symbol: "gal", text: "galão", canConvert: true, conversions: ["cup", "l", "ml", "qt", "tsp", "Tbs", "pnt"] };
-const polegada: UnitDetail = { symbol: "in", text: "polegada", canConvert: true, conversions: ["cm"] };
-const cm: UnitDetail = { symbol: "cm", text: "centimeter", canConvert: true, conversions: ["in"] };
-const quilograma: UnitDetail = { symbol: "kg", text: "quilograma", canConvert: true, conversions: ["lb", "oz", "g", "mg"] };
-const litro: UnitDetail = { symbol: "l", text: "litro", canConvert: true, conversions: ["cup", "pnt", "ml", "qt", "tsp", "Tbs", "gal"] };
-const miligrama: UnitDetail = { symbol: "mg", text: "miligrama", canConvert: true, conversions: ["g"] };
-const mililitro: UnitDetail = { symbol: "ml", text: "mililitro", canConvert: true, conversions: ["cup", "l", "pnt", "qt", "tsp", "Tbs", "gal"] };
-const pacote: UnitDetail = { symbol: "pacote", text: "pacote", canConvert: false, conversions: [] };
-const pedaco: UnitDetail = { symbol: "pedaço", text: "pedaço", canConvert: false, conversions: [] };
-const pitada: UnitDetail = { symbol: "pitada", text: "pitada", canConvert: false, conversions: [] };
-const fatia: UnitDetail = { symbol: "fatia", text: "fatia", canConvert: false, conversions: [] };
-const bastao: UnitDetail = { symbol: "bastão", text: "bastão", canConvert: false, conversions: [] };
+const saco: UnitDetail = { symbol: "saco", text: "saco" };
+const caixa: UnitDetail = { symbol: "caixa", text: "caixa" };
+const copo: UnitDetail = { symbol: "cup", text: "copo", conversionGroup: "volume" };
+const lata: UnitDetail = { symbol: "lata", text: "lata" };
+const dente: UnitDetail = { symbol: "dente", text: "dente" };
+const gota: UnitDetail = { symbol: "gota", text: "gota" };
+const grama: UnitDetail = { symbol: "g", text: "grama", conversionGroup: "mass" };
+const galao: UnitDetail = { symbol: "gal", text: "galão", conversionGroup: "volume" };
+const cm: UnitDetail = { symbol: "cm", text: "centimeter", conversionGroup: "length" };
+const quilograma: UnitDetail = { symbol: "kg", text: "quilograma", conversionGroup: "mass" };
+const litro: UnitDetail = { symbol: "l", text: "litro", conversionGroup: "volume" };
+const miligrama: UnitDetail = { symbol: "mg", text: "miligrama", conversionGroup: "mass" };
+const mililitro: UnitDetail = { symbol: "ml", text: "mililitro", conversionGroup: "volume" };
+const pacote: UnitDetail = { symbol: "pacote", text: "pacote" };
+const pedaco: UnitDetail = { symbol: "pedaço", text: "pedaço" };
+const pitada: UnitDetail = { symbol: "pitada", text: "pitada" };
+const fatia: UnitDetail = { symbol: "fatia", text: "fatia" };
+const bastao: UnitDetail = { symbol: "bastão", text: "bastão" };
 
 const ingredientUnits = new Map<string, UnitDetail>();
 ingredientUnits.set("saco", saco);
@@ -68,61 +68,13 @@ ingredientUnits.set("pedaço", pedaco);
 ingredientUnits.set("pedaços", pedaco);
 ingredientUnits.set("pitada", pitada);
 ingredientUnits.set("pitadas", pitada);
-ingredientUnits.set("polegada", polegada);
-ingredientUnits.set("polegadas", polegada);
 ingredientUnits.set("fatia", fatia);
 ingredientUnits.set("fatias", fatia);
 ingredientUnits.set("bastão", bastao);
 ingredientUnits.set("bastões", bastao);
 
-const xicaraFunc = (input: string[], startIndex: number) => {
-  const text = input.slice(startIndex + 1).join("");
-
-  if (text.startsWith("de chá") || text.startsWith("(chá)")) {
-    return {
-      uom: "xícara de chá",
-      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
-      newIndex: startIndex + 4
-    };
-  }
-
-  if (text.startsWith("de café") || text.startsWith("(café)")) {
-    return {
-      uom: "xícara de café",
-      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
-      newIndex: startIndex + 4
-    };
-  }
-
-  return { uom: "xícara", uomText: "xícara", newIndex: startIndex };
-};
-
-ingredientUnits.set("xícara", { symbol: "saco", text: "saco", canConvert: false, customFunction: xicaraFunc, conversions: [] });
-ingredientUnits.set("xícaras", { symbol: "saco", text: "saco", canConvert: false, customFunction: xicaraFunc, conversions: [] });
-
-const colherFunc = (input: string[], startIndex: number) => {
-  const text = input.slice(startIndex + 1).join("");
-
-  if (text.startsWith("de chá") || text.startsWith("(chá)")) {
-    return {
-      uom: "colher de chá",
-      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
-      newIndex: startIndex + 4
-    };
-  }
-
-  if (text.startsWith("de sopa") || text.startsWith("(sopa)")) {
-    return {
-      uom: "colher de sopa",
-      uomText: input.slice(startIndex - 1, startIndex + 4).join(""),
-      newIndex: startIndex + 4
-    };
-  }
-
-  return { uom: "colher", uomText: "colher", newIndex: startIndex };
-};
-ingredientUnits.set("colher", { symbol: "saco", text: "saco", canConvert: false, customFunction: colherFunc, conversions: [] });
-ingredientUnits.set("colheres", { symbol: "saco", text: "saco", canConvert: false, customFunction: colherFunc, conversions: [] });
+ingredientUnits.set("colher", { symbol: "colher", text: "colher" });
+ingredientUnits.set("colheres", { symbol: "colher", text: "colher" });
 
 const ingredientSizes = ["grande", "médio", "média", "pequeno", "pequena"];
 
@@ -147,8 +99,8 @@ timeUnitMultipliers.set("segundo", 1);
 timeUnitMultipliers.set("hora", 60 * 60);
 timeUnitMultipliers.set("dia", 60 * 60 * 24);
 
-const fahrenheit: UnitDetail = { symbol: "F", text: "fahrenheit", canConvert: true, conversions: ["C"] };
-const celsius: UnitDetail = { symbol: "C", text: "celsius", canConvert: true, conversions: ["F"] };
+const fahrenheit: UnitDetail = { symbol: "f", text: "fahrenheit", conversionGroup: "temperature" };
+const celsius: UnitDetail = { symbol: "c", text: "celsius", conversionGroup: "temperature" };
 const temperatureUnits = new Map<string, UnitDetail>();
 temperatureUnits.set("fahrenheit", fahrenheit);
 temperatureUnits.set("f", fahrenheit);
@@ -173,6 +125,15 @@ ingredientQuantities.set("dez", 10);
 
 const ingredientRangeMarker = ["a", "-", "ou"];
 
+const defaultConversions = new Map<string, string[]>();
+defaultConversions.set("volume", ["cup", "l", "ml"]);
+defaultConversions.set("mass", ["kg", "mg", "g"]);
+defaultConversions.set("length", ["cm"]);
+defaultConversions.set("temperature", ["f", "c"]);
+
+const converters = new Map<string, (input: number) => number>(CultureInvariantConversions);
+const unitConversions = {defaultConversions, converters};
+
 export default {
   ingredientUnits,
   ingredientSizes,
@@ -183,4 +144,5 @@ export default {
   temperatureMarkers,
   ingredientQuantities,
   ingredientRangeMarker,
+  unitConversions
 };

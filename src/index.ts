@@ -1,7 +1,6 @@
 import { tokenize } from "./tokenizer";
 import Fraction from "fraction.js";
-import { getUnits } from "./units";
-import convert from 'convert-units';
+import { getUnits, convert } from "./units";
 import {
   IngredientParseResult,
   InstructionParseResult,
@@ -101,7 +100,7 @@ export function parseInstruction(
   text: string,
   language: ValidLanguages,
   options: ParseInstructionOptions = defaultParseInstructionOptions
-  ): InstructionParseResult | null {
+): InstructionParseResult | null {
   const tokens = tokenize(text);
 
   if (tokens == null || tokens.length == 0) {
@@ -349,44 +348,65 @@ function getExtra(tokens: string[], startIndex: number): string {
 }
 
 function getIngredientConversions(defaultQuantity: AlternativeQuantity, language: ValidLanguages): Array<AlternativeQuantity> {
-  const unit = getUnits(language).ingredientUnits.get(defaultQuantity.unit);
+  const cultureUnits = getUnits(language);
+  const unit = cultureUnits?.ingredientUnits?.get(defaultQuantity.unit);
+  const conversionGroup = unit?.conversionGroup;
 
-  if (!unit?.canConvert) {
+  if (!conversionGroup) {
     return [];
   }
 
-  return unit.conversions.map((possibility: string) => {
-    const quantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
-    const minQuantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
-    const maxQuantity = convert(defaultQuantity.quantity).from(unit.symbol).to(possibility);
+  const defaultConversions = cultureUnits?.unitConversions?.defaultConversions?.get(conversionGroup);
 
-    return {
-      quantity: round(quantity, 0, 4),
-      unit: possibility,
-      minQuantity: round(minQuantity, 0, 4),
-      maxQuantity: round(maxQuantity, 0, 4),
-    };
-  });
+  if (!defaultConversions) {
+    return [];
+  }
+
+  return defaultConversions.filter(item => item !== unit.symbol)
+    .map((possibility: string) => {
+      const quantity = convert(defaultQuantity.quantity, unit.symbol, possibility, language);
+      const minQuantity = convert(defaultQuantity.minQuantity, unit.symbol, possibility, language);
+      const maxQuantity = convert(defaultQuantity.maxQuantity, unit.symbol, possibility, language);
+
+      const possibilityUOM = cultureUnits?.ingredientUnits?.get(possibility);
+
+      return {
+        quantity: round(quantity, 0, 4),
+        unit: possibility,
+        unitText: possibilityUOM?.text ?? possibility,
+        minQuantity: round(minQuantity, 0, 4),
+        maxQuantity: round(maxQuantity, 0, 4),
+      };
+    });
 }
 
 function getTemperatureConversions(temperature: number, uom: string, language: ValidLanguages): AlternativeQuantity[] {
-  const unit = getUnits(language).temperatureUnits.get(uom);
+  const cultureUnits = getUnits(language);
+  const unit = cultureUnits?.temperatureUnits?.get(uom);
+  const conversionGroup = unit?.conversionGroup;
 
-  if (!unit?.canConvert) {
+  if (!conversionGroup) {
     return [];
   }
 
-  return unit.conversions.map((possibility: string) => {
-    const quantity = convert(temperature).from(unit.symbol).to(possibility);
+  const defaultConversions = cultureUnits?.unitConversions?.defaultConversions?.get(conversionGroup);
 
-    const rounded = round(quantity, 0, 4);
-    return {
-      quantity: rounded,
-      unit: possibility,
-      minQuantity: rounded,
-      maxQuantity: rounded,
-    };
-  });
+  if (!defaultConversions) {
+    return [];
+  }
+
+  return defaultConversions.filter(item => item !== unit.symbol)
+    .map((possibility: string) => {
+      const quantity = convert(temperature, unit.symbol, possibility, language);
+
+      const rounded = round(quantity, 0, 4);
+      return {
+        quantity: rounded,
+        unit: possibility,
+        minQuantity: rounded,
+        maxQuantity: rounded,
+      };
+    });
 }
 
 function isUnicodeFraction(maybeFraction: string): boolean {

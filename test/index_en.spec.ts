@@ -1,7 +1,7 @@
 import { parseIngredient, parseInstruction } from "../src/index";
 import { InstructionTime } from "../src/types";
 
-describe("Parse ingredient EN", () => {
+describe("Parse ingredient en-US", () => {
   const table = [
     ["", -1, -1, -1, -1, -1],
     ["142g bread flour", 142, "142", "gram", "bread flour", ""],
@@ -56,7 +56,7 @@ describe("Parse ingredient EN", () => {
   it.each(table)(
     "parse %s",
     (text, quantity, quantityText, unit, ingredient, extra) => {
-      const result = parseIngredient(text as string, "en");
+      const result = parseIngredient(text as string, "en-US");
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.quantityText ?? -1).toBe(quantityText);
       expect(result?.unit ?? -1).toBe(unit);
@@ -66,7 +66,7 @@ describe("Parse ingredient EN", () => {
   );
 });
 
-describe("Parse ingredient ranges EN", () => {
+describe("Parse ingredient ranges en-US", () => {
   const table = [
     [
       "one to two pounds of carrots",
@@ -137,7 +137,7 @@ describe("Parse ingredient ranges EN", () => {
       ingredient,
       extra
     ) => {
-      const result = parseIngredient(text as string, "en");
+      const result = parseIngredient(text as string, "en-US");
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
       expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
@@ -149,24 +149,54 @@ describe("Parse ingredient ranges EN", () => {
   );
 });
 
-describe("Parse ingredient with options EN", () => {
+describe("Parse ingredient with options en-US", () => {
   const table = [
-    ["500g of flour", 500, 500, 500, "gram", "flour", .5, "kg"],
-    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000, "g"],
-    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000000, "mg"],
-    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 2.2046, "lb"],
-    ["1-2kg of flour", 2, 1, 2, "kilogram", "flour", 4.4092, "lb"],
-    ["1 cup milk", 1, 1, 1, "cup", "milk", 16, "Tbs"],
-    ["1 cup milk", 1, 1, 1, "cup", "milk", .25, "qt"],
-    ["1 cup milk", 1, 1, 1, "cup", "milk", 48, "tsp"],
-    ["1 cup milk", 1, 1, 1, "cup", "milk", 48, "tsp"],
-    ["1 dash of cream", 1, 1, 1, "dash", "cream", 0, ""],
-    ["1/2in ginger", 0.5, 0.5, 0.5, "inch", "ginger", 1.27, "cm"],
-    ["2cm ginger", 2, 2, 2, "centimeter", "ginger", 0.7874, "in"],
+    ["500g of flour", 500, 500, 500, "gram", "flour", .5, .5, .5, "kg"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000, 1000, 1000, "g"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 1000000, 1000000, 1000000, "mg"],
+    ["1kg of flour", 1, 1, 1, "kilogram", "flour", 2.2046, 2.2046, 2.2046, "lb"],
+    ["1-2kg of flour", 2, 1, 2, "kilogram", "flour", 4.4092, 2.2046, 4.4092, "lb"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", 16, 16, 16, "tbsp"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", .25, .25, .25, "qt"],
+    ["1 cup milk", 1, 1, 1, "cup", "milk", 48, 48, 48, "tsp"],
+    ["1 dash of cream", 1, 1, 1, "dash", "cream", 0, 0, 0, ""],
+    ["1/2in ginger", 0.5, 0.5, 0.5, "inch", "ginger", 1.27, 1.27, 1.27, "cm"],
+    ["2cm ginger", 2, 2, 2, "centimeter", "ginger", 0.7874, 0.7874, 0.7874, "in"],
+    ["1 package noodles", 1, 1, 1, "package", "noodles", 0, 0, 0, ""],
   ];
   it.each(table)(
     "parse %s",
-    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateUOM) => {
+    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateMin, alternateMax, alternateUOM) => {
+      const result = parseIngredient(text as string, "en-US", { includeAlternativeUnits: true, includeExtra: true });
+      expect(result?.quantity ?? -1).toBe(quantity);
+      expect(result?.minQuantity ?? -1).toBe(minQuantity);
+      expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
+      expect(result?.unit ?? -1).toBe(unit);
+      expect(result?.ingredient ?? -1).toBe(ingredient);
+
+      if (alternateQuantity === 0) {
+        expect(result?.alternativeQuantities).toEqual([]);
+      } else {
+        expect(result?.alternativeQuantities).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              quantity: alternateQuantity, unit: alternateUOM,
+              minQuantity: alternateMin, maxQuantity: alternateMax
+            })
+          ])
+        )
+      }
+    }
+  );
+});
+
+describe("Parse ingredient with options EN", () => {
+  const table = [
+    ["500g of flour", 500, 500, 500, "gram", "flour", .5, .5, .5, "kg"],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, quantity, minQuantity, maxQuantity, unit, ingredient, alternateQuantity, alternateMin, alternateMax, alternateUOM) => {
       const result = parseIngredient(text as string, "en", { includeAlternativeUnits: true, includeExtra: true });
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
@@ -179,7 +209,10 @@ describe("Parse ingredient with options EN", () => {
       } else {
         expect(result?.alternativeQuantities).toEqual(
           expect.arrayContaining([
-            expect.objectContaining({ quantity: alternateQuantity, unit: alternateUOM, minQuantity: alternateQuantity, maxQuantity: alternateQuantity })
+            expect.objectContaining({
+              quantity: alternateQuantity, unit: alternateUOM,
+              minQuantity: alternateMin, maxQuantity: alternateMax
+            })
           ])
         )
       }
@@ -187,7 +220,7 @@ describe("Parse ingredient with options EN", () => {
   );
 });
 
-describe("Parse instruction EN", () => {
+describe("Parse instruction en-US", () => {
   const table = [
     ["", -1, -1, -1],
     ["Bake for 10min", 600, 0, ""],
@@ -207,7 +240,7 @@ describe("Parse instruction EN", () => {
   it.each(table)(
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
-      const result = parseInstruction(text as string, "en");
+      const result = parseInstruction(text as string, "en-US");
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
@@ -215,22 +248,22 @@ describe("Parse instruction EN", () => {
   );
 });
 
-describe("Parse instruction with options EN", () => {
+describe("Parse instruction with options en-US", () => {
   const table = [
-    ["Preheat the oven at 450 fahrenheit", 450, "fahrenheit", 232.2222, "C"],
-    ["Preheat the oven at 450 celsius", 450, "celsius", 842, "F"],
+    ["Preheat the oven at 450 fahrenheit", 450, "fahrenheit", 232.2222, "c"],
+    ["Preheat the oven at 450 celsius", 450, "celsius", 842, "f"],
     [
       "Preheat the oven at 450 fahrenheit then adjust to 500F",
       500, // keep the last temperature
       "fahrenheit",
-      260, "C"
+      260, "c"
     ],
     ["Bake", 0, "", 0, ""],
   ];
   it.each(table)(
     "parse %s",
     (text, temperature, temperatureUnit, altTemp, altTempUOM) => {
-      const result = parseInstruction(text as string, "en", { includeAlternativeTemperatureUnit: true });
+      const result = parseInstruction(text as string, "en-US", { includeAlternativeTemperatureUnit: true });
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
 
@@ -247,7 +280,7 @@ describe("Parse instruction with options EN", () => {
   );
 });
 
-describe("Parse instruction time range EN", () => {
+describe("Parse instruction time range en-US", () => {
   const table = [
     [
       "Bake for 10min then 20 min then 30 minutes",
@@ -275,7 +308,7 @@ describe("Parse instruction time range EN", () => {
   ];
   it.each(table)("parse %s", (text, totalTimeInSeconds, time) => {
     const timeItems = time as InstructionTime[];
-    const result = parseInstruction(text as string, "en");
+    const result = parseInstruction(text as string, "en-US");
     expect(result?.totalTimeInSeconds ?? -1).toBe(totalTimeInSeconds);
     expect(result?.timeItems.length).toBe(timeItems.length);
 
