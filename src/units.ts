@@ -33,3 +33,16 @@ export function convert(
 
   return converter(input);
 }
+
+export function round(
+  value: number,
+  minimumFractionDigits: number,
+  maximumFractionDigits: number,
+) {
+  const formattedValue = value.toLocaleString("en", {
+    useGrouping: false,
+    minimumFractionDigits,
+    maximumFractionDigits,
+  });
+  return Number(formattedValue);
+}

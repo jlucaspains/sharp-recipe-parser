@@ -166,7 +166,6 @@ ingredientQuantities.set("dez", 10);
 const ingredientRangeMarker = ["a", "-", "ou"];
 
 const defaultConversions = new Map<string, string[]>();
-defaultConversions.set("volume", ["cup", "l", "ml"]);
 defaultConversions.set("mass", ["kg", "mg", "g"]);
 defaultConversions.set("length", ["cm"]);
 defaultConversions.set("temperature", ["f", "c"]);

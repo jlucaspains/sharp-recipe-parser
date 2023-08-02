@@ -7,6 +7,7 @@ const converters = new Map<string, (input: number) => number>(
 const defaultConversions = new Map<string, string[]>(
   DefaultPortuguese.unitConversions.defaultConversions,
 );
+defaultConversions.set("volume", ["cup", "l", "ml"]);
 const unitConversions = { converters, defaultConversions };
 const ingredientUnits = new Map<string, UnitDetail>(
   DefaultPortuguese.ingredientUnits,

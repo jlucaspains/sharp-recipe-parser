@@ -6,6 +6,18 @@ const converters = new Map<string, (input: number) => number>(
 const defaultConversions = new Map<string, string[]>(
   DefaultEnglish.unitConversions.defaultConversions,
 );
+
+defaultConversions.set("volume", [
+  "cup",
+  "tbsp",
+  "l",
+  "ml",
+  "qt",
+  "tsp",
+  "gal",
+  "pt",
+]);
+
 const unitConversions = { converters, defaultConversions };
 
 // volume (cup is base): l, tbsp, qt, tsp, gal, pt

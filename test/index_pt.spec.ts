@@ -354,6 +354,7 @@ describe("Parse ingredient with options pt-BR", () => {
 describe("Parse ingredient with options pt", () => {
   const table = [
     ["500g de farinha", 500, 500, 500, "grama", "farinha", 0.5, 0.5, 0.5, "kg"],
+    ["1 copo de farinha", 1, 1, 1, "copo", "farinha", 0, 0, 0, ""],
   ];
   it.each(table)(
     "parse %s",

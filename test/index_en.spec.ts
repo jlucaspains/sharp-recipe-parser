@@ -253,6 +253,7 @@ describe("Parse ingredient with options en-US", () => {
 describe("Parse ingredient with options EN", () => {
   const table = [
     ["500g of flour", 500, 500, 500, "gram", "flour", 0.5, 0.5, 0.5, "kg"],
+    ["1 cup of flour", 1, 1, 1, "cup", "flour", 0, 0, 0, ""],
   ];
   it.each(table)(
     "parse %s",
