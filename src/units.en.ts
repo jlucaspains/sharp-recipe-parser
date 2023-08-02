@@ -240,16 +240,6 @@ ingredientQuantities.set("ten", 10);
 const ingredientRangeMarker = ["to", "-", "or"];
 
 const defaultConversions = new Map<string, string[]>();
-defaultConversions.set("volume", [
-  "cup",
-  "tbsp",
-  "l",
-  "ml",
-  "qt",
-  "tsp",
-  "gal",
-  "pt",
-]);
 defaultConversions.set("mass", ["lb", "kg", "oz", "mg", "g"]);
 defaultConversions.set("length", ["in", "cm"]);
 defaultConversions.set("temperature", ["f", "c"]);
