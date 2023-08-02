@@ -306,6 +306,7 @@ describe("Parse ingredient with options pt-BR", () => {
     ],
     ["1 copo de leite", 1, 1, 1, "copo", "leite", 0.25, 0.25, 0.25, "l"],
     ["1 copo de leite", 1, 1, 1, "copo", "leite", 50, 50, 50, "colhercha"],
+    ["10 colheres de sopa de leite", 10, 10, 10, "colhersopa", "leite", 0.6, 0.6, 0.6, "copo"],
     ["1 pitada de sal", 1, 1, 1, "pitada", "sal", 0, 0, 0, ""],
     ["1 pacote macarrao", 1, 1, 1, "pacote", "macarrao", 0, 0, 0, ""],
   ];
