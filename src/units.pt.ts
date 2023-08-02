@@ -4,7 +4,7 @@ import CultureInvariantConversions from "./conversions";
 const saco: UnitDetail = { symbol: "saco", text: "saco" };
 const caixa: UnitDetail = { symbol: "caixa", text: "caixa" };
 const copo: UnitDetail = {
-  symbol: "cup",
+  symbol: "copo",
   text: "copo",
   conversionGroup: "volume",
 };

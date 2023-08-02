@@ -7,7 +7,6 @@ const converters = new Map<string, (input: number) => number>(
 const defaultConversions = new Map<string, string[]>(
   DefaultPortuguese.unitConversions.defaultConversions,
 );
-defaultConversions.set("volume", ["cup", "l", "ml"]);
 const unitConversions = { converters, defaultConversions };
 const ingredientUnits = new Map<string, UnitDetail>(
   DefaultPortuguese.ingredientUnits,
@@ -106,41 +105,41 @@ ingredientUnits.set("colhercha", {
 // override conversions for volumetric UOMs like cup, tablespoon, teaspoon
 
 const mlFactor = 1000;
-const cupFactor = 4;
+const copoFactor = 4;
 const colherSopaFactor = 66.6667;
 const colherChaFactor = 200;
 const xicaraCafeFactor = 4.17;
 const xicaraChaFactor = 5;
-converters.set("l->cup", (input) => input * cupFactor);
+converters.set("l->copo", (input) => input * copoFactor);
 converters.set("l->colhersopa", (input) => input * colherSopaFactor);
 converters.set("l->colhercha", (input) => input * colherChaFactor);
 converters.set("l->xicaracafe", (input) => input * xicaraCafeFactor);
 converters.set("l->xicaracha", (input) => input * xicaraChaFactor);
 converters.set("l->ml", (input) => input * mlFactor);
 
-converters.set("cup->l", (input) => input / cupFactor);
+converters.set("copo->l", (input) => input / copoFactor);
 converters.set(
-  "cup->colhersopa",
-  (input) => (input / cupFactor) * colherSopaFactor,
+  "copo->colhersopa",
+  (input) => (input / copoFactor) * colherSopaFactor,
 );
 converters.set(
-  "cup->colhercha",
-  (input) => (input / cupFactor) * colherChaFactor,
+  "copo->colhercha",
+  (input) => (input / copoFactor) * colherChaFactor,
 );
 converters.set(
-  "cup->xicaracafe",
-  (input) => (input / cupFactor) * xicaraCafeFactor,
+  "copo->xicaracafe",
+  (input) => (input / copoFactor) * xicaraCafeFactor,
 );
 converters.set(
-  "cup->xicaracha",
-  (input) => (input / cupFactor) * xicaraChaFactor,
+  "copo->xicaracha",
+  (input) => (input / copoFactor) * xicaraChaFactor,
 );
-converters.set("cup->ml", (input) => (input / cupFactor) * mlFactor);
+converters.set("copo->ml", (input) => (input / copoFactor) * mlFactor);
 
 converters.set("colhersopa->l", (input) => input / colherSopaFactor);
 converters.set(
-  "colhersopa->cup",
-  (input) => (input / colherSopaFactor) * cupFactor,
+  "colhersopa->copo",
+  (input) => (input / colherSopaFactor) * copoFactor,
 );
 converters.set(
   "colhersopa->colhercha",
@@ -161,8 +160,8 @@ converters.set(
 
 converters.set("colhercha->l", (input) => input / colherChaFactor);
 converters.set(
-  "colhercha->cup",
-  (input) => (input / colherChaFactor) * cupFactor,
+  "colhercha->copo",
+  (input) => (input / colherChaFactor) * copoFactor,
 );
 converters.set(
   "colhercha->colhersopa",
@@ -183,8 +182,8 @@ converters.set(
 
 converters.set("xicaracafe->l", (input) => input / xicaraCafeFactor);
 converters.set(
-  "xicaracafe->cup",
-  (input) => (input / xicaraCafeFactor) * cupFactor,
+  "xicaracafe->copo",
+  (input) => (input / xicaraCafeFactor) * copoFactor,
 );
 converters.set(
   "xicaracafe->colhercha",
@@ -205,8 +204,8 @@ converters.set(
 
 converters.set("xicaracha->l", (input) => input / xicaraChaFactor);
 converters.set(
-  "xicaracha->cup",
-  (input) => (input / xicaraChaFactor) * cupFactor,
+  "xicaracha->copo",
+  (input) => (input / xicaraChaFactor) * copoFactor,
 );
 converters.set(
   "xicaracha->colhercha",
@@ -227,7 +226,7 @@ converters.set(
 
 // override list of conversions for volume
 defaultConversions.set("volume", [
-  "cup",
+  "copo",
   "l",
   "ml",
   "xicaracha",
