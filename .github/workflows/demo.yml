@@ -26,8 +26,6 @@ jobs:
           npm install
 
       - name: build
-        env:
-          BASE_PATH: '/'
         run: |
           cd demo
           npm run build
