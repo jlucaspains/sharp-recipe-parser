@@ -5,6 +5,7 @@ on:
     branches: 'main'
     paths:
       - 'demo/**'
+  workflow_dispatch:
 
 jobs:
   build_site:
