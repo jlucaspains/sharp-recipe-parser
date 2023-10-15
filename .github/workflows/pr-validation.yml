@@ -22,6 +22,8 @@ jobs:
 
       - run: yarn build
 
+      - run: yarn lint
+
       - run: yarn coverage
 
       - name: SonarCloud Scan
