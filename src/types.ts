@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export type ValidLanguages = "en" | "en-US" | "pt" | "pt-BR" | string;
 
 export interface IngredientParseResult {
