@@ -117,7 +117,7 @@ function getTemperatureConversions(
   return defaultConversions
     .filter((item) => item !== unit.symbol)
     .map((possibility: string) => {
-      const possibilityUOM = units.ingredientUnits.get(possibility);
+      const possibilityUOM = units.temperatureUnits.get(possibility);
       const quantity = convert(temperature, unit.symbol, possibility, units);
 
       const rounded = round(quantity, 0, 4);

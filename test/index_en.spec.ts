@@ -327,20 +327,30 @@ describe("Parse instruction en-US", () => {
 
 describe("Parse instruction with options en-US", () => {
   const table = [
-    ["Preheat the oven at 450 fahrenheit", 450, "fahrenheit", 232.2222, "c"],
-    ["Preheat the oven at 450 celsius", 450, "celsius", 842, "f"],
+    [
+      "Preheat the oven at 450 fahrenheit",
+      450,
+      "fahrenheit",
+      232.2222,
+      "c",
+      "celsius",
+    ],
+    ["Preheat the oven at 450F", 450, "fahrenheit", 232.2222, "c", "celsius"],
+    ["Preheat the oven at 450 celsius", 450, "celsius", 842, "f", "fahrenheit"],
+    ["Preheat the oven at 450C", 450, "celsius", 842, "f", "fahrenheit"],
     [
       "Preheat the oven at 450 fahrenheit then adjust to 500F",
       500, // keep the last temperature
       "fahrenheit",
       260,
       "c",
+      "celsius",
     ],
-    ["Bake", 0, "", 0, ""],
+    ["Bake", 0, "", 0, "", ""],
   ];
   it.each(table)(
     "parse %s",
-    (text, temperature, temperatureUnit, altTemp, altTempUOM) => {
+    (text, temperature, temperatureUnit, altTemp, altTempUOM, altTempName) => {
       const result = parseInstruction(text as string, "en-US", {
         includeAlternativeTemperatureUnit: true,
       });
@@ -355,6 +365,7 @@ describe("Parse instruction with options en-US", () => {
             expect.objectContaining({
               quantity: altTemp,
               unit: altTempUOM,
+              unitText: altTempName,
               minQuantity: altTemp,
               maxQuantity: altTemp,
             }),
