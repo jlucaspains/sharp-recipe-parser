@@ -327,7 +327,14 @@ describe("Parse instruction en-US", () => {
 
 describe("Parse instruction with options en-US", () => {
   const table = [
-    ["Preheat the oven at 450 fahrenheit", 450, "fahrenheit", 232.2222, "c", "celsius"],
+    [
+      "Preheat the oven at 450 fahrenheit",
+      450,
+      "fahrenheit",
+      232.2222,
+      "c",
+      "celsius",
+    ],
     ["Preheat the oven at 450F", 450, "fahrenheit", 232.2222, "c", "celsius"],
     ["Preheat the oven at 450 celsius", 450, "celsius", 842, "f", "fahrenheit"],
     ["Preheat the oven at 450C", 450, "celsius", 842, "f", "fahrenheit"],
@@ -337,7 +344,7 @@ describe("Parse instruction with options en-US", () => {
       "fahrenheit",
       260,
       "c",
-      "celsius"
+      "celsius",
     ],
     ["Bake", 0, "", 0, "", ""],
   ];
