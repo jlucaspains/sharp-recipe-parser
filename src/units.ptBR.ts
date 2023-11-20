@@ -136,6 +136,25 @@ converters.set(
 );
 converters.set("copo->ml", (input) => (input / copoFactor) * mlFactor);
 
+converters.set("ml->l", (input) => input / mlFactor);
+converters.set(
+  "ml->colhersopa",
+  (input) => (input / mlFactor) * colherSopaFactor,
+);
+converters.set(
+  "ml->colhercha",
+  (input) => (input / mlFactor) * colherChaFactor,
+);
+converters.set(
+  "ml->xicaracafe",
+  (input) => (input / mlFactor) * xicaraCafeFactor,
+);
+converters.set(
+  "ml->xicaracha",
+  (input) => (input / mlFactor) * xicaraChaFactor,
+);
+converters.set("ml->copo", (input) => (input / mlFactor) * copoFactor);
+
 converters.set("colhersopa->l", (input) => input / colherSopaFactor);
 converters.set(
   "colhersopa->copo",
