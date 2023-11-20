@@ -89,6 +89,7 @@ describe("Parse ingredient pt-BR", () => {
     ["oito quilos de cenouras", 8, "oito", "quilograma", "cenouras", ""],
     ["nove quilos de cenouras", 9, "nove", "quilograma", "cenouras", ""],
     ["dez quilos de cenouras", 10, "dez", "quilograma", "cenouras", ""],
+    ["10ml de agua", 10, "10", "mililitro", "agua", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
@@ -320,6 +321,7 @@ describe("Parse ingredient with options pt-BR", () => {
     ],
     ["1 pitada de sal", 1, 1, 1, "pitada", "sal", 0, 0, 0, ""],
     ["1 pacote macarrao", 1, 1, 1, "pacote", "macarrao", 0, 0, 0, ""],
+    ["10ml de agua", 10, 10, 10, "mililitro", "agua", 0.04, 0.04, 0.04, "copo"],
   ];
   it.each(table)(
     "parse %s",
