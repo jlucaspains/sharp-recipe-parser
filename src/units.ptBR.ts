@@ -265,4 +265,5 @@ export default {
   ingredientQuantities: DefaultPortuguese.ingredientQuantities,
   ingredientRangeMarker: DefaultPortuguese.ingredientRangeMarker,
   unitConversions,
+  defaultTemperatureUnit: "celsius"
 };

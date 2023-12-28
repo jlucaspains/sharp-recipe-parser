@@ -49,6 +49,16 @@ export function parseInstruction(
       const maybeUnit = token.toLowerCase();
 
       if (units.temperatureMarkers.includes(maybeUnit)) {
+        // preemptively set temperature if marker is found
+        // if later, a specific UOM is also found, it will override this.
+        // if nothing is found and a default exists, it will use that.
+        if (units.defaultTemperatureUnit) {
+          temperature = number;
+          temperatureText = numberText;
+          temperatureUnit = units.temperatureUnits.get(units.defaultTemperatureUnit)!.text;
+          temperatureUnitText = units.defaultTemperatureUnit;
+        }
+
         continue;
       }
 

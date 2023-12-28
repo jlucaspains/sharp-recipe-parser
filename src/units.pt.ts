@@ -147,7 +147,7 @@ temperatureUnits.set("f", fahrenheit);
 temperatureUnits.set("c", celsius);
 temperatureUnits.set("celsius", celsius);
 
-const temperatureMarkers = ["°", "grau"];
+const temperatureMarkers = ["°", "grau", "graus"];
 
 const ingredientPrepositions = ["de"];
 
@@ -186,4 +186,5 @@ export default {
   ingredientQuantities,
   ingredientRangeMarker,
   unitConversions,
+  defaultTemperatureUnit: null
 };

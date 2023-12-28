@@ -52,6 +52,7 @@ export interface Units {
   ingredientQuantities: Map<string, number>;
   ingredientRangeMarker: string[];
   unitConversions: UnitConversion;
+  defaultTemperatureUnit: string | null;
 }
 
 export type UnitCustomIdentifier = (
