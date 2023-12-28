@@ -311,6 +311,18 @@ describe("Parse instruction en-US", () => {
       500, // keep the last temperature
       "fahrenheit",
     ],
+    [
+      "Preheat the oven at 450 degrees",
+      0,
+      450,
+      "fahrenheit", // assume en-US default temperature unit
+    ],
+    [
+      "Preheat the oven at 450 degrees for a while",
+      0,
+      450,
+      "fahrenheit", // assume en-US default temperature unit
+    ],
     ["Shape and proof for about 2 hours", 7200, 0, ""],
     ["Mix all ingredients", 0, 0, ""],
   ];
@@ -318,6 +330,23 @@ describe("Parse instruction en-US", () => {
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
       const result = parseInstruction(text as string, "en-US");
+      expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
+      expect(result?.temperature ?? -1).toBe(temperature);
+      expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
+    },
+  );
+});
+
+describe("Parse instruction default temperature unit en", () => {
+  const table = [
+    ["Preheat the oven at 450 degress", 0, 0, ""],
+    ["Preheat the oven at 450 degress for a while", 0, 0, ""],
+    ["Preheat the oven at 450°", 0, 0, ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, timeInSeconds, temperature, temperatureUnit) => {
+      const result = parseInstruction(text as string, "en");
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);

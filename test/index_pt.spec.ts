@@ -426,6 +426,18 @@ describe("Parse instruction pt-BR", () => {
       200, // keep the last temperature
       "celsius",
     ],
+    [
+      "Aqueca o forno a 180 graus",
+      0,
+      180,
+      "celsius", // assume pt-BR default temperature unit
+    ],
+    [
+      "Aqueca o forno a 180 graus por um tempo",
+      0,
+      180,
+      "celsius", // assume pt-BR default temperature unit
+    ],
     ["Forme uma bola e deixe crescer por 2 horas", 7200, 0, ""],
     ["Misture todos os ingredientes", 0, 0, ""],
   ];
@@ -433,6 +445,22 @@ describe("Parse instruction pt-BR", () => {
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
       const result = parseInstruction(text as string, "pt-BR");
+      expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
+      expect(result?.temperature ?? -1).toBe(temperature);
+      expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
+    },
+  );
+});
+
+describe("Parse instruction default temperature unit pt", () => {
+  const table = [
+    ["Aqueca o forno a 180 graus", 0, 0, ""],
+    ["Aqueca o forno a 180 graus por um tempo", 0, 0, ""],
+  ];
+  it.each(table)(
+    "parse %s",
+    (text, timeInSeconds, temperature, temperatureUnit) => {
+      const result = parseInstruction(text as string, "pt");
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
