@@ -55,7 +55,10 @@ export function parseInstruction(
         if (units.defaultTemperatureUnit) {
           temperature = number;
           temperatureText = numberText;
-          temperatureUnit = units.temperatureUnits.get(units.defaultTemperatureUnit)!.text;
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          temperatureUnit = units.temperatureUnits.get(
+            units.defaultTemperatureUnit,
+          )!.text;
           temperatureUnitText = units.defaultTemperatureUnit;
         }
 

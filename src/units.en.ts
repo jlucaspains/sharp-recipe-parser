@@ -260,5 +260,5 @@ export default {
   ingredientQuantities,
   ingredientRangeMarker,
   unitConversions,
-  defaultTemperatureUnit: null
+  defaultTemperatureUnit: null,
 };
