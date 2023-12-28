@@ -59,7 +59,6 @@ export function parseInstruction(
           temperatureUnit = units.temperatureUnits.get(
             units.defaultTemperatureUnit,
           )!.text;
-          temperatureUnitText = units.defaultTemperatureUnit;
         }
 
         continue;

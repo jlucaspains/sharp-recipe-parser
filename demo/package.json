@@ -32,6 +32,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@jlucaspains/sharp-recipe-parser": "^1.0.0-beta10"
+		"@jlucaspains/sharp-recipe-parser": "^1.0.6"
 	}
 }
