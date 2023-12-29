@@ -1,5 +1,5 @@
-import { parseIngredient, parseInstruction } from "../src/index";
-import * as Types from "../src/types";
+import { parseIngredient, parseInstruction } from "../src/index.js";
+import * as Types from "../src/types.js";
 
 describe("Parse ingredient en-US", () => {
   const table = [

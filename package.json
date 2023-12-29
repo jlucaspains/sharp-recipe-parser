@@ -22,9 +22,6 @@
   "dependencies": {
     "fraction.js": "^4.2.0"
   },
-  "publishConfig": {
-    "@jlucaspains:registry": "https://npm.pkg.github.com"
-  },
   "devDependencies": {
     "@babel/preset-env": "^7.23.6",
     "csv-parse": "^5.4.0",
@@ -39,8 +36,9 @@
     "prettier": "^3.0.0"
   },
   "files": [
-    "lib/**/*"
+    "src/**/*"
   ],
+	"type": "module",
   "keywords": [
     "recipe",
     "parser",

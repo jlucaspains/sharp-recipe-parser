@@ -1,6 +1,6 @@
-import { tokenize } from "./tokenizer";
-import { getUnits, convert, round } from "./units";
-import * as Types from "./types";
+import { tokenize } from "./tokenizer.js";
+import { getUnits, convert, round } from "./units.js";
+import * as Types from "./types.js";
 
 /**
  * @typedef {{

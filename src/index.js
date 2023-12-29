@@ -1,2 +1,2 @@
-export { parseIngredient } from "./ingredientParser";
-export { parseInstruction } from "./instructionParser";
+export { parseIngredient } from "./ingredientParser.js";
+export { parseInstruction } from "./instructionParser.js";

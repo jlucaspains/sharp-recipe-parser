@@ -1,4 +1,4 @@
-import { parseIngredient } from "../src/index";
+import { parseIngredient } from "../src/index.js";
 import { parse } from "csv-parse/sync";
 import * as fs from "fs";
 import * as path from "path";

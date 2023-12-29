@@ -1,8 +1,8 @@
-import * as Types from "./types";
-import EnglishUnits from "./units.en";
-import AmericanEnglishUnits from "./units.enUS";
-import PortugueseUnits from "./units.pt";
-import BrazilianPortugueseUnits from "./units.ptBR";
+import * as Types from "./types.js";
+import EnglishUnits from "./units.en.js";
+import AmericanEnglishUnits from "./units.enUS.js";
+import PortugueseUnits from "./units.pt.js";
+import BrazilianPortugueseUnits from "./units.ptBR.js";
 
 /**
  * @type {Map<string, string>}

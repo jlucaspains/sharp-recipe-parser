@@ -1,5 +1,5 @@
-import * as Types from "./types";
-import CultureInvariantConversions from "./conversions";
+import * as Types from "./types.js";
+import CultureInvariantConversions from "./conversions.js";
 
 /**
  * @typedef {Types.UnitDetail} UnitDetail

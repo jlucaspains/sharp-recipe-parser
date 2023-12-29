@@ -1,4 +1,4 @@
-import { parseIngredient, parseInstruction } from "../src/index";
+import { parseIngredient, parseInstruction } from "../src/index.js";
 
 test("Parse ingredient with bad language", () => {
   expect(() => parseIngredient("some ingredient", "no")).toThrow(
