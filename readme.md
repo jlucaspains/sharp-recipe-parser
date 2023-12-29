@@ -13,7 +13,7 @@ yarn add @jlucaspains/sharp-recipe-parser
 ```
 
 Then:
-```typescript
+```javascript
 import { parseIngredient, parseInstruction } from '@jlucaspains/sharp-recipe-parser';
 
 // with default options

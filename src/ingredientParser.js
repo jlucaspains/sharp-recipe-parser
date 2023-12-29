@@ -1,16 +1,33 @@
 import Fraction from "fraction.js";
 import { tokenize } from "./tokenizer";
-import {
-  AlternativeQuantity,
-  IngredientParseResult,
-  ParseIngredientOptions,
-  Units,
-  ValidLanguages,
-} from "./types";
+import * as Types from "./types";
 import { convert, getUnits, round } from "./units";
 
-/* eslint-disable @typescript-eslint/naming-convention */
-const unicodeFractions: Record<string, string> = {
+/**
+ * @typedef {{
+ *  quantity: number;
+ *  quantityText: string;
+ *  minQuantity: number;
+ *  maxQuantity: number;
+ *  unit: string;
+ *  unitText: string;
+ *  ingredient: string;
+ *  extra: string;
+ *  alternativeQuantities: AlternativeQuantity[];
+ * }} IngredientParseResult
+*/
+
+/**
+ * @typedef {{
+ *  includeExtra: boolean;
+ *  includeAlternativeUnits: boolean;
+ * }} ParseIngredientOptions
+*/
+
+/**
+ * @type {Record<string, string>}
+ */
+const unicodeFractions = {
   "½": "1/2",
   "⅓": "1/3",
   "⅔": "2/3",
@@ -30,18 +47,28 @@ const unicodeFractions: Record<string, string> = {
   "⅑": "1/9",
   "⅒": "1/10",
 };
-/* eslint-enable @typescript-eslint/naming-convention */
 
-const defaultParseIngredientOptions: ParseIngredientOptions = {
+/**
+ * @type {ParseIngredientOptions}
+ */
+const defaultParseIngredientOptions = {
   includeAlternativeUnits: false,
   includeExtra: true,
 };
 
+/**
+ * Parses an ingredient string into its component parts
+ * @param {string} text
+ * @param {ValidLanguages} language
+ * @param {ParseIngredientOptions} options
+ * @returns {IngredientParseResult | null}
+ * @throws {Error} if language is not supported
+ */
 export function parseIngredient(
-  text: string,
-  language: ValidLanguages,
-  options: ParseIngredientOptions = defaultParseIngredientOptions,
-): IngredientParseResult | null {
+  text,
+  language,
+  options = defaultParseIngredientOptions,
+) {
   const units = getUnits(language);
 
   if (!units) {
@@ -77,7 +104,10 @@ export function parseIngredient(
   const minQuantity = firstQuantity || quantity;
   const maxQuantity = quantity;
 
-  let alternativeQuantities: AlternativeQuantity[] = [];
+  /**
+   * @type {AlternativeQuantity[]}
+   */
+  let alternativeQuantities = [];
   if (options.includeAlternativeUnits) {
     alternativeQuantities = getIngredientConversions(
       { quantity, minQuantity, maxQuantity, unit, unitText },
@@ -98,10 +128,17 @@ export function parseIngredient(
   };
 }
 
+/**
+ * Gets the quantity out of a list of tokens using a specific unit dictionary
+ *
+ * @param {string[]} tokens
+ * @param {Units}
+ * @returns {[number, number, string, number]}
+ */
 function getQuantity(
-  tokens: string[],
-  units: Units,
-): [number, number, string, number] {
+  tokens,
+  units,
+) {
   let quantityText = "";
   let quantityConvertible = "";
   let firstQuantityConvertible = "";
@@ -124,8 +161,7 @@ function getQuantity(
         value = unicodeFractions[item];
         specialSpace = quantityConvertible.length > 0 ? " " : space; // force space for unicode fractions
       } else if (isTextNumber) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        value = units.ingredientQuantities.get(item.toLowerCase())!.toString();
+        value = units.ingredientQuantities.get(item.toLowerCase()).toString();
       }
 
       quantityText += `${space}${item}`;
@@ -154,7 +190,16 @@ function getQuantity(
   return [firstQuantityValue, quantityValue, quantityText, index];
 }
 
-function getQuantityValue(quantityConvertible: string): number {
+
+/**
+ * This function converts a quantity string into a numerical value.
+ * If the string includes a "/", it is treated as a fraction and converted accordingly.
+ * If the string does not include a "/", it is converted directly to a float.
+ *
+ * @param {string} quantityConvertible - The quantity string to be converted.
+ * @returns {number} The converted numerical value of the quantity.
+ */
+function getQuantityValue(quantityConvertible) {
   let quantityValue = 0;
   if (quantityConvertible.includes("/")) {
     const frac = new Fraction(quantityConvertible.trim());
@@ -166,11 +211,19 @@ function getQuantityValue(quantityConvertible: string): number {
   return quantityValue;
 }
 
+/**
+ * Gets the unit out of a list of tokens using a specific unit dictionary
+ *
+ * @param {string[]} tokens
+ * @param {number} startIndex
+ * @param {Units}
+ * @returns {[string, string, number]}
+ */
 function getUnit(
-  tokens: string[],
-  startIndex: number,
-  units: Units,
-): [string, string, number] {
+  tokens,
+  startIndex,
+  units,
+) {
   if (startIndex >= tokens.length) {
     return ["", "", startIndex];
   }
@@ -198,10 +251,15 @@ function getUnit(
 
   newStartIndex++;
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const unit = units.ingredientUnits.get(possibleUOMLower)!;
-  let resultUnit: string;
-  let resultUnitText: string;
+  const unit = units.ingredientUnits.get(possibleUOMLower);
+  /**
+   * @type {string}
+   */
+  let resultUnit;
+  /**
+   * @type {string}
+   */
+  let resultUnitText;
 
   if (unit.customFunction) {
     const customUnit = unit.customFunction(tokens, newStartIndex);
@@ -216,11 +274,18 @@ function getUnit(
   return [resultUnit, resultUnitText, newStartIndex];
 }
 
+/**
+ * 
+ * @param {string[]} tokens 
+ * @param {number} startIndex 
+ * @param {Units} units 
+ * @returns {[string, number]}
+ */
 function getIngredient(
-  tokens: string[],
-  startIndex: number,
-  units: Units,
-): [string, number] {
+  tokens,
+  startIndex,
+  units,
+) {
   if (startIndex >= tokens.length) {
     return ["", startIndex];
   }
@@ -262,17 +327,29 @@ function getIngredient(
   ];
 }
 
-function getExtra(tokens: string[], startIndex: number): string {
+/**
+ * Gets the extra text out of a list of tokens
+ * @param {string[]} tokens
+ * @param {number} startIndex
+ * @returns {string}
+ */
+function getExtra(tokens, startIndex) {
   return tokens
     .slice(startIndex + 1)
     .join("")
     .trim();
 }
 
+/**
+ * 
+ * @param {AlternativeQuantity} defaultQuantity 
+ * @param {Units} units 
+ * @returns {AlternativeQuantity[]}
+ */
 function getIngredientConversions(
-  defaultQuantity: AlternativeQuantity,
-  units: Units,
-): AlternativeQuantity[] {
+  defaultQuantity,
+  units,
+) {
   const unit = units.ingredientUnits.get(defaultQuantity.unit);
   const conversionGroup = unit?.conversionGroup;
 
@@ -289,7 +366,7 @@ function getIngredientConversions(
 
   return defaultConversions
     .filter((item) => item !== unit.symbol)
-    .map((possibility: string) => {
+    .map((possibility) => {
       const quantity = convert(
         defaultQuantity.quantity,
         unit.symbol,
@@ -321,7 +398,12 @@ function getIngredientConversions(
     });
 }
 
-function isUnicodeFraction(maybeFraction: string): boolean {
+/**
+ * 
+ * @param {string} maybeFraction 
+ * @returns {boolean}
+ */
+function isUnicodeFraction(maybeFraction) {
   // eslint-disable-next-line no-prototype-builtins
   return unicodeFractions.hasOwnProperty(maybeFraction);
 }

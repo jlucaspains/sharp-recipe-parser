@@ -1,9 +1,15 @@
 import DefaultEnglish from "./units.en";
 
-const converters = new Map<string, (input: number) => number>(
+/**
+ * @type {Map<string, (input: number) => number>}
+ */
+const converters = new Map(
   DefaultEnglish.unitConversions.converters,
 );
-const defaultConversions = new Map<string, string[]>(
+/**
+ * @type {Map<string, string[]>}
+ */
+const defaultConversions = new Map(
   DefaultEnglish.unitConversions.defaultConversions,
 );
 

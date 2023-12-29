@@ -1,20 +1,39 @@
-import { UnitDetail } from "./types";
+import * as Types from "./types";
 import DefaultPortuguese from "./units.pt";
 
-const converters = new Map<string, (input: number) => number>(
+/**
+ * @type {Map<string, (input: number) => number>}
+ */
+const converters = new Map(
   DefaultPortuguese.unitConversions.converters,
 );
-const defaultConversions = new Map<string, string[]>(
+
+/**
+ * @type {Map<string, string[]>}
+ */
+const defaultConversions = new Map(
   DefaultPortuguese.unitConversions.defaultConversions,
 );
 const unitConversions = { converters, defaultConversions };
-const ingredientUnits = new Map<string, UnitDetail>(
+/**
+ * @type {Map<string, Types.UnitDetail>}
+ */
+const ingredientUnits = new Map(
   DefaultPortuguese.ingredientUnits,
 );
 
 // Add xicara that is specific to ptBR
-
-const xicaraFunc = (input: string[], startIndex: number) => {
+/**
+ * This function parses a given array of input strings and identifies the unit of measure (UOM).
+ * It checks if the text starts with "de chá" or "(chá)" and returns "xicaracha" as the UOM.
+ * If the text starts with "de café" or "(café)", it returns "xicaracafe" as the UOM.
+ * If none of the above conditions are met, it returns "xícara" as the UOM.
+ *
+ * @param {string[]} input - The array of input strings to be parsed.
+ * @param {number} startIndex - The index in the input array to start parsing from.
+ * @returns {Types.UnitCustomIdentifier} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
+ */
+const xicaraFunc = (input, startIndex) => {
   const text = input.slice(startIndex + 1).join("");
 
   if (text.startsWith("de chá") || text.startsWith("(chá)")) {
@@ -59,7 +78,17 @@ ingredientUnits.set("xicaracafe", {
 });
 
 // Add colher de cha e de cafe that are specific to ptBR
-const colherFunc = (input: string[], startIndex: number) => {
+/**
+ * This function parses a given array of input strings and identifies the unit of measure (UOM).
+ * It checks if the text starts with "de chá" or "(chá)" and returns "colhercha" as the UOM.
+ * If the text starts with "de sopa" or "(sopa)", it returns "colhersopa" as the UOM.
+ * If none of the above conditions are met, it returns "colher" as the UOM.
+ *
+ * @param {string[]} input - The array of input strings to be parsed.
+ * @param {number} startIndex - The index in the input array to start parsing from.
+ * @returns {UnitCustomIdentifier} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
+ */
+const colherFunc = (input, startIndex) => {
   const text = input.slice(startIndex + 1).join("");
 
   if (text.startsWith("de chá") || text.startsWith("(chá)")) {

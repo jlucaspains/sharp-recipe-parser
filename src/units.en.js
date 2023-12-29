@@ -1,94 +1,101 @@
-import { UnitDetail } from "./types";
+import * as Types from "./types";
 import CultureInvariantConversions from "./conversions";
 
-const bag: UnitDetail = { symbol: "bag", text: "bag" };
-const batch: UnitDetail = { symbol: "batch", text: "batch" };
-const box: UnitDetail = { symbol: "box", text: "box" };
-const bunch: UnitDetail = { symbol: "bunch", text: "bunch" };
-const cup: UnitDetail = {
+/**
+ * @typedef {Types.UnitDetail} UnitDetail
+ */
+
+const bag = { symbol: "bag", text: "bag" };
+const batch = { symbol: "batch", text: "batch" };
+const box = { symbol: "box", text: "box" };
+const bunch = { symbol: "bunch", text: "bunch" };
+const cup = {
   symbol: "cup",
   text: "cup",
   conversionGroup: "volume",
 };
-const can: UnitDetail = { symbol: "can", text: "can" };
-const clove: UnitDetail = { symbol: "clove", text: "clove" };
-const dash: UnitDetail = { symbol: "dash", text: "dash" };
-const drop: UnitDetail = { symbol: "drop", text: "drop" };
-const gram: UnitDetail = { symbol: "g", text: "gram", conversionGroup: "mass" };
-const gallon: UnitDetail = {
+const can = { symbol: "can", text: "can" };
+const clove = { symbol: "clove", text: "clove" };
+const dash = { symbol: "dash", text: "dash" };
+const drop = { symbol: "drop", text: "drop" };
+const gram = { symbol: "g", text: "gram", conversionGroup: "mass" };
+const gallon = {
   symbol: "gal",
   text: "gallon",
   conversionGroup: "volume",
 };
-const grain: UnitDetail = { symbol: "grain", text: "grain" };
-const inch: UnitDetail = {
+const grain = { symbol: "grain", text: "grain" };
+const inch = {
   symbol: "in",
   text: "inch",
   conversionGroup: "length",
 };
-const cm: UnitDetail = {
+const cm = {
   symbol: "cm",
   text: "centimeter",
   conversionGroup: "length",
 };
-const kilogram: UnitDetail = {
+const kilogram = {
   symbol: "kg",
   text: "kilogram",
   conversionGroup: "mass",
 };
-const pound: UnitDetail = {
+const pound = {
   symbol: "lb",
   text: "pound",
   conversionGroup: "mass",
 };
-const liter: UnitDetail = {
+const liter = {
   symbol: "l",
   text: "liter",
   conversionGroup: "volume",
 };
-const milligram: UnitDetail = {
+const milligram = {
   symbol: "mg",
   text: "milligram",
   conversionGroup: "mass",
 };
-const milliliter: UnitDetail = {
+const milliliter = {
   symbol: "ml",
   text: "milliliter",
   conversionGroup: "volume",
 };
-const ounce: UnitDetail = {
+const ounce = {
   symbol: "oz",
   text: "ounce",
   conversionGroup: "mass",
 };
-const pkg: UnitDetail = { symbol: "package", text: "package" };
-const piece: UnitDetail = { symbol: "piece", text: "piece" };
-const pinch: UnitDetail = { symbol: "pinch", text: "pinch" };
-const pint: UnitDetail = {
+const pkg = { symbol: "package", text: "package" };
+const piece = { symbol: "piece", text: "piece" };
+const pinch = { symbol: "pinch", text: "pinch" };
+const pint = {
   symbol: "pnt",
   text: "pint",
   conversionGroup: "volume",
 };
-const quart: UnitDetail = {
+const quart = {
   symbol: "qt",
   text: "quart",
   conversionGroup: "volume",
 };
-const slice: UnitDetail = { symbol: "slice", text: "slice" };
-const stalk: UnitDetail = { symbol: "stalk", text: "stalk" };
-const stick: UnitDetail = { symbol: "stick", text: "stick" };
-const teaspoon: UnitDetail = {
+const slice = { symbol: "slice", text: "slice" };
+const stalk = { symbol: "stalk", text: "stalk" };
+const stick = { symbol: "stick", text: "stick" };
+const teaspoon = {
   symbol: "tsp",
   text: "teaspoon",
   conversionGroup: "volume",
 };
-const tablespoon: UnitDetail = {
+const tablespoon = {
   symbol: "tbsp",
   text: "tablespoon",
   conversionGroup: "volume",
 };
 
-const ingredientUnits = new Map<string, UnitDetail>();
+/**
+ * @type {Map<string, UnitDetail>}
+ */
+const ingredientUnits = new Map();
 ingredientUnits.set("bag", bag);
 ingredientUnits.set("bags", bag);
 ingredientUnits.set("batch", batch);
@@ -184,7 +191,10 @@ ingredientUnits.set("tspn", teaspoon);
 
 const ingredientSizes = ["large", "medium", "small"];
 
-const timeUnits = new Map<string, string>();
+/**
+ * @type {Map<string, string>}
+ */
+const timeUnits = new Map();
 timeUnits.set("min", "minute");
 timeUnits.set("mins", "minute");
 timeUnits.set("minute", "minute");
@@ -199,23 +209,29 @@ timeUnits.set("hours", "hour");
 timeUnits.set("day", "day");
 timeUnits.set("days", "day");
 
-const timeUnitMultipliers = new Map<string, number>();
+/**
+ * @type {Map<string, number>}
+ */
+const timeUnitMultipliers = new Map();
 timeUnitMultipliers.set("minute", 60);
 timeUnitMultipliers.set("second", 1);
 timeUnitMultipliers.set("hour", 60 * 60);
 timeUnitMultipliers.set("day", 60 * 60 * 24);
 
-const fahrenheit: UnitDetail = {
+const fahrenheit = {
   symbol: "f",
   text: "fahrenheit",
   conversionGroup: "temperature",
 };
-const celsius: UnitDetail = {
+const celsius = {
   symbol: "c",
   text: "celsius",
   conversionGroup: "temperature",
 };
-const temperatureUnits = new Map<string, UnitDetail>();
+/**
+ * @type {Map<string, UnitDetail>}
+ */
+const temperatureUnits = new Map();
 temperatureUnits.set("fahrenheit", fahrenheit);
 temperatureUnits.set("f", fahrenheit);
 temperatureUnits.set("c", celsius);
@@ -225,7 +241,10 @@ const temperatureMarkers = ["°", "degree", "degrees"];
 
 const ingredientPrepositions = ["of"];
 
-const ingredientQuantities = new Map<string, number>();
+/**
+ * @type {Map<string, number>}
+ */
+const ingredientQuantities = new Map();
 ingredientQuantities.set("one", 1);
 ingredientQuantities.set("two", 2);
 ingredientQuantities.set("three", 3);
@@ -239,12 +258,18 @@ ingredientQuantities.set("ten", 10);
 
 const ingredientRangeMarker = ["to", "-", "or"];
 
-const defaultConversions = new Map<string, string[]>();
+/**
+ * @type {Map<string, string[]>}
+ */
+const defaultConversions = new Map();
 defaultConversions.set("mass", ["lb", "kg", "oz", "mg", "g"]);
 defaultConversions.set("length", ["in", "cm"]);
 defaultConversions.set("temperature", ["f", "c"]);
 
-const converters = new Map<string, (input: number) => number>(
+/**
+ * @type {Map<string, (input: number) => number>}
+ */
+const converters = new Map(
   CultureInvariantConversions,
 );
 const unitConversions = { defaultConversions, converters };
