@@ -13,16 +13,16 @@ import { convert, getUnits, round } from "./units";
  *  unitText: string;
  *  ingredient: string;
  *  extra: string;
- *  alternativeQuantities: AlternativeQuantity[];
+ *  alternativeQuantities: Types.AlternativeQuantity[];
  * }} IngredientParseResult
-*/
+ */
 
 /**
  * @typedef {{
  *  includeExtra: boolean;
  *  includeAlternativeUnits: boolean;
  * }} ParseIngredientOptions
-*/
+ */
 
 /**
  * @type {Record<string, string>}
@@ -58,10 +58,10 @@ const defaultParseIngredientOptions = {
 
 /**
  * Parses an ingredient string into its component parts
- * @param {string} text
- * @param {ValidLanguages} language
- * @param {ParseIngredientOptions} options
- * @returns {IngredientParseResult | null}
+ * @param {string} text - The ingredient string to be parsed.
+ * @param {Types.ValidLanguages} language - The language of the ingredient string.
+ * @param {ParseIngredientOptions} options - The options to use when parsing the ingredient string.
+ * @returns {IngredientParseResult | null} The parsed ingredient object, or null if the ingredient string is empty.
  * @throws {Error} if language is not supported
  */
 export function parseIngredient(
@@ -105,7 +105,7 @@ export function parseIngredient(
   const maxQuantity = quantity;
 
   /**
-   * @type {AlternativeQuantity[]}
+   * @type {Types.AlternativeQuantity[]}
    */
   let alternativeQuantities = [];
   if (options.includeAlternativeUnits) {
@@ -130,15 +130,11 @@ export function parseIngredient(
 
 /**
  * Gets the quantity out of a list of tokens using a specific unit dictionary
- *
- * @param {string[]} tokens
- * @param {Units}
- * @returns {[number, number, string, number]}
+ * @param {string[]} tokens - The list of tokens to get the quantity from.
+ * @param {Types.Units} units - The unit dictionary to use when parsing the quantity.
+ * @returns {[number, number, string, number]} The quantity value, the quantity text, and the index of the last token used to get the quantity.
  */
-function getQuantity(
-  tokens,
-  units,
-) {
+function getQuantity(tokens, units) {
   let quantityText = "";
   let quantityConvertible = "";
   let firstQuantityConvertible = "";
@@ -190,12 +186,10 @@ function getQuantity(
   return [firstQuantityValue, quantityValue, quantityText, index];
 }
 
-
 /**
  * This function converts a quantity string into a numerical value.
  * If the string includes a "/", it is treated as a fraction and converted accordingly.
  * If the string does not include a "/", it is converted directly to a float.
- *
  * @param {string} quantityConvertible - The quantity string to be converted.
  * @returns {number} The converted numerical value of the quantity.
  */
@@ -213,17 +207,12 @@ function getQuantityValue(quantityConvertible) {
 
 /**
  * Gets the unit out of a list of tokens using a specific unit dictionary
- *
- * @param {string[]} tokens
- * @param {number} startIndex
- * @param {Units}
- * @returns {[string, string, number]}
+ * @param {string[]} tokens - The list of tokens to get the unit from.
+ * @param {number} startIndex - The index of the first token to use when getting the unit.
+ * @param {Types.Units} units - The unit dictionary to use when parsing the unit.
+ * @returns {[string, string, number]} The unit value, the unit text, and the index of the last token used to get the unit.
  */
-function getUnit(
-  tokens,
-  startIndex,
-  units,
-) {
+function getUnit(tokens, startIndex, units) {
   if (startIndex >= tokens.length) {
     return ["", "", startIndex];
   }
@@ -275,17 +264,13 @@ function getUnit(
 }
 
 /**
- * 
- * @param {string[]} tokens 
- * @param {number} startIndex 
- * @param {Units} units 
- * @returns {[string, number]}
+ * Gets the ingredient out of a list of tokens using a specific unit dictionary
+ * @param {string[]} tokens - The list of tokens to get the ingredient from.
+ * @param {number} startIndex - The index of the first token to use when getting the ingredient.
+ * @param {Types.Units} units - The unit dictionary to use when parsing the ingredient.
+ * @returns {[string, number]} The ingredient value and the index of the last token used to get the ingredient.
  */
-function getIngredient(
-  tokens,
-  startIndex,
-  units,
-) {
+function getIngredient(tokens, startIndex, units) {
   if (startIndex >= tokens.length) {
     return ["", startIndex];
   }
@@ -329,9 +314,9 @@ function getIngredient(
 
 /**
  * Gets the extra text out of a list of tokens
- * @param {string[]} tokens
- * @param {number} startIndex
- * @returns {string}
+ * @param {string[]} tokens - The list of tokens to get the extra text from.
+ * @param {number} startIndex - The index of the first token to use when getting the extra text.
+ * @returns {string} The extra text value.
  */
 function getExtra(tokens, startIndex) {
   return tokens
@@ -341,15 +326,12 @@ function getExtra(tokens, startIndex) {
 }
 
 /**
- * 
- * @param {AlternativeQuantity} defaultQuantity 
- * @param {Units} units 
- * @returns {AlternativeQuantity[]}
+ * Gets the ingredient conversions for a given ingredient quantity
+ * @param {Types.AlternativeQuantity} defaultQuantity - The ingredient quantity to get the conversions for.
+ * @param {Types.Units} units - The unit dictionary to use when getting the conversions.
+ * @returns {Types.AlternativeQuantity[]} The ingredient conversions.
  */
-function getIngredientConversions(
-  defaultQuantity,
-  units,
-) {
+function getIngredientConversions(defaultQuantity, units) {
   const unit = units.ingredientUnits.get(defaultQuantity.unit);
   const conversionGroup = unit?.conversionGroup;
 
@@ -399,9 +381,9 @@ function getIngredientConversions(
 }
 
 /**
- * 
- * @param {string} maybeFraction 
- * @returns {boolean}
+ * Checks if a string is a unicode fraction
+ * @param {string} maybeFraction - The string to check.
+ * @returns {boolean} True if the string is a unicode fraction, false otherwise.
  */
 function isUnicodeFraction(maybeFraction) {
   // eslint-disable-next-line no-prototype-builtins

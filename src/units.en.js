@@ -269,11 +269,12 @@ defaultConversions.set("temperature", ["f", "c"]);
 /**
  * @type {Map<string, (input: number) => number>}
  */
-const converters = new Map(
-  CultureInvariantConversions,
-);
+const converters = new Map(CultureInvariantConversions);
 const unitConversions = { defaultConversions, converters };
 
+/**
+ * @type {Types.Units}
+ */
 export default {
   ingredientUnits,
   ingredientSizes,

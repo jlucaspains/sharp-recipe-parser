@@ -4,9 +4,7 @@ import DefaultPortuguese from "./units.pt";
 /**
  * @type {Map<string, (input: number) => number>}
  */
-const converters = new Map(
-  DefaultPortuguese.unitConversions.converters,
-);
+const converters = new Map(DefaultPortuguese.unitConversions.converters);
 
 /**
  * @type {Map<string, string[]>}
@@ -18,9 +16,7 @@ const unitConversions = { converters, defaultConversions };
 /**
  * @type {Map<string, Types.UnitDetail>}
  */
-const ingredientUnits = new Map(
-  DefaultPortuguese.ingredientUnits,
-);
+const ingredientUnits = new Map(DefaultPortuguese.ingredientUnits);
 
 // Add xicara that is specific to ptBR
 /**
@@ -28,7 +24,6 @@ const ingredientUnits = new Map(
  * It checks if the text starts with "de chá" or "(chá)" and returns "xicaracha" as the UOM.
  * If the text starts with "de café" or "(café)", it returns "xicaracafe" as the UOM.
  * If none of the above conditions are met, it returns "xícara" as the UOM.
- *
  * @param {string[]} input - The array of input strings to be parsed.
  * @param {number} startIndex - The index in the input array to start parsing from.
  * @returns {Types.UnitCustomIdentifier} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
@@ -83,10 +78,9 @@ ingredientUnits.set("xicaracafe", {
  * It checks if the text starts with "de chá" or "(chá)" and returns "colhercha" as the UOM.
  * If the text starts with "de sopa" or "(sopa)", it returns "colhersopa" as the UOM.
  * If none of the above conditions are met, it returns "colher" as the UOM.
- *
  * @param {string[]} input - The array of input strings to be parsed.
  * @param {number} startIndex - The index in the input array to start parsing from.
- * @returns {UnitCustomIdentifier} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
+ * @returns {{ uom: string; uomText: string; newIndex: number }} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
  */
 const colherFunc = (input, startIndex) => {
   const text = input.slice(startIndex + 1).join("");

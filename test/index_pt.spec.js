@@ -1,5 +1,5 @@
 import { parseIngredient, parseInstruction } from "../src/index";
-import { InstructionTime } from "../src/types";
+import * as Types from "../src/types";
 
 describe("Parse ingredient pt-BR", () => {
   const table = [

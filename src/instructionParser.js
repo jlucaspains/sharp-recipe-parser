@@ -4,11 +4,11 @@ import * as Types from "./types";
 
 /**
  * @typedef {{
-*  timeInSeconds: number;
-*  timeUnitText: string;
-*  timeText: string;
-* }} InstructionTime
-*/
+ *  timeInSeconds: number;
+ *  timeUnitText: string;
+ *  timeText: string;
+ * }} InstructionTime
+ */
 
 /**
  * @typedef {{
@@ -18,15 +18,15 @@ import * as Types from "./types";
  *  temperatureUnit: string;
  *  temperatureText: string;
  *  temperatureUnitText: string;
- *  alternativeTemperatures: AlternativeQuantity[];
+ *  alternativeTemperatures: Types.AlternativeQuantity[];
  * }} InstructionParseResult
-*/
+ */
 
 /**
  * @typedef {{
  *  includeAlternativeTemperatureUnit: boolean;
  * }} ParseInstructionOptions
-*/
+ */
 
 /**
  * @type {ParseInstructionOptions}
@@ -39,9 +39,8 @@ const defaultParseInstructionOptions = {
  * This function parses a given instruction string.
  * It identifies and extracts the time, temperature, and units from the instruction.
  * It also provides alternative temperature conversions if the option is set.
- *
  * @param {string} text - The instruction string to be parsed.
- * @param {ValidLanguages} language - The language of the instruction.
+ * @param {Types.ValidLanguages} language - The language of the instruction.
  * @param {ParseInstructionOptions} options - The options for parsing the instruction.
  * @returns {InstructionParseResult | null} An object containing the parsed time, temperature, and units, or null if no tokens are found.
  * @throws {Error} Throws an error if the language is not supported.
@@ -75,7 +74,7 @@ export function parseInstruction(
   let temperatureUnit = "";
   let temperatureUnitText = "";
   /**
-   * @type {AlternativeQuantity[]}
+   * @type {Types.AlternativeQuantity[]}
    */
   let alternativeTemperatures = [];
   for (const token of tokens) {
@@ -147,17 +146,12 @@ export function parseInstruction(
  * It uses the provided units to find the conversion group for the unit of measure.
  * If a conversion group is found, it gets the default conversions for that group.
  * It then filters out the original unit of measure and maps the remaining units to their converted quantities.
- *
  * @param {number} temperature - The temperature to be converted.
  * @param {string} uom - The unit of measure for the temperature.
- * @param {Units} units - The units object containing temperature units and unit conversions.
- * @returns {AlternativeQuantity[]} An array of alternative quantities, each containing the converted quantity, unit, unit text, and min and max quantities.
+ * @param {Types.Units} units - The units object containing temperature units and unit conversions.
+ * @returns {Types.AlternativeQuantity[]} An array of alternative quantities, each containing the converted quantity, unit, unit text, and min and max quantities.
  */
-function getTemperatureConversions(
-  temperature,
-  uom,
-  units,
-) {
+function getTemperatureConversions(temperature, uom, units) {
   const unit = units.temperatureUnits.get(uom);
   const conversionGroup = unit?.conversionGroup;
 

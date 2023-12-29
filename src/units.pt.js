@@ -195,28 +195,9 @@ defaultConversions.set("temperature", ["f", "c"]);
 /**
  * @type {Map<string, (input: number) => number>}
  */
-const converters = new Map(
-  CultureInvariantConversions,
-);
+const converters = new Map(CultureInvariantConversions);
 const unitConversions = { defaultConversions, converters };
 
-/**
- * This object contains various units, markers, prepositions, quantities, and conversions related to ingredients and cooking instructions.
- * It also includes a default temperature unit.
- *
- * @typedef {Object} Units
- * @property {Map<string, NewType>} ingredientUnits - The units used for ingredients.
- * @property {string[]} ingredientSizes - The sizes used for ingredients.
- * @property {Map<string, string>} timeUnits - The units used for time.
- * @property {Map<string, number>} timeUnitMultipliers - The multipliers used for converting between different time units.
- * @property {Map<string, UnitDetail>} temperatureUnits - The units used for temperature.
- * @property {string[]} ingredientPrepositions - The prepositions used with ingredients.
- * @property {string[]} temperatureMarkers - The markers used for temperature.
- * @property {Map<string, number>} ingredientQuantities - The quantities used for ingredients.
- * @property {string[]} ingredientRangeMarker - The marker used for ingredient ranges.
- * @property {{defaultConversions: Map<string, string[]>;converters: Map<string, (input: number) => number>;}} unitConversions - The conversions used for units.
- * @property {string|null} defaultTemperatureUnit - The default unit used for temperature.
- */
 export default {
   ingredientUnits,
   ingredientSizes,

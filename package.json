@@ -1,10 +1,10 @@
 {
   "name": "@jlucaspains/sharp-recipe-parser",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Recipe parsing tools",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "run": "node lib/index.js",
+    "run": "node src/index.js",
     "test": "jest",
     "coverage": "jest --coverage",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",

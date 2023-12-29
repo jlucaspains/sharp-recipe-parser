@@ -2,10 +2,10 @@
  * @typedef {{
  *  symbol: string;
  *  text: string;
- *  customFunction?: UnitCustomIdentifier;
+ *  customFunction?: (tokens: string[], startIndex: number) => { uom: string; uomText: string; newIndex: number };
  *  conversionGroup?: string;
  * }} UnitDetail
-*/
+ */
 
 /**
  * @typedef {{
@@ -15,7 +15,14 @@
  *  minQuantity: number;
  *  maxQuantity: number;
  * }} AlternativeQuantity
-*/
+ */
+
+/**
+ * @typedef {{
+ *  defaultConversions: Map<string, string[]>;
+ *  converters: Map<string, (input: number) => number>;
+ * }} UnitConversion
+ */
 
 /**
  * @typedef {{
@@ -45,7 +52,7 @@
  * }} InstructionTime
  */
 
-export const Types = {}
+export const Types = {};
 
 // export type UnitCustomIdentifier = (
 //   tokens: string[],
@@ -57,11 +64,9 @@ export const Types = {}
 //   converters: Map<string, (input: number) => number>;
 // }
 
-
 // export interface UnitDetail {
 //   symbol: string;
 //   text: string;
 //   customFunction?: UnitCustomIdentifier;
 //   conversionGroup?: string;
 // }
-
