@@ -1,22 +1,22 @@
 module.exports = {
   extends: [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:@typescript-eslint/strict",
+    "plugin:jsdoc/recommended",
     "prettier",
   ],
-  plugins: ["@typescript-eslint", "prettier"],
-  parser: "@typescript-eslint/parser",
+  plugins: ["jsdoc", "prettier"],
   parserOptions: {
-    project: "./tsconfig.lint.json",
+    ecmaVersion: "latest",
+    sourceType: "module"
+  },
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+    jest: true
   },
   root: true,
   rules: {
     "prettier/prettier": ["error"],
-    "@typescript-eslint/no-unnecessary-condition": [
-      "error",
-      { allowConstantLoopConditions: true },
-    ],
   },
 };

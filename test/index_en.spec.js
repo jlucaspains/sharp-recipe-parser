@@ -1,5 +1,5 @@
-import { parseIngredient, parseInstruction } from "../src/index";
-import { InstructionTime } from "../src/types";
+import { parseIngredient, parseInstruction } from "../src/index.js";
+import * as Types from "../src/types.js";
 
 describe("Parse ingredient en-US", () => {
   const table = [
@@ -56,7 +56,7 @@ describe("Parse ingredient en-US", () => {
   it.each(table)(
     "parse %s",
     (text, quantity, quantityText, unit, ingredient, extra) => {
-      const result = parseIngredient(text as string, "en-US");
+      const result = parseIngredient(text, "en-US");
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.quantityText ?? -1).toBe(quantityText);
       expect(result?.unit ?? -1).toBe(unit);
@@ -137,7 +137,7 @@ describe("Parse ingredient ranges en-US", () => {
       ingredient,
       extra,
     ) => {
-      const result = parseIngredient(text as string, "en-US");
+      const result = parseIngredient(text, "en-US");
       expect(result?.quantity ?? -1).toBe(quantity);
       expect(result?.minQuantity ?? -1).toBe(minQuantity);
       expect(result?.maxQuantity ?? -1).toBe(maxQuantity);
@@ -222,7 +222,7 @@ describe("Parse ingredient with options en-US", () => {
       alternateMax,
       alternateUOM,
     ) => {
-      const result = parseIngredient(text as string, "en-US", {
+      const result = parseIngredient(text, "en-US", {
         includeAlternativeUnits: true,
         includeExtra: true,
       });
@@ -269,7 +269,7 @@ describe("Parse ingredient with options EN", () => {
       alternateMax,
       alternateUOM,
     ) => {
-      const result = parseIngredient(text as string, "en", {
+      const result = parseIngredient(text, "en", {
         includeAlternativeUnits: true,
         includeExtra: true,
       });
@@ -329,7 +329,7 @@ describe("Parse instruction en-US", () => {
   it.each(table)(
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
-      const result = parseInstruction(text as string, "en-US");
+      const result = parseInstruction(text, "en-US");
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
@@ -346,7 +346,7 @@ describe("Parse instruction default temperature unit en", () => {
   it.each(table)(
     "parse %s",
     (text, timeInSeconds, temperature, temperatureUnit) => {
-      const result = parseInstruction(text as string, "en");
+      const result = parseInstruction(text, "en");
       expect(result?.totalTimeInSeconds ?? -1).toBe(timeInSeconds);
       expect(result?.temperature ?? -1).toBe(temperature);
       expect(result?.temperatureUnit ?? -1).toBe(temperatureUnit);
@@ -380,7 +380,7 @@ describe("Parse instruction with options en-US", () => {
   it.each(table)(
     "parse %s",
     (text, temperature, temperatureUnit, altTemp, altTempUOM, altTempName) => {
-      const result = parseInstruction(text as string, "en-US", {
+      const result = parseInstruction(text, "en-US", {
         includeAlternativeTemperatureUnit: true,
       });
       expect(result?.temperature ?? -1).toBe(temperature);
@@ -432,8 +432,11 @@ describe("Parse instruction time range en-US", () => {
     ["Boil until done", 0, []],
   ];
   it.each(table)("parse %s", (text, totalTimeInSeconds, time) => {
-    const timeItems = time as InstructionTime[];
-    const result = parseInstruction(text as string, "en-US");
+    /**
+     * @type {Types.InstructionTime[]}
+     */
+    const timeItems = time;
+    const result = parseInstruction(text, "en-US");
     expect(result?.totalTimeInSeconds ?? -1).toBe(totalTimeInSeconds);
     expect(result?.timeItems.length).toBe(timeItems.length);
 

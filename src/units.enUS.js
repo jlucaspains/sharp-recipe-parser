@@ -1,9 +1,14 @@
-import DefaultEnglish from "./units.en";
+import DefaultEnglish from "./units.en.js";
+import * as Types from "./types.js";
 
-const converters = new Map<string, (input: number) => number>(
-  DefaultEnglish.unitConversions.converters,
-);
-const defaultConversions = new Map<string, string[]>(
+/**
+ * @type {Map<string, (input: number) => number>}
+ */
+const converters = new Map(DefaultEnglish.unitConversions.converters);
+/**
+ * @type {Map<string, string[]>}
+ */
+const defaultConversions = new Map(
   DefaultEnglish.unitConversions.defaultConversions,
 );
 
@@ -92,6 +97,9 @@ converters.set("pt->qt", (input) => (input / ptFactor) * qtFactor);
 converters.set("pt->tsp", (input) => (input / ptFactor) * tspFactor);
 converters.set("pt->gal", (input) => (input / ptFactor) * galFactor);
 
+/**
+ * @type {Types.Units}
+ */
 export default {
   ingredientUnits: DefaultEnglish.ingredientUnits,
   ingredientSizes: DefaultEnglish.ingredientSizes,

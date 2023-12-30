@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { parseIngredient, parseInstruction } from "../src/index";
+import { parseIngredient, parseInstruction } from "../src/index.js";
 
 test("Parse ingredient with bad language", () => {
   expect(() => parseIngredient("some ingredient", "no")).toThrow(
@@ -9,13 +7,13 @@ test("Parse ingredient with bad language", () => {
 });
 
 test("Parse ingredient with null language", () => {
-  expect(() => parseIngredient("some ingredient", null as any)).toThrow(
+  expect(() => parseIngredient("some ingredient", null)).toThrow(
     "Language null is not supported",
   );
 });
 
 test("Parse ingredient with null language", () => {
-  expect(() => parseIngredient("some ingredient", undefined as any)).toThrow(
+  expect(() => parseIngredient("some ingredient", undefined)).toThrow(
     "Language undefined is not supported",
   );
 });
@@ -29,11 +27,11 @@ test("Parse ingredient space", () => {
 });
 
 test("Parse ingredient null", () => {
-  expect(parseIngredient(null as any, "en")).toBeNull();
+  expect(parseIngredient(null, "en")).toBeNull();
 });
 
 test("Parse ingredient undefined", () => {
-  expect(parseIngredient(undefined as any, "en")).toBeNull();
+  expect(parseIngredient(undefined, "en")).toBeNull();
 });
 
 test("Parse instruction with bad language", () => {
@@ -43,13 +41,13 @@ test("Parse instruction with bad language", () => {
 });
 
 test("Parse instruction with null language", () => {
-  expect(() => parseInstruction("some instruction", null as any)).toThrow(
+  expect(() => parseInstruction("some instruction", null)).toThrow(
     "Language null is not supported",
   );
 });
 
 test("Parse instruction with undefined language", () => {
-  expect(() => parseInstruction("some instruction", undefined as any)).toThrow(
+  expect(() => parseInstruction("some instruction", undefined)).toThrow(
     "Language undefined is not supported",
   );
 });
@@ -63,9 +61,9 @@ test("Parse instruction space", () => {
 });
 
 test("Parse instruction null", () => {
-  expect(parseInstruction(null as any, "en")).toBeNull();
+  expect(parseInstruction(null, "en")).toBeNull();
 });
 
 test("Parse instruction undefined", () => {
-  expect(parseInstruction(undefined as any, "en")).toBeNull();
+  expect(parseInstruction(undefined, "en")).toBeNull();
 });

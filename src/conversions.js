@@ -1,4 +1,7 @@
-const unitConversions = new Map<string, (input: number) => number>();
+/**
+ * @type {Map<string, (input: number) => number>}
+ */
+const unitConversions = new Map();
 
 // temperature
 unitConversions.set("c->f", (input) => (input * 9) / 5 + 32);
