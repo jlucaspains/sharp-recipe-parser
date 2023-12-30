@@ -29,6 +29,6 @@ jobs:
           TAG="${{ github.event.release.tag_name }}"
           echo "VERSION=${TAG#v}" >> $GITHUB_ENV
 
-      - run: yarn publish --new-version "$VERSION" --access public
+      - run: yarn publish --new-version "$VERSION" --access public --no-git-tag-version
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN }}
