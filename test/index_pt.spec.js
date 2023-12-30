@@ -50,6 +50,7 @@ describe("Parse ingredient pt-BR", () => {
     ["5 latas de milho", 5, "5", "lata", "milho", ""],
     ["½ lata de milho seco", 0.5, "½", "lata", "milho seco", ""],
     ["10 ml leite", 10, "10", "mililitro", "leite", ""],
+    ["10l leite", 10, "10", "litro", "leite", ""],
     ["Sal a gosto", 0, "", "", "Sal a gosto", ""],
     ["Ingrediente", 0, "", "", "Ingrediente", ""],
     ["1 gota de balnilha", 1, "1", "gota", "balnilha", ""],

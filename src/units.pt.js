@@ -92,6 +92,7 @@ ingredientUnits.set("quilogramas", quilograma);
 ingredientUnits.set("litro", litro);
 ingredientUnits.set("litros", litro);
 ingredientUnits.set("lt", litro);
+ingredientUnits.set("l", litro);
 ingredientUnits.set("lts", litro);
 ingredientUnits.set("mg", miligrama);
 ingredientUnits.set("mgs", miligrama);
