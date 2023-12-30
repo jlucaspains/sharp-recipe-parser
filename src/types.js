@@ -41,7 +41,7 @@
  */
 
 /**
- * @typedef {"en" | "en-US" | "pt" | "pt-BR"} ValidLanguages
+ * @typedef {"en" | "en-US" | "pt" | "pt-BR" | string} ValidLanguages
  */
 
 /**
@@ -53,20 +53,3 @@
  */
 
 export const Types = {};
-
-// export type UnitCustomIdentifier = (
-//   tokens: string[],
-//   startIndex: number,
-// ) => { uom: string; uomText: string; newIndex: number };
-
-// export interface UnitConversion {
-//   defaultConversions: Map<string, string[]>;
-//   converters: Map<string, (input: number) => number>;
-// }
-
-// export interface UnitDetail {
-//   symbol: string;
-//   text: string;
-//   customFunction?: UnitCustomIdentifier;
-//   conversionGroup?: string;
-// }
