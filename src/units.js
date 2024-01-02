@@ -1,3 +1,4 @@
+//@ts-check
 import * as Types from "./types.js";
 import EnglishUnits from "./units.en.js";
 import AmericanEnglishUnits from "./units.enUS.js";
@@ -5,7 +6,7 @@ import PortugueseUnits from "./units.pt.js";
 import BrazilianPortugueseUnits from "./units.ptBR.js";
 
 /**
- * @type {Map<string, string>}
+ * @type {Map<string, Types.Units>}
  */
 const units = new Map();
 units.set("en", EnglishUnits);

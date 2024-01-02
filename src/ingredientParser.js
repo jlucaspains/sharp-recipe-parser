@@ -1,3 +1,4 @@
+//@ts-check
 import Fraction from "fraction.js";
 import { tokenize } from "./tokenizer.js";
 import * as Types from "./types.js";

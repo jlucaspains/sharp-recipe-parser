@@ -1,3 +1,4 @@
+//@ts-check
 /**
  * This function tokenizes a given text string.
  * It splits the text into an array of tokens, optionally removing spaces.

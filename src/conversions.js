@@ -1,3 +1,4 @@
+//@ts-check
 /**
  * @type {Map<string, (input: number) => number>}
  */

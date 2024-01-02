@@ -1,3 +1,4 @@
+//@ts-check
 import DefaultEnglish from "./units.en.js";
 import * as Types from "./types.js";
 

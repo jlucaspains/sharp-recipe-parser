@@ -1,3 +1,4 @@
+//@ts-check
 import * as Types from "./types.js";
 import DefaultPortuguese from "./units.pt.js";
 
@@ -26,7 +27,7 @@ const ingredientUnits = new Map(DefaultPortuguese.ingredientUnits);
  * If none of the above conditions are met, it returns "xícara" as the UOM.
  * @param {string[]} input - The array of input strings to be parsed.
  * @param {number} startIndex - The index in the input array to start parsing from.
- * @returns {Types.UnitCustomIdentifier} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
+ * @returns {{uom: string, uomText: string, newIndex: number}} An object containing the identified UOM, the text representation of the UOM, and the new index in the input array.
  */
 const xicaraFunc = (input, startIndex) => {
   const text = input.slice(startIndex + 1).join("");

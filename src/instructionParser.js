@@ -1,3 +1,4 @@
+//@ts-check
 import { tokenize } from "./tokenizer.js";
 import { getUnits, convert, round } from "./units.js";
 import * as Types from "./types.js";

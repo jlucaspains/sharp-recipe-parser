@@ -1,3 +1,4 @@
+//@ts-check
 import * as Types from "./types.js";
 import CultureInvariantConversions from "./conversions.js";
 
