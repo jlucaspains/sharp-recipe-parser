@@ -35,6 +35,7 @@
  *  temperatureMarkers: string[];
  *  ingredientQuantities: Map<string, number>;
  *  ingredientRangeMarker: string[];
+ *  ingredientQuantityAddMarker: string[];
  *  unitConversions: UnitConversion;
  *  defaultTemperatureUnit: string | null;
  * }} Units

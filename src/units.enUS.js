@@ -110,6 +110,7 @@ export default {
   temperatureMarkers: DefaultEnglish.temperatureMarkers,
   ingredientQuantities: DefaultEnglish.ingredientQuantities,
   ingredientRangeMarker: DefaultEnglish.ingredientRangeMarker,
+  ingredientQuantityAddMarker: DefaultEnglish.ingredientQuantityAddMarker,
   unitConversions,
   defaultTemperatureUnit: "fahrenheit",
 };

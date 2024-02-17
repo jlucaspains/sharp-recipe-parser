@@ -258,6 +258,8 @@ ingredientQuantities.set("ten", 10);
 
 const ingredientRangeMarker = ["to", "-", "or"];
 
+const ingredientQuantityAddMarker = ["and"];
+
 /**
  * @type {Map<string, string[]>}
  */
@@ -285,6 +287,7 @@ export default {
   temperatureMarkers,
   ingredientQuantities,
   ingredientRangeMarker,
+  ingredientQuantityAddMarker,
   unitConversions,
   defaultTemperatureUnit: null,
 };
