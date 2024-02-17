@@ -162,7 +162,7 @@ function getQuantity(tokens, units) {
 
       quantityText += `${space}${item}`;
       quantityConvertible += `${specialSpace}${value}`;
-    } else if(units.ingredientQuantityAddMarker.includes(item)){
+    } else if (units.ingredientQuantityAddMarker.includes(item)) {
       quantityText += `${space}${item}`;
     } else if (
       quantityText.length > 0 &&
