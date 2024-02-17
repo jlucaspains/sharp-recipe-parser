@@ -185,6 +185,8 @@ ingredientQuantities.set("dez", 10);
 
 const ingredientRangeMarker = ["a", "-", "ou"];
 
+const ingredientQuantityAddMarker = ["e"];
+
 /**
  * @type {Map<string, string[]>}
  */
@@ -209,6 +211,7 @@ export default {
   temperatureMarkers,
   ingredientQuantities,
   ingredientRangeMarker,
+  ingredientQuantityAddMarker,
   unitConversions,
   defaultTemperatureUnit: null,
 };
