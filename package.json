@@ -7,8 +7,8 @@
     "run": "node src/index.js",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint": "eslint --ignore-path .eslintignore --ext .js .",
-    "lintfix": "eslint --fix --ignore-path .eslintignore --ext .js .",
+    "lint": "eslint --ignore-pattern demo --ignore-pattern lib",
+    "lintfix": "eslint --fix --ignore-pattern demo --ignore-pattern lib",
     "types": "tsc --declaration --allowJs --emitDeclarationOnly"
   },
   "author": "Lucas Pains",
