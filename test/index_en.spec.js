@@ -52,6 +52,10 @@ describe("Parse ingredient en-US", () => {
     ["1 tbsp. flour", 1, "1", "tablespoon", "flour", ""],
     ["1 tbsp . flour", 1, "1", "tablespoon", "flour", ""],
     ["1 and 1/2 cups flour", 1.5, "1 and 1/2", "cup", "flour", ""],
+    ["carrot/parsnip", 0, "", "", "carrot/parsnip", ""],
+    ["1/parsnip", 1, "1", "", "/parsnip", ""],
+    ["carrot/1", 1, "1", "", "", ""],
+    ["1 1/carrot", 1, "1 1", "", "/carrot", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(

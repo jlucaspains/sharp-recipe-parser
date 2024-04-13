@@ -92,6 +92,10 @@ describe("Parse ingredient pt-BR", () => {
     ["dez quilos de cenouras", 10, "dez", "quilograma", "cenouras", ""],
     ["10ml de agua", 10, "10", "mililitro", "agua", ""],
     ["1 e 1/2 copo de agua", 1.5, "1 e 1/2", "copo", "agua", ""],
+    ["cenoura/laranja", 0, "", "", "cenoura/laranja", ""],
+    ["1/cenoura", 1, "1", "", "/cenoura", ""],
+    ["cenoura/1", 1, "1", "", "", ""],
+    ["1 1/cenoura", 1, "1 1", "", "/cenoura", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
