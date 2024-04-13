@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import * as Types from "../src/types.js";
 import { parseIngredient, parseInstruction } from "../src/index.js";
 

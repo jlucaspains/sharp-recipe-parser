@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import * as Types from "./types.js";
 import CultureInvariantConversions from "./conversions.js";
 
@@ -202,6 +201,9 @@ defaultConversions.set("temperature", ["f", "c"]);
 const converters = new Map(CultureInvariantConversions);
 const unitConversions = { defaultConversions, converters };
 
+/**
+ * @type {Types.Units}
+ */
 export default {
   ingredientUnits,
   ingredientSizes,

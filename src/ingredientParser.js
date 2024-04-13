@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import * as Types from "./types.js";
 import Fraction from "fraction.js";
 import { tokenize } from "./tokenizer.js";

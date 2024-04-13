@@ -12,6 +12,7 @@ export default [
     rules: {
       "prettier/prettier": ["error"],
       ...js.configs.recommended.rules,
+      ...jsdoc.configs["flat/recommended"].rules,
     },
     languageOptions: {
       globals: {

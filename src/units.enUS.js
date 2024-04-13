@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import * as Types from "./types.js";
 import DefaultEnglish from "./units.en.js";
 
