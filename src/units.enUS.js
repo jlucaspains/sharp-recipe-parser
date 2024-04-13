@@ -1,5 +1,5 @@
-import DefaultEnglish from "./units.en.js";
 import * as Types from "./types.js";
+import DefaultEnglish from "./units.en.js";
 
 /**
  * @type {Map<string, (input: number) => number>}

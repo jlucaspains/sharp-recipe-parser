@@ -201,6 +201,9 @@ defaultConversions.set("temperature", ["f", "c"]);
 const converters = new Map(CultureInvariantConversions);
 const unitConversions = { defaultConversions, converters };
 
+/**
+ * @type {Types.Units}
+ */
 export default {
   ingredientUnits,
   ingredientSizes,

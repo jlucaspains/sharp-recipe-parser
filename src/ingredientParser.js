@@ -1,6 +1,6 @@
+import * as Types from "./types.js";
 import Fraction from "fraction.js";
 import { tokenize } from "./tokenizer.js";
-import * as Types from "./types.js";
 import { convert, getUnits, round } from "./units.js";
 
 /**
