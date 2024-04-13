@@ -147,7 +147,11 @@ function getQuantity(tokens, units) {
     const hasNext = index + 1 < tokens.length;
     const isSpace = item === " ";
     const isNumber = !isSpace && !isNaN(Number(item));
-    const isFraction = item === "/" && previousWasNumber && hasNext && !isNaN(Number(tokens[index + 1]));
+    const isFraction =
+      item === "/" &&
+      previousWasNumber &&
+      hasNext &&
+      !isNaN(Number(tokens[index + 1]));
     const isSpecialFraction = isUnicodeFraction(item);
     const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
