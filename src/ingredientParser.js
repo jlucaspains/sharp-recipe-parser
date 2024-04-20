@@ -140,12 +140,18 @@ function getQuantity(tokens, units) {
   let firstQuantityConvertible = "";
   let index = 0;
   let space = "";
+  let previousWasNumber = false;
 
   for (; index < tokens.length; index++) {
     const item = tokens[index];
+    const hasNext = index + 1 < tokens.length;
     const isSpace = item === " ";
     const isNumber = !isSpace && !isNaN(Number(item));
-    const isFraction = item === "/";
+    const isFraction =
+      item === "/" &&
+      previousWasNumber &&
+      hasNext &&
+      !isNaN(Number(tokens[index + 1]));
     const isSpecialFraction = isUnicodeFraction(item);
     const isTextNumber = units.ingredientQuantities.has(item.toLowerCase());
 
@@ -176,6 +182,7 @@ function getQuantity(tokens, units) {
     }
 
     space = isSpace ? " " : "";
+    previousWasNumber = isNumber;
   }
 
   if (quantityText.length === 0) {
