@@ -90,7 +90,7 @@ export function parseIngredient(
     quantityEndIndex,
     units,
   );
-  
+
   /**
    * @type {Types.AlternativeQuantity[]}
    */
@@ -98,11 +98,13 @@ export function parseIngredient(
   let alternativeQtyIndex = unitEndIndex;
   let ingredientStartIndex = unitEndIndex;
   if (tokens[alternativeQtyIndex + 1] === "(") {
-    const [alternativeFirstQuantity, alternativeQuantity, alternativeQuantityText, alternativeQtyEndIndex] = getQuantity(
-      tokens,
-      units,
-      alternativeQtyIndex + 1
-    );
+    const [
+      alternativeFirstQuantity,
+      alternativeQuantity,
+      // eslint-disable-next-line no-unused-vars
+      _,
+      alternativeQtyEndIndex,
+    ] = getQuantity(tokens, units, alternativeQtyIndex + 1);
     const [unit, unitText, alternativeUnitEndIndex] = getUnit(
       tokens,
       alternativeQtyEndIndex,
@@ -141,10 +143,12 @@ export function parseIngredient(
   const maxQuantity = quantity;
 
   if (options.includeAlternativeUnits) {
-    alternativeQuantities.push(...getIngredientConversions(
-      { quantity, minQuantity, maxQuantity, unit, unitText },
-      units,
-    ));
+    alternativeQuantities.push(
+      ...getIngredientConversions(
+        { quantity, minQuantity, maxQuantity, unit, unitText },
+        units,
+      ),
+    );
   }
 
   return {
@@ -164,6 +168,7 @@ export function parseIngredient(
  * Gets the quantity out of a list of tokens using a specific unit dictionary
  * @param {string[]} tokens - The list of tokens to get the quantity from.
  * @param {Types.Units} units - The unit dictionary to use when parsing the quantity.
+ * @param {string} index - The index of the first token to use when getting the quantity.
  * @returns {[number, number, string, number]} The quantity value, the quantity text, and the index of the last token used to get the quantity.
  */
 function getQuantity(tokens, units, index = 0) {
@@ -260,7 +265,7 @@ function getUnit(tokens, startIndex, units) {
   let newStartIndex = startIndex;
 
   // remove ingredient size if present
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     const item = tokens[newStartIndex];
 
