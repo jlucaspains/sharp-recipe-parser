@@ -90,9 +90,47 @@ export function parseIngredient(
     quantityEndIndex,
     units,
   );
+
+  /**
+   * @type {Types.AlternativeQuantity[]}
+   */
+  let alternativeQuantities = [];
+  let alternativeQtyIndex = unitEndIndex;
+  let ingredientStartIndex = unitEndIndex;
+  if (tokens[alternativeQtyIndex + 1] === "(") {
+    const [
+      alternativeFirstQuantity,
+      alternativeQuantity,
+      // eslint-disable-next-line no-unused-vars
+      _,
+      alternativeQtyEndIndex,
+    ] = getQuantity(tokens, units, alternativeQtyIndex + 1);
+    const [unit, unitText, alternativeUnitEndIndex] = getUnit(
+      tokens,
+      alternativeQtyEndIndex,
+      units,
+    );
+
+    if (alternativeQuantity > 0) {
+      alternativeQuantities.push({
+        quantity: alternativeQuantity,
+        unit,
+        unitText,
+        minQuantity: alternativeFirstQuantity || alternativeQuantity,
+        maxQuantity: alternativeQuantity,
+      });
+    }
+
+    if (tokens[alternativeUnitEndIndex] === ")") {
+      ingredientStartIndex = alternativeUnitEndIndex + 2;
+    } else {
+      ingredientStartIndex = alternativeUnitEndIndex;
+    }
+  }
+
   const [ingredient, ingredientEndIndex] = getIngredient(
     tokens,
-    unitEndIndex,
+    ingredientStartIndex,
     units,
   );
 
@@ -104,14 +142,12 @@ export function parseIngredient(
   const minQuantity = firstQuantity || quantity;
   const maxQuantity = quantity;
 
-  /**
-   * @type {Types.AlternativeQuantity[]}
-   */
-  let alternativeQuantities = [];
   if (options.includeAlternativeUnits) {
-    alternativeQuantities = getIngredientConversions(
-      { quantity, minQuantity, maxQuantity, unit, unitText },
-      units,
+    alternativeQuantities.push(
+      ...getIngredientConversions(
+        { quantity, minQuantity, maxQuantity, unit, unitText },
+        units,
+      ),
     );
   }
 
@@ -132,13 +168,13 @@ export function parseIngredient(
  * Gets the quantity out of a list of tokens using a specific unit dictionary
  * @param {string[]} tokens - The list of tokens to get the quantity from.
  * @param {Types.Units} units - The unit dictionary to use when parsing the quantity.
+ * @param {string} index - The index of the first token to use when getting the quantity.
  * @returns {[number, number, string, number]} The quantity value, the quantity text, and the index of the last token used to get the quantity.
  */
-function getQuantity(tokens, units) {
+function getQuantity(tokens, units, index = 0) {
   let quantityText = "";
   let quantityConvertible = "";
   let firstQuantityConvertible = "";
-  let index = 0;
   let space = "";
   let previousWasNumber = false;
 
@@ -229,7 +265,7 @@ function getUnit(tokens, startIndex, units) {
   let newStartIndex = startIndex;
 
   // remove ingredient size if present
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     const item = tokens[newStartIndex];
 
