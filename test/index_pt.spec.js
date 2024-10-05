@@ -328,6 +328,10 @@ describe("Parse ingredient with options pt-BR", () => {
     ["1 pitada de sal", 1, 1, 1, "pitada", "sal", 0, 0, 0, ""],
     ["1 pacote macarrao", 1, 1, 1, "pacote", "macarrao", 0, 0, 0, ""],
     ["10ml de agua", 10, 10, 10, "mililitro", "agua", 0.04, 0.04, 0.04, "copo"],
+    ["1 copo (120g) farinha", 1, 1, 1, "copo", "farinha", 120, 120, 120, "grama"],
+    ["1 copo (120gramas) farinha", 1, 1, 1, "copo", "farinha", 120, 120, 120, "grama"],
+    ["120g (1 copo) farinha", 120, 120, 120, "grama", "farinha", 1, 1, 1, "copo"],
+    ["100-200g (1-2 copo) farinha", 200, 100, 200, "grama", "farinha", 2, 1, 2, "copo"],
   ];
   it.each(table)(
     "parse %s",

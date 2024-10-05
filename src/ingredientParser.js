@@ -90,9 +90,45 @@ export function parseIngredient(
     quantityEndIndex,
     units,
   );
+  
+  /**
+   * @type {Types.AlternativeQuantity[]}
+   */
+  let alternativeQuantities = [];
+  let alternativeQtyIndex = unitEndIndex;
+  let ingredientStartIndex = unitEndIndex;
+  if (tokens[alternativeQtyIndex + 1] === "(") {
+    const [alternativeFirstQuantity, alternativeQuantity, alternativeQuantityText, alternativeQtyEndIndex] = getQuantity(
+      tokens,
+      units,
+      alternativeQtyIndex + 1
+    );
+    const [unit, unitText, alternativeUnitEndIndex] = getUnit(
+      tokens,
+      alternativeQtyEndIndex,
+      units,
+    );
+
+    if (alternativeQuantity > 0) {
+      alternativeQuantities.push({
+        quantity: alternativeQuantity,
+        unit,
+        unitText,
+        minQuantity: alternativeFirstQuantity || alternativeQuantity,
+        maxQuantity: alternativeQuantity,
+      });
+    }
+
+    if (tokens[alternativeUnitEndIndex] === ")") {
+      ingredientStartIndex = alternativeUnitEndIndex + 2;
+    } else {
+      ingredientStartIndex = alternativeUnitEndIndex;
+    }
+  }
+
   const [ingredient, ingredientEndIndex] = getIngredient(
     tokens,
-    unitEndIndex,
+    ingredientStartIndex,
     units,
   );
 
@@ -104,15 +140,11 @@ export function parseIngredient(
   const minQuantity = firstQuantity || quantity;
   const maxQuantity = quantity;
 
-  /**
-   * @type {Types.AlternativeQuantity[]}
-   */
-  let alternativeQuantities = [];
   if (options.includeAlternativeUnits) {
-    alternativeQuantities = getIngredientConversions(
+    alternativeQuantities.push(...getIngredientConversions(
       { quantity, minQuantity, maxQuantity, unit, unitText },
       units,
-    );
+    ));
   }
 
   return {
@@ -134,11 +166,10 @@ export function parseIngredient(
  * @param {Types.Units} units - The unit dictionary to use when parsing the quantity.
  * @returns {[number, number, string, number]} The quantity value, the quantity text, and the index of the last token used to get the quantity.
  */
-function getQuantity(tokens, units) {
+function getQuantity(tokens, units, index = 0) {
   let quantityText = "";
   let quantityConvertible = "";
   let firstQuantityConvertible = "";
-  let index = 0;
   let space = "";
   let previousWasNumber = false;
 
