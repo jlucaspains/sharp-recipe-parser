@@ -21,7 +21,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "fraction.js": "^4.2.0"
+    "fraction.js": "^5.0.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.6",
