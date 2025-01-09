@@ -256,7 +256,7 @@ ingredientQuantities.set("eight", 8);
 ingredientQuantities.set("nine", 9);
 ingredientQuantities.set("ten", 10);
 
-const ingredientRangeMarker = ["to", "-", "or"];
+const ingredientRangeMarker = ["to", "-", "–", "or"];
 
 const ingredientQuantityAddMarker = ["and"];
 

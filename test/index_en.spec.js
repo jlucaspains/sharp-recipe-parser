@@ -273,6 +273,8 @@ describe("Parse ingredient with options EN", () => {
       "gram",
     ],
     ["120g (1 cup) of flour", 120, 120, 120, "gram", "flour", 1, 1, 1, "cup"],
+    ["½-1 tsp dried chilli flakes, or to taste", 1, 0.5, 1, "teaspoon", "dried chilli flakes", 0, 0, 0, ""],
+    ["½–1 tsp dried chilli flakes, or to taste", 1, 0.5, 1, "teaspoon", "dried chilli flakes", 0, 0, 0, ""],
     [
       "100-200g (1-2 cup) of flour",
       200,

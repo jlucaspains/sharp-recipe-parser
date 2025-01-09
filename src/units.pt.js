@@ -183,7 +183,7 @@ ingredientQuantities.set("oito", 8);
 ingredientQuantities.set("nove", 9);
 ingredientQuantities.set("dez", 10);
 
-const ingredientRangeMarker = ["a", "-", "ou"];
+const ingredientRangeMarker = ["a", "-", "–", "ou"];
 
 const ingredientQuantityAddMarker = ["e"];
 
