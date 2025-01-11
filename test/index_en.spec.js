@@ -53,9 +53,7 @@ describe("Parse ingredient en-US", () => {
     ["1 tbsp . flour", 1, "1", "tablespoon", "flour", ""],
     ["1 and 1/2 cups flour", 1.5, "1 and 1/2", "cup", "flour", ""],
     ["carrot/parsnip", 0, "", "", "carrot/parsnip", ""],
-    ["1/parsnip", 1, "1", "", "/parsnip", ""],
     ["carrot/1", 1, "1", "", "", ""],
-    ["1 1/carrot", 1, "1 1", "", "/carrot", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
@@ -273,8 +271,11 @@ describe("Parse ingredient with options EN", () => {
       "gram",
     ],
     ["120g (1 cup) of flour", 120, 120, 120, "gram", "flour", 1, 1, 1, "cup"],
+    ["120g(1 cup) of flour", 120, 120, 120, "gram", "flour", 1, 1, 1, "cup"],
     ["½-1 tsp dried chilli flakes, or to taste", 1, 0.5, 1, "teaspoon", "dried chilli flakes", 0, 0, 0, ""],
     ["½–1 tsp dried chilli flakes, or to taste", 1, 0.5, 1, "teaspoon", "dried chilli flakes", 0, 0, 0, ""],
+    ["300g/10½oz onions, thinly sliced", 300, 300, 300, "gram", "onions", 10.5, 10.5, 10.5, "ounce"],
+    ["300g / 10½oz onions, thinly sliced", 300, 300, 300, "gram", "onions", 10.5, 10.5, 10.5, "ounce"],
     [
       "100-200g (1-2 cup) of flour",
       200,

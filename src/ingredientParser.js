@@ -97,7 +97,8 @@ export function parseIngredient(
   let alternativeQuantities = [];
   let alternativeQtyIndex = unitEndIndex;
   let ingredientStartIndex = unitEndIndex;
-  if (tokens[alternativeQtyIndex + 1] === "(") {
+  if (tokens[alternativeQtyIndex] === "(" || tokens[alternativeQtyIndex + 1] === "(" 
+    || tokens[alternativeQtyIndex] === "/" || tokens[alternativeQtyIndex + 1] === "/") {
     const [
       alternativeFirstQuantity,
       alternativeQuantity,

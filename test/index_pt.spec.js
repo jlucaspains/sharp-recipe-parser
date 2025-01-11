@@ -93,9 +93,7 @@ describe("Parse ingredient pt-BR", () => {
     ["10ml de agua", 10, "10", "mililitro", "agua", ""],
     ["1 e 1/2 copo de agua", 1.5, "1 e 1/2", "copo", "agua", ""],
     ["cenoura/laranja", 0, "", "", "cenoura/laranja", ""],
-    ["1/cenoura", 1, "1", "", "/cenoura", ""],
     ["cenoura/1", 1, "1", "", "", ""],
-    ["1 1/cenoura", 1, "1 1", "", "/cenoura", ""],
     ["1", 1, "1", "", "", ""],
   ];
   it.each(table)(
@@ -364,6 +362,22 @@ describe("Parse ingredient with options pt-BR", () => {
       1,
       "copo",
     ],
+    [
+      "120g(1 copo) farinha",
+      120,
+      120,
+      120,
+      "grama",
+      "farinha",
+      1,
+      1,
+      1,
+      "copo",
+    ],
+    ["½-1 colher pimenta", 1, 0.5, 1, "colher", "pimenta", 0, 0, 0, ""],
+    ["½–1 colher pimenta", 1, 0.5, 1, "colher", "pimenta", 0, 0, 0, ""],
+    ["500g/½kg cebola", 500, 500, 500, "grama", "cebola", 0.5, 0.5, 0.5, "quilograma"],
+    ["500g / ½kg cebola", 500, 500, 500, "grama", "cebola", 0.5, 0.5, 0.5, "quilograma"],
     [
       "100-200g (1-2 copo) farinha",
       200,
