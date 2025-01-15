@@ -4,6 +4,8 @@
 
 A simple recipe ingredient and instruction parser that avoids regexes as much as possible.
 
+See online demo at [share-recipe-parser.lpains.net](https://sharp-recipe-parser.lpains.net/).
+
 ## Getting started
 Install package from [npmjs.com](https://www.npmjs.com/package/@jlucaspains/sharp-recipe-parser):
 ```bash
