@@ -223,8 +223,14 @@ function getQuantity(tokens, units, index = 0) {
       quantityConvertible = "";
     } else if (!isSpace && quantityText.length > 0) {
       break;
-    }
+    } else if (!isSpace) {
+      const possibleUOMLower = item.toLowerCase();
+      const unit = units.ingredientUnits.get(possibleUOMLower);
 
+      if (unit) {
+        break;
+      }
+    }
     space = isSpace ? " " : "";
     previousWasNumber = isNumber;
   }

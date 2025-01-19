@@ -4,7 +4,7 @@ on:
   push:
     branches: 'main'
     paths:
-      - 'demo/**'
+      - 'demo2/**'
   workflow_dispatch:
 
 jobs:
@@ -18,24 +18,29 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: npm
 
       - name: Install dependencies
         run: |
-          cd demo
-          npm install
+          cd demo2
+          yarn install
+      
+      - name: Set package version
+        run: |
+          cd demo2
+          version=$(yarn list -s --pattern @jlucaspains/sharp-recipe-parser | sed 's/.*@//g')
+          echo "PUBLIC_PACKAGE_VERSION=$version" > .env
 
       - name: build
         run: |
-          cd demo
-          npm run build
+          cd demo2
+          yarn run build
           touch build/.nojekyll
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v1
         with:
           # this should match the `pages` option in your adapter-static options
-          path: 'demo/build/'
+          path: 'demo2/build/'
 
   deploy:
     needs: build_site

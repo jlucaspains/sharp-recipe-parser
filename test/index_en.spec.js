@@ -55,6 +55,7 @@ describe("Parse ingredient en-US", () => {
     ["carrot/parsnip", 0, "", "", "carrot/parsnip", ""],
     ["1", 1, "1", "", "", ""],
     ["Pinch salt and pepper ($0.05)", 0, "", "pinch", "salt and pepper", ""],
+    ["Pinch salt and pepper", 0, "", "pinch", "salt and pepper", ""],
   ];
   it.each(table)(
     "parse %s",

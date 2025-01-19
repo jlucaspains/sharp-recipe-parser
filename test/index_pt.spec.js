@@ -96,6 +96,7 @@ describe("Parse ingredient pt-BR", () => {
     ["cenoura/1", 1, "1", "", "", ""],
     ["1", 1, "1", "", "", ""],
     ["Pitada de sal e pimenta ($0.05)", 0, "", "pitada", "sal e pimenta", ""],
+    ["Pitada de sal e pimenta", 0, "", "pitada", "sal e pimenta", ""],
   ];
   it.each(table)(
     "parse %s",
