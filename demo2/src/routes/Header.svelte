@@ -3,8 +3,7 @@
 </script>
 
 <header>
-	<div class="corner">
-	</div>
+	<div class="corner"></div>
 
 	<div class="corner">
 		<a href="https://github.com/jlucaspains/sharp-recipe-parser">

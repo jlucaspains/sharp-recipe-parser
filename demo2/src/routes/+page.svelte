@@ -1,7 +1,7 @@
 <script>
 	import Header from './Header.svelte';
 	import Parser from './Parser.svelte';
-	import { PUBLIC_PACKAGE_VERSION } from '$env/static/public'
+	import { PUBLIC_PACKAGE_VERSION } from '$env/static/public';
 </script>
 
 <svelte:head>
@@ -19,7 +19,7 @@
 			<Parser />
 		</section>
 	</main>
-	<footer class="text-center text-gray-400 text-sm">
+	<footer class="text-center text-sm text-gray-400">
 		v{PUBLIC_PACKAGE_VERSION}
 	</footer>
 </div>
