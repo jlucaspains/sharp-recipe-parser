@@ -209,7 +209,10 @@ function getQuantity(tokens, units, index = 0) {
 
       quantityText += `${space}${item}`;
       quantityConvertible += `${specialSpace}${value}`;
-    } else if (units.ingredientQuantityAddMarker.includes(item)) {
+    } else if (
+      quantityText.length > 0 &&
+      units.ingredientQuantityAddMarker.includes(item)
+    ) {
       quantityText += `${space}${item}`;
     } else if (
       quantityText.length > 0 &&
@@ -220,8 +223,14 @@ function getQuantity(tokens, units, index = 0) {
       quantityConvertible = "";
     } else if (!isSpace && quantityText.length > 0) {
       break;
-    }
+    } else if (!isSpace) {
+      const possibleUOMLower = item.toLowerCase();
+      const unit = units.ingredientUnits.get(possibleUOMLower);
 
+      if (unit) {
+        break;
+      }
+    }
     space = isSpace ? " " : "";
     previousWasNumber = isNumber;
   }

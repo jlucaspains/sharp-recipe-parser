@@ -4,9 +4,9 @@
 </script>
 
 <div
-	class="my-4 rounded shadow-lg shadow-gray-900 bg-gray-800 duration-300 hover:-translate-y-1 p-4 flex flex-col"
+	class="my-4 flex flex-col rounded bg-gray-800 p-4 shadow-lg shadow-gray-900 duration-300 hover:-translate-y-1"
 >
-	<span class="mb-2 text-3xl text-white flex-grow">
+	<span class="mb-2 flex-grow text-3xl text-white">
 		{value}
 	</span>
 	<div>
