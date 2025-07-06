@@ -21,6 +21,7 @@ import { convert, getUnits, round } from "./units.js";
  * @typedef {{
  *  includeExtra: boolean;
  *  includeAlternativeUnits: boolean;
+ *  fallbackLanguage: string;
  * }} ParseIngredientOptions
  */
 
@@ -54,6 +55,7 @@ const unicodeFractions = {
 const defaultParseIngredientOptions = {
   includeAlternativeUnits: false,
   includeExtra: true,
+  fallbackLanguage: ""
 };
 
 /**
@@ -69,10 +71,14 @@ export function parseIngredient(
   language,
   options = defaultParseIngredientOptions,
 ) {
-  const units = getUnits(language);
+  let units = getUnits(language);
+
+  if (!units && options.fallbackLanguage) {
+    units = getUnits(options.fallbackLanguage);
+  }
 
   if (!units) {
-    throw new Error(`Language ${language} is not supported`);
+    throw new Error(`Language ${language} is not supported and no fallback language is provided`);
   }
 
   const tokens = tokenize(text, false);
