@@ -55,7 +55,7 @@ const unicodeFractions = {
 const defaultParseIngredientOptions = {
   includeAlternativeUnits: false,
   includeExtra: true,
-  fallbackLanguage: ""
+  fallbackLanguage: "",
 };
 
 /**
@@ -78,7 +78,9 @@ export function parseIngredient(
   }
 
   if (!units) {
-    throw new Error(`Language ${language} is not supported and no fallback language is provided`);
+    throw new Error(
+      `Language ${language} is not supported and no fallback language is provided`,
+    );
   }
 
   const tokens = tokenize(text, false);

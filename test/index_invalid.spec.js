@@ -19,32 +19,36 @@ test("Parse ingredient with unknown language no fallback", () => {
 });
 
 test("Parse ingredient with unknown language with fallback en-CA", () => {
-  const result = parseIngredient("1 cup flour", "en-CA", { fallbackLanguage: "en-US" });
+  const result = parseIngredient("1 cup flour", "en-CA", {
+    fallbackLanguage: "en-US",
+  });
   expect(result).toEqual({
-    "alternativeQuantities": [],
-    "extra": "",
-    "ingredient": "flour",
-    "maxQuantity": 1,
-    "minQuantity": 1,
-    "quantity": 1,
-    "quantityText": "1",
-    "unit": "cup",
-    "unitText": "cup",
+    alternativeQuantities: [],
+    extra: "",
+    ingredient: "flour",
+    maxQuantity: 1,
+    minQuantity: 1,
+    quantity: 1,
+    quantityText: "1",
+    unit: "cup",
+    unitText: "cup",
   });
 });
 
 test("Parse ingredient with unknown language with fallback en", () => {
-  const result = parseIngredient("1 cup flour", "en", { fallbackLanguage: "en-US" });
+  const result = parseIngredient("1 cup flour", "en", {
+    fallbackLanguage: "en-US",
+  });
   expect(result).toEqual({
-    "alternativeQuantities": [],
-    "extra": "",
-    "ingredient": "flour",
-    "maxQuantity": 1,
-    "minQuantity": 1,
-    "quantity": 1,
-    "quantityText": "1",
-    "unit": "cup",
-    "unitText": "cup",
+    alternativeQuantities: [],
+    extra: "",
+    ingredient: "flour",
+    maxQuantity: 1,
+    minQuantity: 1,
+    quantity: 1,
+    quantityText: "1",
+    unit: "cup",
+    unitText: "cup",
   });
 });
 
