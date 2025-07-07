@@ -96,6 +96,42 @@ test("Parse instruction with null language", () => {
   );
 });
 
+test("Parse instruction with unknown language no fallback", () => {
+  expect(() => parseInstruction("some instruction", "en-CA")).toThrow(
+    "Language en-CA is not supported and fallback language  is not available.",
+  );
+});
+
+test("Parse instruction with unknown language with fallback en-US", () => {
+  const result = parseInstruction("some instruction", "en-CA", {
+    fallbackLanguage: "en-US",
+  });
+  expect(result).toEqual({
+    totalTimeInSeconds: 0,
+    timeItems: [],
+    temperature: 0,
+    temperatureText: "",
+    temperatureUnit: "",
+    temperatureUnitText: "",
+    alternativeTemperatures: [],
+  });
+});
+
+test("Parse instruction with unknown language with fallback en", () => {
+  const result = parseInstruction("some instruction", "en-CA", {
+    fallbackLanguage: "en",
+  });
+  expect(result).toEqual({
+    totalTimeInSeconds: 0,
+    timeItems: [],
+    temperature: 0,
+    temperatureText: "",
+    temperatureUnit: "",
+    temperatureUnitText: "",
+    alternativeTemperatures: [],
+  });
+});
+
 test("Parse instruction with undefined language", () => {
   expect(() => parseInstruction("some instruction", undefined)).toThrow(
     "Language undefined is not supported",
