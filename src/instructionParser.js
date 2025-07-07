@@ -25,6 +25,7 @@ import { getUnits, convert, round } from "./units.js";
 /**
  * @typedef {{
  *  includeAlternativeTemperatureUnit: boolean;
+ *  fallbackLanguage: string;
  * }} ParseInstructionOptions
  */
 
@@ -33,6 +34,7 @@ import { getUnits, convert, round } from "./units.js";
  */
 const defaultParseInstructionOptions = {
   includeAlternativeTemperatureUnit: false,
+  fallbackLanguage: "",
 };
 
 /**
@@ -50,10 +52,16 @@ export function parseInstruction(
   language,
   options = defaultParseInstructionOptions,
 ) {
-  const units = getUnits(language);
+  let units = getUnits(language);
+
+  if (!units && options.fallbackLanguage) {
+    units = getUnits(options.fallbackLanguage);
+  }
 
   if (!units) {
-    throw new Error(`Language ${language} is not supported`);
+    throw new Error(
+      `Language ${language} is not supported and fallback language ${options.fallbackLanguage} is not available.`,
+    );
   }
 
   const tokens = tokenize(text);
