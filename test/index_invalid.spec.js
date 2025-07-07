@@ -12,6 +12,56 @@ test("Parse ingredient with null language", () => {
   );
 });
 
+test("Parse ingredient with unknown language no fallback", () => {
+  expect(() => parseIngredient("some ingredient", "en-CA")).toThrow(
+    "Language en-CA is not supported and no fallback language is provided",
+  );
+});
+
+test("Parse ingredient with unknown language with fallback en-US", () => {
+  const result = parseIngredient("1 cup flour", "en-CA", {
+    fallbackLanguage: "en-US",
+  });
+  expect(result).toEqual({
+    alternativeQuantities: [],
+    extra: "",
+    ingredient: "flour",
+    maxQuantity: 1,
+    minQuantity: 1,
+    quantity: 1,
+    quantityText: "1",
+    unit: "cup",
+    unitText: "cup",
+  });
+});
+
+test("Parse ingredient with unknown language with fallback en", () => {
+  const result = parseIngredient("1 cup flour", "en-CA", {
+    fallbackLanguage: "en",
+  });
+  expect(result).toEqual({
+    alternativeQuantities: [],
+    extra: "",
+    ingredient: "flour",
+    maxQuantity: 1,
+    minQuantity: 1,
+    quantity: 1,
+    quantityText: "1",
+    unit: "cup",
+    unitText: "cup",
+  });
+});
+
+test("Parse ingredient with unknown language with invalid fallback", () => {
+  expect(() =>
+    parseIngredient("some ingredient", "en-CA", {
+      fallbackLanguage: "en-CA",
+    }),
+  ).toThrow(
+    "Language en-CA is not supported and no fallback language is provided",
+  );
+});
+
 test("Parse ingredient with null language", () => {
   expect(() => parseIngredient("some ingredient", undefined)).toThrow(
     "Language undefined is not supported",
