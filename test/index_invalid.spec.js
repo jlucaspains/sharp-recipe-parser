@@ -53,9 +53,11 @@ test("Parse ingredient with unknown language with fallback en", () => {
 });
 
 test("Parse ingredient with unknown language with invalid fallback", () => {
-  expect(() => parseIngredient("some ingredient", "en-CA", {
-    fallbackLanguage: "en-CA",
-  })).toThrow(
+  expect(() =>
+    parseIngredient("some ingredient", "en-CA", {
+      fallbackLanguage: "en-CA",
+    }),
+  ).toThrow(
     "Language en-CA is not supported and no fallback language is provided",
   );
 });
