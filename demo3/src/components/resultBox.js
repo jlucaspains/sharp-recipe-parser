@@ -65,7 +65,6 @@ export function createResultGrid(results = []) {
   });
 
   results.forEach(result => {
-    console.log(result);
     const resultBox = createResultBox(result.value.toString(), result.valueDescription);
     grid.appendChild(resultBox);
   });
