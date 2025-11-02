@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 640px) {
+  body {
+    font-size: 14px;
+  }
+  
+  /* Ensure text doesn't overflow on very small screens */
+  h1 {
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  /* Improve touch targets on mobile */
+  input, button {
+    min-height: 44px;
+  }
+  
+  /* Reduce excessive margins on mobile */
+  .parser-container {
+    margin-top: 1rem;
+  }
+}

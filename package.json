@@ -7,8 +7,6 @@
     "run": "node src/index.js",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lint": "eslint --ignore-pattern demo2 --ignore-pattern lib",
-    "lintfix": "eslint --fix --ignore-pattern demo2 --ignore-pattern lib",
     "types": "tsc --declaration --allowJs --emitDeclarationOnly"
   },
   "author": "Lucas Pains",
