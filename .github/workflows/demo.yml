@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: ['main']
     paths:
-      - 'demo2/**'
+      - 'demo3/**'
   workflow_dispatch:
 
 jobs:
@@ -19,30 +19,30 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: |
-          cd demo2
+          cd demo3
           yarn install
       
       - name: Set package version
         run: |
-          cd demo2
+          cd demo3
           version=$(yarn list -s --pattern @jlucaspains/sharp-recipe-parser | sed 's/.*@//g')
-          echo "PUBLIC_PACKAGE_VERSION=$version" > .env
+          echo "VITE_PACKAGE_VERSION=$version" > .env
 
       - name: build
         run: |
-          cd demo2
+          cd demo3
           yarn run build
-          touch build/.nojekyll
+          touch dist/.nojekyll
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v4
         with:
           # this should match the `pages` option in your adapter-static options
-          path: 'demo2/build/'
+          path: 'demo3/dist/'
 
   deploy:
     needs: build_site
