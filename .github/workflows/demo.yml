@@ -24,18 +24,18 @@ jobs:
       - name: Install dependencies
         run: |
           cd demo3
-          npm install
+          yarn install
       
       - name: Set package version
         run: |
           cd demo3
-          version=$(npm list -s --pattern @jlucaspains/sharp-recipe-parser | sed 's/.*@//g')
+          version=$(yarn list -s --pattern @jlucaspains/sharp-recipe-parser | sed 's/.*@//g')
           echo "VITE_PACKAGE_VERSION=$version" > .env
 
       - name: build
         run: |
           cd demo3
-          npm run build
+          yarn run build
           touch dist/.nojekyll
 
       - name: Upload Artifacts
