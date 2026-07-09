@@ -93,11 +93,36 @@ export function parseIngredient(
     tokens,
     units,
   );
-  const [unit, unitText, unitEndIndex] = getUnit(
+  let [unit, unitText, unitEndIndex] = getUnit(
     tokens,
     quantityEndIndex,
     units,
   );
+
+  let trailingUnitEndIndex = null;
+  if (!unit) {
+    let lastIdx = tokens.length - 1;
+    while (lastIdx >= 0 && tokens[lastIdx] === " ") lastIdx--;
+
+    if (lastIdx >= 2) {
+      const lastToken = tokens[lastIdx];
+      const possibleUnit = units.ingredientUnits.get(lastToken.toLowerCase());
+
+      if (possibleUnit) {
+        let markerIdx = lastIdx - 1;
+        while (markerIdx >= 0 && tokens[markerIdx] === " ") markerIdx--;
+
+        if (
+          markerIdx >= 0 &&
+          units.ingredientRangeMarker.includes(tokens[markerIdx])
+        ) {
+          unit = possibleUnit.text;
+          unitText = lastToken;
+          trailingUnitEndIndex = markerIdx;
+        }
+      }
+    }
+  }
 
   /**
    * @type {Types.AlternativeQuantity[]}
@@ -145,11 +170,14 @@ export function parseIngredient(
     tokens,
     ingredientStartIndex,
     units,
+    trailingUnitEndIndex,
   );
 
   let extra = "";
   if (options.includeExtra) {
-    extra = getExtra(tokens, ingredientEndIndex);
+    const extraStartIndex =
+      trailingUnitEndIndex !== null ? tokens.length : ingredientEndIndex;
+    extra = getExtra(tokens, extraStartIndex);
   }
 
   const minQuantity = firstQuantity || quantity;
@@ -335,15 +363,19 @@ function getUnit(tokens, startIndex, units) {
  * @param {string[]} tokens - The list of tokens to get the ingredient from.
  * @param {number} startIndex - The index of the first token to use when getting the ingredient.
  * @param {Types.Units} units - The unit dictionary to use when parsing the ingredient.
+ * @param {number | null} limitEndIndex - Optional upper bound on the token slice end index, used to exclude a trailing unit (e.g. "to taste") from the ingredient text.
  * @returns {[string, number]} The ingredient value and the index of the last token used to get the ingredient.
  */
-function getIngredient(tokens, startIndex, units) {
+function getIngredient(tokens, startIndex, units, limitEndIndex = null) {
   if (startIndex >= tokens.length) {
     return ["", startIndex];
   }
 
   const separatorIndex = tokens.findIndex((item) => item == ",");
-  const endIndex = separatorIndex > 0 ? separatorIndex : tokens.length;
+  let endIndex = separatorIndex > 0 ? separatorIndex : tokens.length;
+  if (limitEndIndex !== null) {
+    endIndex = Math.min(endIndex, limitEndIndex);
+  }
   const cleanTokens = [];
   let withinParenthesis = false;
 

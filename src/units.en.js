@@ -81,6 +81,7 @@ const quart = {
 const slice = { symbol: "slice", text: "slice" };
 const stalk = { symbol: "stalk", text: "stalk" };
 const stick = { symbol: "stick", text: "stick" };
+const taste = { symbol: "taste", text: "taste" };
 const teaspoon = {
   symbol: "tsp",
   text: "teaspoon",
@@ -181,6 +182,8 @@ ingredientUnits.set("sticks", stick);
 ingredientUnits.set("t", teaspoon);
 ingredientUnits.set("tablespoon", tablespoon);
 ingredientUnits.set("tablespoons", tablespoon);
+ingredientUnits.set("taste", taste);
+ingredientUnits.set("tastes", taste);
 ingredientUnits.set("tbs", tablespoon);
 ingredientUnits.set("tbsp", tablespoon);
 ingredientUnits.set("tbspn", tablespoon);

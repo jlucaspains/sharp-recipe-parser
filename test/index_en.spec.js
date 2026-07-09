@@ -30,7 +30,7 @@ describe("Parse ingredient en-US", () => {
     ["5 cans of dried corn", 5, "5", "can", "dried corn", ""],
     ["½ cans of dried corn", 0.5, "½", "can", "dried corn", ""],
     ["10 ml milk", 10, "10", "milliliter", "milk", ""],
-    ["Salt to taste", 0, "", "", "Salt to taste", ""],
+    ["Salt to taste", 0, "", "taste", "Salt", ""],
     ["Ingredient", 0, "", "", "Ingredient", ""],
     ["10 gr wheat flour", 10, "10", "grain", "wheat flour", ""],
     ["1 drop of water", 1, "1", "drop", "water", ""],
@@ -57,6 +57,7 @@ describe("Parse ingredient en-US", () => {
     ["Pinch salt and pepper ($0.05)", 0, "", "pinch", "salt and pepper", ""],
     ["Pinch salt and pepper", 0, "", "pinch", "salt and pepper", ""],
     ["Salt and pepper", 0, "", "", "Salt and pepper", ""],
+    ["black pepper to taste", 0, "", "taste", "black pepper", ""]
   ];
   it.each(table)(
     "parse %s",
