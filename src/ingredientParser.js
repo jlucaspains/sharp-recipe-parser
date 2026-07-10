@@ -93,11 +93,7 @@ export function parseIngredient(
     tokens,
     units,
   );
-  let [unit, unitText, unitEndIndex] = getUnit(
-    tokens,
-    quantityEndIndex,
-    units,
-  );
+  let [unit, unitText, unitEndIndex] = getUnit(tokens, quantityEndIndex, units);
 
   let trailingUnitEndIndex = null;
   if (!unit) {
