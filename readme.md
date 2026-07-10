@@ -152,18 +152,25 @@ sharp-recipe-parser uses a simple technique that preserves words and punctuation
 ### Getting started
 1. Fork this repository and clone your fork locally
 2. This project uses Yarn Classic (v1). If you don't have it, install it via npm:
-   ```bash
+   ```sh
    npm install -g yarn
    ```
 3. Install dependencies:
-   ```bash
+   ```sh
    yarn install
    ```
 4. Run the test suite to confirm everything is working before making changes:
-   ```bash
+   ```sh
    yarn test
    ```
-
+5. Make sure changes align to `eslint` config:
+   ```sh
+   yarn lint
+   ```
+6. Check types:
+   ```sh
+   yarn run types
+   ```
 
 ## FAQ
 1. Why not use AI?
