@@ -58,6 +58,8 @@ describe("Parse ingredient en-US", () => {
     ["Pinch salt and pepper", 0, "", "pinch", "salt and pepper", ""],
     ["Salt and pepper", 0, "", "", "Salt and pepper", ""],
     ["black pepper to taste", 0, "", "taste", "black pepper", ""],
+    ["Bacon strips or slices", 0, "", "", "Bacon strips or slices", ""],
+    ["Bread crumbs or piece", 0, "", "", "Bread crumbs or piece", ""],
   ];
   it.each(table)(
     "parse %s",

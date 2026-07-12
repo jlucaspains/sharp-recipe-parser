@@ -104,13 +104,13 @@ export function parseIngredient(
       const lastToken = tokens[lastIdx];
       const possibleUnit = units.ingredientUnits.get(lastToken.toLowerCase());
 
-      if (possibleUnit) {
+      if (possibleUnit && possibleUnit.trailingOnly) {
         let markerIdx = lastIdx - 1;
         while (markerIdx >= 0 && tokens[markerIdx] === " ") markerIdx--;
 
         if (
           markerIdx >= 0 &&
-          units.ingredientRangeMarker.includes(tokens[markerIdx])
+          units.trailingUnitMarker.includes(tokens[markerIdx].toLowerCase())
         ) {
           unit = possibleUnit.text;
           unitText = lastToken;

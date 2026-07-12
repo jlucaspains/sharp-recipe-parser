@@ -55,7 +55,7 @@ const pedaco = { symbol: "pedaço", text: "pedaço" };
 const pitada = { symbol: "pitada", text: "pitada" };
 const fatia = { symbol: "fatia", text: "fatia" };
 const bastao = { symbol: "bastão", text: "bastão" };
-const gosto = { symbol: "gosto", text: "gosto" };
+const gosto = { symbol: "gosto", text: "gosto", trailingOnly: true };
 
 /**
  * @type {Map<string, UnitDetail>}
@@ -189,6 +189,8 @@ const ingredientRangeMarker = ["a", "-", "–", "ou"];
 
 const ingredientQuantityAddMarker = ["e"];
 
+const trailingUnitMarker = ["a"];
+
 /**
  * @type {Map<string, string[]>}
  */
@@ -217,6 +219,7 @@ export default {
   ingredientQuantities,
   ingredientRangeMarker,
   ingredientQuantityAddMarker,
+  trailingUnitMarker,
   unitConversions,
   defaultTemperatureUnit: null,
 };

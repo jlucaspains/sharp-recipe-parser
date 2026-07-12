@@ -81,7 +81,7 @@ const quart = {
 const slice = { symbol: "slice", text: "slice" };
 const stalk = { symbol: "stalk", text: "stalk" };
 const stick = { symbol: "stick", text: "stick" };
-const taste = { symbol: "taste", text: "taste" };
+const taste = { symbol: "taste", text: "taste", trailingOnly: true };
 const teaspoon = {
   symbol: "tsp",
   text: "teaspoon",
@@ -263,6 +263,8 @@ const ingredientRangeMarker = ["to", "-", "–", "or"];
 
 const ingredientQuantityAddMarker = ["and"];
 
+const trailingUnitMarker = ["to"];
+
 /**
  * @type {Map<string, string[]>}
  */
@@ -291,6 +293,7 @@ export default {
   ingredientQuantities,
   ingredientRangeMarker,
   ingredientQuantityAddMarker,
+  trailingUnitMarker,
   unitConversions,
   defaultTemperatureUnit: null,
 };
