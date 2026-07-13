@@ -4,6 +4,7 @@
  *  text: string;
  *  customFunction?: (tokens: string[], startIndex: number) => { uom: string; uomText: string; newIndex: number };
  *  conversionGroup?: string;
+ *  trailingOnly?: boolean;
  * }} UnitDetail
  */
 
@@ -36,6 +37,7 @@
  *  ingredientQuantities: Map<string, number>;
  *  ingredientRangeMarker: string[];
  *  ingredientQuantityAddMarker: string[];
+ *  trailingUnitMarker: string[];
  *  unitConversions: UnitConversion;
  *  defaultTemperatureUnit: string | null;
  * }} Units

@@ -143,10 +143,34 @@ sharp-recipe-parser uses a simple technique that preserves words and punctuation
    1. "180 degree celsius"
 
 ## Contribute
+### Guidelines
 1. By default regex is not allowed. If absolutely necessary, they will be reviewed in a case-by-case basis
 2. All changes need to have appropriate translation in the same PR
 3. Open an issue describing the problem you are trying to fix before opening a PR. That should help ensure all PRs are reviewed and approved.
 4. Please be nice. This is a work of love, not money.
+
+### Getting started
+1. Fork this repository and clone your fork locally
+2. This project uses Yarn Classic (v1). If you don't have it, install it via npm:
+   ```sh
+   npm install -g yarn
+   ```
+3. Install dependencies:
+   ```sh
+   yarn install
+   ```
+4. Run the test suite to confirm everything is working before making changes:
+   ```sh
+   yarn test
+   ```
+5. Make sure changes align to `eslint` config:
+   ```sh
+   yarn lint
+   ```
+6. Check types:
+   ```sh
+   yarn run types
+   ```
 
 ## FAQ
 1. Why not use AI?

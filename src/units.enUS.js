@@ -111,6 +111,7 @@ export default {
   ingredientQuantities: DefaultEnglish.ingredientQuantities,
   ingredientRangeMarker: DefaultEnglish.ingredientRangeMarker,
   ingredientQuantityAddMarker: DefaultEnglish.ingredientQuantityAddMarker,
+  trailingUnitMarker: DefaultEnglish.trailingUnitMarker,
   unitConversions,
   defaultTemperatureUnit: "fahrenheit",
 };
