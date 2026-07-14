@@ -32,4 +32,4 @@ jobs:
       
       - run: npm version "$VERSION" --no-git-tag-version
 
-      - run: npm publish --provenance --access public 
+      - run: npm publish --provenance --access public
