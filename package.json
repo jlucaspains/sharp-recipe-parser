@@ -14,7 +14,7 @@
   "author": "Lucas Pains",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jlucaspains/sharp-recipe-parser/"
+    "url": "git+https://github.com/jlucaspains/sharp-recipe-parser.git"
   },
   "bugs": {
     "url": "https://github.com/jlucaspains/sharp-recipe-parser/issues"
