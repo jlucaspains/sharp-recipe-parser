@@ -1,7 +1,6 @@
 name: Publish Package
 
 on:
-  workflow_dispatch:
   release:
     types: [created]
 
@@ -30,5 +29,7 @@ jobs:
         run: |
           TAG="${{ github.event.release.tag_name }}"
           echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+      
+      - run: npm version "$VERSION" --no-git-tag-version
 
-      - run: yarn publish --new-version "$VERSION" --access public --no-git-tag-version
+      - run: npm publish --provenance --access public 
